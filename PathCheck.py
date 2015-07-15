@@ -1,3 +1,4 @@
+from __future__ import division
 '''
 Created on Mar 20, 2015
 
@@ -5,8 +6,6 @@ Created on Mar 20, 2015
 '''
 
 ''' This code is just for demonstration and has nothing to do with ACHP'''
-
-from __future__ import division
 
 import sys
 print sys.path
