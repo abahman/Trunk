@@ -7,10 +7,6 @@ Created on Mar 20, 2015
 
 ''' This code is just for demonstration and has nothing to do with ACHP'''
 
-<<<<<<< HEAD
-
-=======
->>>>>>> origin/master
 import sys
 print sys.path
 print ' '
