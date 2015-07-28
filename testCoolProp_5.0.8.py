@@ -45,14 +45,14 @@ from matplotlib import pyplot
 from CoolProp.Plots import Ts, drawIsoLines
 
 
-# Ref = 'n-Pentane'
-# ax = Ts(Ref)
-# ax.set_xlim([-0.5, 1.5])
-# ax.set_ylim([300, 530])
-# quality = drawIsoLines(Ref, 'Ts', 'Q', [0.3, 0.5, 0.7, 0.8], axis=ax)
-# isobars = drawIsoLines(Ref, 'Ts', 'P', [100, 2000], num=5, axis=ax)
-# isochores = drawIsoLines(Ref, 'Ts', 'D', [2, 600], num=7, axis=ax)
-# pyplot.show()
+Ref = 'n-Pentane'
+ax = Ts(Ref)
+ax.set_xlim([-0.5, 1.5])
+ax.set_ylim([300, 530])
+quality = drawIsoLines(Ref, 'Ts', 'Q', [0.3, 0.5, 0.7, 0.8], axis=ax)
+isobars = drawIsoLines(Ref, 'Ts', 'P', [100, 2000], num=5, axis=ax)
+isochores = drawIsoLines(Ref, 'Ts', 'D', [2, 600], num=7, axis=ax)
+pyplot.show()
 
 #   
 # ph_plot_water = CPP.PropsPlot('Water','Ph')
@@ -87,14 +87,14 @@ from CoolProp.Plots import Ts, drawIsoLines
 # ax.text(2700, 3500, 'Saturated Vapour', fontsize=15, rotation=-100)
 # ph_plot_water.savefig('images/Water_Ph.pdf')
 
-ref_fluid = 'R600a'
-fig = pyplot.figure(1, figsize=(10, 10), dpi=100)
-for i, gtype in enumerate(['PT', 'PD', 'PS', 'PH', 'TD', 'TS', 'HS']):
-    ax = pyplot.subplot(4, 2, i+1)
-    if gtype.startswith('P'):
-        ax.set_yscale('log')
-    props_plot = PropsPlot(ref_fluid, gtype, axis=ax)
-    props_plot.title(gtype)
-    props_plot._draw_graph()
-fig.set_tight_layout(True) #pyplot.tight_layout()
-fig.savefig('images/comined_R600a.pdf') #pyplot.savefig('images/comined_R600a.pdf')
+# ref_fluid = 'R600a'
+# fig = pyplot.figure(1, figsize=(10, 10), dpi=100)
+# for i, gtype in enumerate(['PT', 'PD', 'PS', 'PH', 'TD', 'TS', 'HS']):
+#     ax = pyplot.subplot(4, 2, i+1)
+#     if gtype.startswith('P'):
+#         ax.set_yscale('log')
+#     props_plot = PropsPlot(ref_fluid, gtype, axis=ax)
+#     props_plot.title(gtype)
+#     props_plot._draw_graph()
+# fig.set_tight_layout(True) #pyplot.tight_layout()
+# fig.savefig('images/comined_R600a.pdf') #pyplot.savefig('images/comined_R600a.pdf')
