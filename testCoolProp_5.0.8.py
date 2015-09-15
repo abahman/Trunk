@@ -43,16 +43,17 @@ import CoolProp.Plots as CPP
 from CoolProp.Plots import PropsPlot
 from matplotlib import pyplot
 from CoolProp.Plots import Ts, drawIsoLines
+from ACHPTools import get_svn_revision
+import sys
 
-
-Ref = 'n-Pentane'
-ax = Ts(Ref)
-ax.set_xlim([-0.5, 1.5])
-ax.set_ylim([300, 530])
-quality = drawIsoLines(Ref, 'Ts', 'Q', [0.3, 0.5, 0.7, 0.8], axis=ax)
-isobars = drawIsoLines(Ref, 'Ts', 'P', [100, 2000], num=5, axis=ax)
-isochores = drawIsoLines(Ref, 'Ts', 'D', [2, 600], num=7, axis=ax)
-pyplot.show()
+# Ref = 'n-Pentane'
+# ax = Ts(Ref)
+# ax.set_xlim([-0.5, 1.5])
+# ax.set_ylim([300, 530])
+# quality = drawIsoLines(Ref, 'Ts', 'Q', [0.3, 0.5, 0.7, 0.8], axis=ax)
+# isobars = drawIsoLines(Ref, 'Ts', 'P', [100, 2000], num=5, axis=ax)
+# isochores = drawIsoLines(Ref, 'Ts', 'D', [2, 600], num=7, axis=ax)
+# pyplot.show()
 
 #   
 # ph_plot_water = CPP.PropsPlot('Water','Ph')
@@ -98,3 +99,9 @@ pyplot.show()
 #     props_plot._draw_graph()
 # fig.set_tight_layout(True) #pyplot.tight_layout()
 # fig.savefig('images/comined_R600a.pdf') #pyplot.savefig('images/comined_R600a.pdf')
+
+print CP.PropsSI("P","T",306.3265564,"Q",0,"R407C")
+print CP.PhaseSI("T",306.3265564,"P",100000,"R407C")
+print CP.PropsSI('I', 'T', 200, 'Q', 0, "R407C")
+print CP.saturation_ancillary("R407C",'I',1,'T', 200)
+print get_svn_revision(sys.path)
