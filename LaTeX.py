@@ -1,12 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-import sys
-sys.path.insert(0, "/Library/TeX/texbin")
-sys.path.insert(1, "/usr/local/bin")
-print sys.path
-print ' '
-
 # Example data
 t = np.arange(0.0, 1.0 + 0.01, 0.01)
 s = np.cos(4 * np.pi * t) + 2
@@ -23,5 +17,5 @@ plt.title(r"\TeX\ is Number "
 # Make room for the ridiculously large title.
 plt.subplots_adjust(top=0.8)
 
-#plt.savefig('images/tex_demo')
+plt.savefig('images/tex_demo.pdf')
 plt.show()
