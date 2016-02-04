@@ -1,5 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import os
+print os.environ['PATH']
+#os.environ["PATH"] += os.pathsep + "/Library/TeX/texbin"
+print os.environ['PATH']
 
 # Example data
 t = np.arange(0.0, 1.0 + 0.01, 0.01)
