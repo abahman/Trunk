@@ -1,6 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+import sys
+sys.path.append("/Library/TeX/texbin")
+print sys.path
+print ' '
 
 # Example data
 t = np.arange(0.0, 1.0 + 0.01, 0.01)
