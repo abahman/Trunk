@@ -2,7 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import sys
-sys.path.append("/Library/TeX/texbin")
+sys.path.insert(0, "/Library/TeX/texbin")
+sys.path.insert(1, "/usr/local/bin")
 print sys.path
 print ' '
 
@@ -22,5 +23,5 @@ plt.title(r"\TeX\ is Number "
 # Make room for the ridiculously large title.
 plt.subplots_adjust(top=0.8)
 
-plt.savefig('images/tex_demo')
+#plt.savefig('images/tex_demo')
 plt.show()
