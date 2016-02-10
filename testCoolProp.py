@@ -1,7 +1,7 @@
 from __future__ import print_function
 import CoolProp
 import CoolProp.CoolProp as CP
-import CoolProp.Plots as CPP
+from CoolProp.Plots import PropertyPlot
 import numpy as np
 
 
@@ -12,7 +12,9 @@ rho = CP.PropsSI('D', 'T', 298.15, 'P', 101325, 'Nitrogen')
 print ('rho of Nirogen= ', rho)
 print (' ')
 
-ph_plot = CPP.PropsPlot('Water','Ph')
+ph_plot = PropertyPlot('Water', 'PH')
+ph_plot.calc_isolines()
+#ph_plot.show()
 ph_plot.savefig('images/enthalpy_pressure_graph_for_Water.pdf')
 
 fluid = 'Water'
@@ -141,3 +143,4 @@ print ('surface tension = ', PropsSI('I','P',250000,'Q',1,'R407C')) #[N/m]
 print('fluid string:',get_fluid_param_string('water','pure'))
 
 #print('new surface tension method:',saturation_ancillary('R407C','I',1,'T', 250))
+print ('T_HR = ', HAPropsSI('T','P',101325.0,'H',37972.967209365510,'R',1)-273.15,'degree C') 
