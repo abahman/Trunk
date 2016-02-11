@@ -1,7 +1,7 @@
 import matplotlib,os
-matplotlib.use('GTKAgg')
-import sys
-from FileIO import prep_csv2rec as prep
+#matplotlib.use('GTKAgg')
+import sys, os
+#from FileIO import prep_csv2rec as prep
 from matplotlib.mlab import csv2rec
 
 import pylab
@@ -11,7 +11,7 @@ from scipy import polyval, polyfit
 
 params = {'axes.labelsize': 10,
           'axes.linewidth':0.5,
-          'text.fontsize': 10,
+          'font.size': 10,
           'legend.fontsize': 8,
           'legend.labelspacing':0.2,
           'xtick.labelsize': 10,
@@ -21,12 +21,12 @@ params = {'axes.labelsize': 10,
           'font.family':'Times New Roman'}
 pylab.rcParams.update(params)
 
-r=prep('ExperimentalData.csv',delRowList=[1])
+r=csv2rec('ExperimentalData.csv',delimiter=',')
 
 ############# HOT SIDE ####################
-mdot_comp=r['mdot_oil_hot']
-mdot_motor=r['mdot_oil_motor']
-mdot_HX=r['mdot_oil_hothx']
+mdot_comp=np.array(r[1:]['mdot_oil_hot'], dtype=float)
+mdot_motor=np.array(r[1:]['mdot_oil_motor'], dtype=float)
+mdot_HX=np.array(r[1:]['mdot_oil_hothx'], dtype=float)
 
 f=pylab.figure(figsize=(3.5,3.5))
 ax=f.add_axes((0.18,0.15,0.77,0.8))
@@ -50,17 +50,17 @@ frame.set_linewidth(0.5)
 ax.set_xlim((0,0.2))
 ax.set_ylim((0,0.2))
 
-pylab.savefig('HotOilMdot.pdf')
-pylab.savefig('HotOilMdot.eps')
-pylab.savefig('HotOilMdot.png',dpi=600)
+pylab.savefig('images/HotOilMdot.pdf')
+#pylab.savefig('images/HotOilMdot.eps')
+#pylab.savefig('images/HotOilMdot.png',dpi=600)
 pylab.show()
 
-shutil.copy('HotOilMdot.eps',os.path.join('..','TeX','HotOilMdot.eps'))
+#shutil.copy('HotOilMdot.eps',os.path.join('..','TeX','HotOilMdot.eps'))
 
 ############# COLD SIDE ####################
-mdot_exp=r['mdot_oil_cold']
-mdot_pump=r['mdot_oil_pump']
-mdot_HX=r['mdot_oil_coldhx']
+mdot_exp=np.array(r[1:]['mdot_oil_cold'], dtype=float)
+mdot_pump=np.array(r[1:]['mdot_oil_pump'], dtype=float)
+mdot_HX=np.array(r[1:]['mdot_oil_coldhx'], dtype=float)
 
 f=pylab.figure(figsize=(3.5,3.5))
 ax=f.add_axes((0.18,0.15,0.77,0.8))
@@ -85,9 +85,9 @@ frame.set_linewidth(0.5)
 ax.set_xlim((0,0.1))
 ax.set_ylim((0,0.1))
 
-pylab.savefig('ColdOilMdot.pdf')
-pylab.savefig('ColdOilMdot.eps')
-pylab.savefig('ColdOilMdot.png',dpi=600)
+pylab.savefig('images/ColdOilMdot.pdf')
+#pylab.savefig('images/ColdOilMdot.eps')
+#pylab.savefig('images/ColdOilMdot.png',dpi=600)
 pylab.show()
 
-shutil.copy('ColdOilMdot.eps',os.path.join('..','TeX','ColdOilMdot.eps'))
+#shutil.copy('ColdOilMdot.eps',os.path.join('..','TeX','ColdOilMdot.eps'))
