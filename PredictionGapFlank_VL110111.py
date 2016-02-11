@@ -1,7 +1,8 @@
 import matplotlib
-matplotlib.use('GTKAgg')
+#matplotlib.use('GTKAgg')
 import sys,os
-from FileIO import prep_csv2rec
+#from FileIO import prep_csv2rec
+from matplotlib.mlab import csv2rec
 import pylab
 import numpy as np
 import shutil
@@ -10,7 +11,7 @@ from scipy.io import loadmat
 
 params = {'axes.labelsize': 10,
           'axes.linewidth': 0.5,
-          'text.fontsize': 10,
+          'font.size': 10,
           'legend.fontsize': 8,
           'legend.labelspacing':0.2,
           'xtick.labelsize': 10,
@@ -20,12 +21,12 @@ params = {'axes.labelsize': 10,
           'font.family':'Times New Roman'}
 pylab.rcParams.update(params)
 
-r=prep_csv2rec('PredictionGapFlank_VL110111.csv',returnData=True)
+r=csv2rec('PredictionGapFlank_VL110111.csv', delimiter=',')
 
 gap_meas=r['gap_meas']*10**6
 gap_calc=r['gap_calc']*10**6
 
-print gap_meas,gap_calc
+print gap_meas,'\n\n', gap_calc
 
 f=pylab.figure(figsize=(3.5,3.5))
 ax=f.add_axes((0.15,0.15,0.8,0.8))
@@ -47,8 +48,9 @@ ax.set_xlim((0,m))
 ax.set_ylim((0,m))
 
 pylab.savefig('DeltaPlot.pdf')
-pylab.savefig('DeltaPlot.eps')
-pylab.savefig('DeltaPlot.png',dpi=600)
+#pylab.savefig('DeltaPlot.eps')
+#pylab.savefig('DeltaPlot.png',dpi=600)
+pylab.show()
 pylab.close()
 
 ## shutil.copy('CompressorParityPlot.eps',os.path.join('..','..','TeX','CompParity.eps'))
