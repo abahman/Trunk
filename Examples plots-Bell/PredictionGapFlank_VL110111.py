@@ -47,9 +47,9 @@ ax.plot(gap_meas,gap_calc,'ko',ms=4)
 ax.set_xlim((0,m))
 ax.set_ylim((0,m))
 
-pylab.savefig('DeltaPlot.pdf')
-#pylab.savefig('DeltaPlot.eps')
-#pylab.savefig('DeltaPlot.png',dpi=600)
+pylab.savefig('images/DeltaPlot.pdf')
+#pylab.savefig('images/DeltaPlot.eps')
+#pylab.savefig('images/DeltaPlot.png',dpi=600)
 pylab.show()
 pylab.close()
 
