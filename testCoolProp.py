@@ -15,7 +15,7 @@ print (' ')
 ph_plot = PropertyPlot('Water', 'PH')
 ph_plot.calc_isolines()
 #ph_plot.show()
-ph_plot.savefig('images/enthalpy_pressure_graph_for_Water.pdf')
+#ph_plot.savefig('images/enthalpy_pressure_graph_for_Water.pdf')
 
 fluid = 'Water'
 pressure_at_critical_point = CP.PropsSI(fluid,'pcrit')
@@ -144,3 +144,4 @@ print('fluid string:',get_fluid_param_string('water','pure'))
 
 #print('new surface tension method:',saturation_ancillary('R407C','I',1,'T', 250))
 print ('T_HR = ', HAPropsSI('T','P',101325.0,'H',37972.967209365510,'R',1)-273.15,'degree C') 
+print ('P_sat = ', PropsSI('Q','P', 445100,'H',244044.447331,'R404A'),'Pa') 
