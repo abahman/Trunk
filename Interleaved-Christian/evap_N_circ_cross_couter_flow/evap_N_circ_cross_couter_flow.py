@@ -406,9 +406,9 @@ class MCE_N(EvaporatorClass):
             from scipy.optimize import fsolve
             def objective_SH_out(mdot_guess):
                 print "mdot_guess",mdot_guess
-                if mdot_guess<0.001:
+                if mdot_guess<0.00001:
                     print 'warning - mass flowrate has a negative value during solving process - constrained to 0.002'
-                    mdot_guess=[0.001]
+                    mdot_guess=[0.00001]
                 self.mdot_r=mdot_guess[0]
                 adjust_flowrates()  #adjust flowrates for hybrid or control
                 fsolve(residual, guess_value)  #actually solve evaporator
