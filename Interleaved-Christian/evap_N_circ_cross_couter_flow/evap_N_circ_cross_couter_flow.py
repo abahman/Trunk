@@ -390,14 +390,22 @@ class MCE_N(EvaporatorClass):
             #calculate the error between estimated and actual inlet enthalpy to first row
             residue=hin_rA-hB_out_for_residue
             self.resids=residue
+            print " the residue is: ", residue
             return residue
         
-        print self.EvapsA[0].Fins.Air.Tdb
+        #print self.EvapsA[0].Fins.Air.Tdb
         h_guess_max=Props('H','P',self.psat_r,'T',self.EvapsA[0].Fins.Air.Tdb,self.Ref)-5.0
-        guess_value=300000*np.ones(self.num_evaps)
+        #guess_value=300000*np.ones(self.num_evaps)
         guess_value=1000.0*h_guess_max**np.ones(self.num_evaps)
-        print self.EvapsA[0].Fins.Air.Tdb,h_guess_max,guess_value
-        print residual(guess_value)
+        #print self.EvapsA[0].Fins.Air.Tdb,h_guess_max,guess_value
+        #print residual(guess_value)
+        print""
+        print " ######### The start of the fucntion residual ###############"
+        print""
+        print " The residual fucntion process: ",residual(guess_value)
+        print ""
+        print " ############### Calculated for each circuit, then out to next function (mass)##################"
+        print""
         
         def solve_for_exit_sh(self):
             "solve for the mass flow rate for a given target super-heat"
@@ -406,9 +414,9 @@ class MCE_N(EvaporatorClass):
             from scipy.optimize import fsolve
             def objective_SH_out(mdot_guess):
                 print "mdot_guess",mdot_guess
-                if mdot_guess<0.00001:
+                if mdot_guess<0.001:
                     print 'warning - mass flowrate has a negative value during solving process - constrained to 0.002'
-                    mdot_guess=[0.00001]
+                    mdot_guess=[0.001]
                 self.mdot_r=mdot_guess[0]
                 adjust_flowrates()  #adjust flowrates for hybrid or control
                 fsolve(residual, guess_value)  #actually solve evaporator
@@ -419,6 +427,7 @@ class MCE_N(EvaporatorClass):
                     self.hout_r+=self.EvapsA[i].mdot_r*self.EvapsA[i].hout_r
                 self.hout_r/=self.mdot_r_tot
                 self.resids=self.hout_r-self.hout_r_target #store nested for csv output
+                print " mdot_r_tot",self.mdot_r_tot,"evapa_hout_r",self.EvapsA[i].hout_r,"hout_r",self.hout_r,"target",self.hout_r_target,"resids",self.resids
                 return self.hout_r-self.hout_r_target
             T_sat=Props('T','P',self.psat_r,'Q',1.0,self.Ref)
             self.hout_r_target=Props('H','T',self.Target_SH+T_sat,'P',self.psat_r,self.Ref)*1000.0
@@ -452,7 +461,7 @@ class MCE_N(EvaporatorClass):
             #calculate residual is the difference of the individual circuit exit enthalpies
             resid_eq_sh=np.zeros(self.num_evaps)
             for i in range(self.num_evaps):
-                resid_eq_sh[i]=self.EvapsA[i].hout_r/10000.0 #bring on similar scale as inputs
+                resid_eq_sh[i]=self.EvapsA[i].hout_r/1000.0 #bring on similar scale as inputs
             resid_eq_sh=np.sum(resid_eq_sh*resid_eq_sh)
             self. resid_eq_sh=resid_eq_sh
             return resid_eq_sh
