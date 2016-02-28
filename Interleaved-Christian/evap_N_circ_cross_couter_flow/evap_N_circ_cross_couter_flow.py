@@ -213,6 +213,7 @@ class MCE_N(EvaporatorClass):
             self.hin_r=Props('H','P', 1429,'Q',0,self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator
+            self.h_tp_tuning=0.7
             
         elif evap_type=='RAC':
             self.Ref='R410a'

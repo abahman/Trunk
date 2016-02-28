@@ -177,7 +177,7 @@ def WavyLouveredFins(Inputs):
     s = 1 / FPM - t
 
     #Height of heat exchanger [m]
-    Height = Pt * (Ntubes_bank)  #assuming that fin extends 1/2 pt above/below last tube in bundle
+    Height = Pt * (Ntubes_bank+1)  #assuming that fin extends 1/2 pt above/below last tube in bundle
     #A_duct is the face area [m^2] equivalent to the duct cross-section
     A_duct = Height * Ltube  #neglecting the additional height of the fins above/below the last tubes in the bundle
     #Number of fins in the tube sheet [-]
@@ -226,7 +226,7 @@ def WavyLouveredFins(Inputs):
     #Heat transfer
     j = 16.06 * pow(Re_D,-1.02 * (pf / D) - 0.256) * pow(A / Atube, -0.601) * pow(Nbank,-0.069) * pow(pf / D,0.84) #Colburn j-Factor
     h_a = j * rho_ha * umax * cp_ha / pow(Pr,2.0/3.0) #air side mean heat transfer coefficient
-    h_a =h_a*Inputs.h_tp_tuning; #print 'wlfins - Inputs.h_tp_tuning ',Inputs.h_tp_tuning
+    #h_a =h_a*Inputs.h_tp_tuning; #print 'wlfins - Inputs.h_tp_tuning ',Inputs.h_tp_tuning
     if h_a<0.00001:
         print "warning, h_a in FinCorrelations, Wavy Louvered fins was smaller 0: ",h_a," set to 0.00001"
         h_a=0.00001

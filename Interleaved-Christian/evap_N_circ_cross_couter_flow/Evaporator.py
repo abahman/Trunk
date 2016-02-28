@@ -309,10 +309,14 @@ class EvaporatorClass():
         #print "in evaporator-enthalpies","hin_r,hsatL,hsatV",self.hin_r,hsatL,hsatV,"self.Tbubble_r,self.psat_r",self.Tbubble_r,self.psat_r
         #print "self.__dict__ in Evaporator.py",self.__dict__
         #print "hin_r in Evaporator.py",self.hin_r
-        self.xin_r=(self.hin_r-hsatL)/(hsatV-hsatL)
-        self.sin_r=self.xin_r*ssatV+(1-self.xin_r)*ssatL
-        self.hin_r=self.xin_r*hsatV+(1-self.xin_r)*hsatL
-        self.Tin_r=self.xin_r*self.Tdew_r+(1-self.xin_r)*self.Tbubble_r
+        if hasattr(self,'hin_r'):  #if give enthalpy and pressure as inputs
+            self.xin_r=(self.hin_r-hsatL)/(hsatV-hsatL)
+            self.sin_r=self.xin_r*ssatV+(1-self.xin_r)*ssatL
+            self.Tin_r=self.xin_r*self.Tdew_r+(1-self.xin_r)*self.Tbubble_r
+        elif hasattr(self,'xin_r'): #if given quality and pressure as inputs
+            self.hin_r=self.xin_r*hsatV+(1-self.xin_r)*hsatL
+            self.sin_r=self.xin_r*ssatV+(1-self.xin_r)*ssatL
+            self.Tin_r=self.xin_r*self.Tdew_r+(1-self.xin_r)*self.Tbubble_r
         
         #Begin by assuming that you go all the way to saturated vapor at least
         self.xout_2phase=1.0
@@ -451,13 +455,14 @@ class EvaporatorClass():
         #Outlet superheat an temperature (in case of two phase)
         if existsSuperheat:
             try:
+                #self.Tout_r=PropsSI('T','P',self.pout_r,'H',self.hout_r/1000.0,self.Ref)
                 self.Tout_r=newton(lambda T: Props('H','T',T,'P',self.pout_r,self.Ref)-self.hout_r/1000.0,Props('T','P',self.pout_r,'Q',1.0,self.Ref))
             except:
                 print "problem iwith calculating Tout_r in evaporator.py"
                 print "self.hout_r/1000.0",self.hout_r/1000.0,"self.hin_r/1000.0",self.hin_r/1000.0,"Props('H','Q',1.0,'P',self.pout_r,self.Ref)",Props('H','Q',1.0,'P',self.pout_r,self.Ref),"self.pout_r",self.pout_r,"self.psat_r",self.psat_r,"self.mdot_r",self.mdot_r,"self.xin_r",self.xin_r
                 print "Props('H','Q',0.0,'P',self.pout_r,self.Ref)",Props('H','Q',0.0,'P',self.pout_r,self.Ref),"self.Tin_a,self.Tsat_r",self.Tin_a,self.Tsat_r,"self.DP_r/1000.0",self.DP_r/1000.0,self.Q,self.Q_superheat,self.Q_2phase,existsSuperheat,self.w_2phase
                 print self.Fins.cp_da
-                print "neglecting pressure drop in sh-section for normal evaproator (no issue for Calcuilate_PD, since result will be overwritten)"
+                print "neglecting pressure drop in sh-section for normal evaproator (no issue for Calculate_PD, since result will be overwritten)"
                 if self.w_2phase<1e-11:
                     print "neglecting capacity of two phase section, since likely not converged properly due to small fraction of two-phase area (self.w_2phase=",self.w_2phase
                     self.Q_2phase=0.0
@@ -531,7 +536,7 @@ class EvaporatorClass():
             raise ValueError('Q_target in Evaporator must be positive')
         
         # Average Refrigerant heat transfer coefficient
-        DWS.h_r=ShahEvaporation_Average(self.xin_r,self.xout_2phase,self.Ref,self.G_r,self.ID,self.psat_r,Q_target/DWS.A_r,self.Tbubble_r,self.Tdew_r,h_tp_tuning=0.7)
+        DWS.h_r=ShahEvaporation_Average(self.xin_r,self.xout_2phase,self.Ref,self.G_r,self.ID,self.psat_r,Q_target/DWS.A_r,self.Tbubble_r,self.Tdew_r,self.h_tp_tuning)
         if DWS.h_r<=0.0001:
             print 'something is wrong with the refrigerant side HT-coefficient as requested by Evaporator.py, inputs are\n',self.xin_r,self.xout_2phase,self.Ref,self.G_r,self.ID,self.Tsat_r,Q_target/DWS.A_r,self.Tbubble_r,self.Tdew_r
         
@@ -621,7 +626,7 @@ class EvaporatorClass():
         
 if __name__=='__main__':
     #This code runs if this file is run by itself, but otherwise doesn't run3
-    if True:
+    if 1:
         Ref='R410a'
         TT=[]
         Q=[]
@@ -632,7 +637,7 @@ if __name__=='__main__':
         import numpy as np
         import pylab as pylab
         Tdew=260
-        lower_value=Props('H','T',Tdew,'Q',0.01,Ref)*1000
+        lower_value=Props('H','T',Tdew,'Q',0.0,Ref)*1000
         #lower_value=Props('H','P',Props('P','T',Tdew,'Q',1.0,'R410A'),'T',299,Ref)*1000
         upper_value=Props('H','P',Props('P','T',Tdew,'Q',1.0,Ref),'T',299.79999,Ref)*1000
         for hin_r in np.linspace(lower_value,upper_value,20):  
@@ -688,16 +693,22 @@ if __name__=='__main__':
         pylab.plot(TT,Q,'x-',label='total')
         pylab.plot(TT,QQ,'x-',label='2-phase')
         pylab.legend()
+        pylab.xlabel('Inlet Enthalpy [J/kg]')
+        pylab.ylabel('Capacity [W]')
         pylab.figure()
         pylab.plot(TT,hh,'o-',label='HTC 2-phase')
         pylab.legend()
+        pylab.xlabel('Inlet Enthalpy [J/kg]')
+        pylab.ylabel('2ph Heat Transfer Coefficient [W/m$^2$-K]')
         pylab.figure()
         pylab.plot(TT,T_outa,'o-',label='Tout_a')
         pylab.legend()
+        pylab.xlabel('Inlet Enthalpy [J/kg]')
+        pylab.ylabel('Outlet Air Temp [K]')
         pylab.show()
 
 #########################################################################
-    if False: #run a change-in-dewpoint temperature study
+    if 0: #run a change-in-dewpoint temperature study
         TT=[]
         Q=[]
         ff=[]
@@ -735,7 +746,7 @@ if __name__=='__main__':
                     'mdot_r':  0.0708,
                     'psat_r':  Props('P','T',Tdew,'Q',1.0,'R410A'),
                     'Fins': FinsTubes,
-                    'hin_r':Props('H','T',Tdew,'Q',0.15,'R410A')*1000,
+                    'hin_r':Props('H','P',Props('P','T',Tdew,'Q',1.0,'R410A'),'Q',0.15,'R410A')*1000,
                     'Verbosity':0
             }
             
@@ -756,18 +767,26 @@ if __name__=='__main__':
         import time
         num_runs=100
         Evap.psat_r=Props('P','T',260,'Q',1.0,'R410A')
+        
         start_time = time.clock()
         for i in range(10):
             Evap.Calculate_PD()
-        print time.clock() - start_time, "seconds to run calculate_PD(0)"
+        print time.clock() - start_time, "seconds to run calculate_PD function"
         print Evap.OutputList()
-        start_time = time.clock()
-        for i in range(10):
-            Evap.Calculate()
-        print time.clock() - start_time, "seconds to run normale calculate fct"
-        print Evap.OutputList()
-        pylab.plot(TT,QQ,TT,Q,'x-',label=['2-phase','total'])
+        
+#         start_time = time.clock()
+#         for i in range(10):
+#             Evap.Calculate()
+#         print time.clock() - start_time, "seconds to run normale calculate fct"
+#         print Evap.OutputList()
+
+        pylab.plot(TT,QQ,TT,Q,'x-')
+        pylab.legend(['2-phase','total'])
+        pylab.xlabel('Ref. Inlet Dew Temperature [K]')
+        pylab.ylabel('Capacity [W]')
+        pylab.figure()
+        pylab.plot(TT,hh,'o-',label='HTC 2-phase')
         pylab.legend()
-        pylab.show()
-        pylab.plot(TT,hh)
+        pylab.xlabel('Ref. Inlet Dew Temperature [K]')
+        pylab.ylabel('2ph Heat Transfer Coefficient [W/m$^2$-K]')
         pylab.show()
