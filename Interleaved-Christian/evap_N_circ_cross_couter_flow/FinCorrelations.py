@@ -233,7 +233,7 @@ def WavyLouveredFins(Inputs):
     #Heat transfer
     j = 16.06 * pow(Re_D,-1.02 * (pf / D) - 0.256) * pow(A / Atube, -0.601) * pow(Nbank,-0.069) * pow(pf / D,0.84) #Colburn j-Factor
     h_a = j * rho_ha * umax * cp_ha / pow(Pr,2.0/3.0) #air side mean heat transfer coefficient
-    h_a = h_a*Inputs.h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
+    h_a = h_a*h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
     if h_a<0.00001:
         print "warning, h_a in FinCorrelations, Wavy Louvered fins was smaller 0: ",h_a," set to 0.00001"
         h_a=0.00001
@@ -391,7 +391,7 @@ def HerringboneFins(Inputs):
     
     Pr = cp_ha * mu_ha / k_ha
     h_a = j * rho_ha * u_max * cp_ha / pow(Pr,2.0/3.0) #air side mean heat transfer coefficient using colborn j-factor
-    h_a = h_a*Inputs.h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
+    h_a = h_a*h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
     if h_a<0.00001:
         print "warning, h_a in FinCorrelations, Wavy Louvered fins was smaller 0: ",h_a," set to 0.00001"
         h_a=0.00001
@@ -547,7 +547,7 @@ def PlainFins(Inputs):
     
     Pr = cp_ha * mu_ha / k_ha
     h_a = j * rho_ha * u_max * cp_ha / pow(Pr,2.0/3.0) #air side mean heat transfer coefficient using colborn j-factor
-    h_a = h_a*Inputs.h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
+    h_a = h_a*h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
     if h_a<0.00001:
         print "warning, h_a in FinCorrelations, Wavy Louvered fins was smaller 0: ",h_a," set to 0.00001"
         h_a=0.00001
