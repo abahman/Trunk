@@ -3,15 +3,11 @@
 #########################################################################
 '''This module is used to convert values between different units,
    as needed commonly for ACHP'''
-""" for usage in external files, use
-    import sys
-    sys.path.append("C:/Users/bachc/Desktop/achp/trunk/PyACHP")
-    from convert_units import *
-"""
+
 #import necessary modules
-#from __future__ import division
-from numpy import array, ones,ndarray
-"""##### Array handling (convenience functions ####################################"""
+from __future__ import division
+from numpy import array, ones, ndarray
+"""##### Array handling (convenience function ####################################"""
 def unitconvert(value,function):
     try:
         return function(value)
@@ -26,6 +22,8 @@ def unitconvert(value,function):
                 value[i]=float(value[i])
             result[i]=function(float(value[i]))
         return result
+    else:
+        return function(value)
 """##### Temperature ####################################"""
 def F2K(T_F):
     """Convert temperature in Fahrenheit to Kelvin"""
@@ -46,7 +44,6 @@ def K2C(T_C):
     """Convert temperature in Kelvin to Celsius"""
     return T_C-273.15
 
-
 """##### Massflow    ####################################"""
 def lbh2kgs(lbm):
     """Convert pound per minute to kilogramms per second"""
@@ -54,19 +51,19 @@ def lbh2kgs(lbm):
 def lbm2kgs(lbm):
     """Convert pound per minute to kilogramms per second"""
     return 0.007559873*lbm #0.45359237 [kg/lbm]/60 [s/h]
-def lbm2gs(lbm):
-    """Convert pound per minute to kilogramms per second"""
-    return 0.007559873*lbm*1000.0 #0.45359237 [kg/lbm]/60 [s/h]
 def kgh2kgs(kgh):
     """Convert kilograms per hour to kilogramms per second"""
     return kgh/3600.0 
+def lbm2gs(lbm):
+    """Convert pound per minute to kilogramms per second"""
+    return 0.007559873*lbm*1000.0 #0.45359237 [kg/lbm]/60 [s/h]
 
 """##### Volumetric flow ####################################"""
 def cfm2cms(cfm):
     """"convert cubic feet per minute(cfm) to cubic meters per second(cms)"""
     return 0.0004719474*cfm  #(0.3048[ft/m])^3/60[s/minute]
 def cms2cfm(cms):
-    """"convert cubic feet per minute(cfm) to cubic meters per second(cms)"""
+    """"convert cubic meters per second(cms) to cubic feet per minutes(cfm)"""
     return cms/0.0004719474  #(0.3048[ft/m])^3/60[s/minute]
 
 """##### Energy     ####################################"""
@@ -116,40 +113,48 @@ def ft2m(ft):
     "convert feet to meters"
     return ft*0.3048
 def mm2m(mm):
-    #convert mm to m
+    "convert millimeters to meters"
     return mm/1000.0
 def cm2m(cm):
-    #convert cm to m
+    "convert centimeters to meters"
     return cm/100.0
 
 """##### Area ####################################"""
 def sqin2sqm(sqInch):
-    "convert sqare inches to square meters"
-    return sqInch*0.00064516
+    "convert sqaure inches to square meters"
+    return sqInch*0.00064516    
 def sqm2sqin(sqM):
-    "convert sqare inches to square meters"
+    "convert sqaure inches to square meters"
     return sqM/0.00064516
+
+"""##### Volume ####################################"""
+def cubin2cubm(cubInch):
+    "convert cubic inches to cubic meters"
+    return cubInch/61023.7    
+def cubm2cubin(cubM):
+    "convert cubic meter to cubic inches"
+    return cubM*61023.7
 
 """##### Mass ####################################"""
 def kg2g(kg):
     """convert kg to g"""
     return kg*1000.
+def oz2kg(oz):
+    """convert Ounces to kg"""
+    return oz*0.0283495
 
 """##### Composed properties ####################################"""
 def ipK2siK(ipKValue):
     "convert K-value from [Btu/(hr ft F]] to [W/(m K)]"
-    print "Using ipK2siK - Warning! there exist different definitions for the K-value in IP units!",
     return ipKValue*1.730735
 def siK2ipK(siKValue):
     "convert K-value from  [W/(m K)] to [Btu/(hr ft F]]"
-    print "Using siK2ipK - Warning! there exist different definitions for the K-value in IP units!",
     return siKValue/1.730735
 
 """##### Example conversions, for input 1 ####################################"""
 if __name__=='__main__':
     #This runs if you run this file directly, shows usage
-    import numpy as np
-    x=np.array([10.0,100.0]) #this is the input value for all the examples below
+    x=1 #this is the input value for all the examples below
     print 'Conversion results for input value',x
     print ' * Temperature conversions:','  F2K',F2K(x),'  F2C',F2C(x),'  C2K',C2K(x),'  C2F',C2F(x),'  K2C',K2C(x)
     print ' * Massflow conversions:','  lbh2kgs',lbh2kgs(x),'  lbm2kgs',lbm2kgs(x),'  kgh2kgs',kgh2kgs(x)
@@ -159,5 +164,5 @@ if __name__=='__main__':
     print ' * Pressure conversions', '  kPa2Pa',kPa2Pa(x),'  MPa2kPa',MPa2kPa(x),'  MPa2Pa',MPa2Pa(x)
     print ' * Length conversions', '  in2m',in2m(x),'  ft2m',ft2m(x)
     print ' * Area conversions', '  sqin2sqm',sqin2sqm(x), 'sqm2sqin', sqm2sqin(x)
-    print  '* Composed properties conversions', 'ipK2siK', ipK2siK(x),'siK2ipK',siK2ipK(x)
+    print ' * Composed properties conversions', 'ipK2siK', ipK2siK(x),'siK2ipK',siK2ipK(x)
     print " * Test for automatic list and array handeling", unitconvert(x,sqin2sqm), unitconvert([x,2*x,3*x],sqin2sqm), unitconvert(array([x,2*x,3*x]),sqin2sqm)
