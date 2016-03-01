@@ -5,9 +5,7 @@ import os
 import csv
 import numpy as np
 
-
 def Write2CSV(Class,file,append=False):
-    #print "entering write 2 csv"
     """
     This function takes in a class and a file pointer
     """
@@ -27,16 +25,16 @@ def Write2CSV(Class,file,append=False):
             OutString+=','+string
         return OutString
         
+    #from Cycle import SecondaryCycleClass,DXCycleClass
     # Check if it is an instance of one of the cycle classes - more work required
     # to collect all the component outputs
-    if True:
+    if True: #if isinstance(Class,(SecondaryCycleClass,DXCycleClass)):
         #Pull the cycle outputs
         head,units,vals=OL2Strings(Class.OutputList())
         headList=[head]
         unitsList=[units]
         valsList=[vals]
         componentList=[BuildComponentList(units,'Cycle')]
-        #print componentList
         
         #Loop over the other things that are there
         for item in dir(Class):            
@@ -48,13 +46,9 @@ def Write2CSV(Class,file,append=False):
                 unitsList+=[units]
                 valsList+=[vals]
         components=','.join(componentList)
-        head=','.join(headList)
-        units=','.join(unitsList)
-        vals=','.join(valsList)
-        #print head
-        #print units
-        #print vals
-        
+        head=','.join(headList)     #print head
+        units=','.join(unitsList)   #print units
+        vals=','.join(valsList)     #print vals
         IsCycle=True
     else:
         head,units,vals=OL2Strings(Class.OutputList())
@@ -83,7 +77,7 @@ def Write2CSV(Class,file,append=False):
         fP.write(units+'\n')
         fP.write(vals+'\n')
     fP.close()
-
+    
 def simple_write_to_file_(head,data,file,append='True',newline=True):
     #function to simply write some data into a file
     #quick and dirty, nonspecific, therefore no formatting...
@@ -105,18 +99,18 @@ def simple_write_to_file(head,data,file,append='True',newline=True):
     def callw(input):
         test=str(input)
         if test==input:
-           writertool(input)
+            writertool(input)
         elif isinstance(input, dict):
             for key in input:
                 callw(key+":")
                 callw(input[key])
         else:
-           try:
-            for num in range(len(input)):
-                callw(input[num])
-            callw('<>')
-           except:
-               writertool(input)
+            try:
+                for num in range(len(input)):
+                    callw(input[num])
+                callw('<>')
+            except:
+                writertool(input)
            
     fP=open(file,'a')
     fP.write(str(head))
@@ -161,6 +155,7 @@ def print_dict(dict_inp):
         for keyword in dict_inp[key]:
             print " > "+keyword+" < ",
         print "<<<"
+
 
 def ValidateFields(d,reqFields,optFields=None):
         '''
@@ -234,14 +229,12 @@ def get_svn_revision(path=None):
         return u'SVN-%s' % rev
     return u'SVN-unknown'
 
+
 def subsample(data, sample_size):
     #subsample data
     sample_size=int(sample_size)
     samples = list(zip(*[iter(data)]*sample_size))   # use 3 for triplets, etc.
     return map(lambda x:sum(x)/float(len(x)), samples)
-
-if __name__=='__main__':
-    print get_svn_revision(None)
 
 
 def smooth_curve(curve_data,N_smooth,exp_max=-1,shift_0=0,fix_first_nonzero=False,plotit=False,t='x for plot'):
@@ -286,7 +279,9 @@ def smooth_curve(curve_data,N_smooth,exp_max=-1,shift_0=0,fix_first_nonzero=Fals
         plt.show()
     return a_v
     
-    
+if __name__=='__main__':
+    print get_svn_revision(None)    
+    print ' '
     
 if __name__=='__main__':
     #show how to use curve smoothing
@@ -308,4 +303,3 @@ if __name__=='__main__':
     print subsample(l, 2)
     print subsample(l, 3)
     print subsample(l, 4)
-
