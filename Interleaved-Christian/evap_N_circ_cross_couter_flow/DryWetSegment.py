@@ -1,14 +1,14 @@
 from __future__ import division #Make integer 3/2 give 1.5 in python 2.x
 from math import log,exp
-from CoolProp.HumidAirProp import HAProps,cair_sat#,UseVirialCorrelations,UseIsothermCompressCorrelation,UseIdealGasEnthalpyCorrelations
-from FinCorrelations import WavyLouveredFins
+from CoolProp.HumidAirProp import HAProps,cair_sat #,UseVirialCorrelations,UseIsothermCompressCorrelation,UseIdealGasEnthalpyCorrelations
+#from CoolProp.CoolProp import HAPropsSI, cair_sat #HAPropsSI and cair_sat are updated from "CoolProp.HumidAirProp" to CoolProp.CoolProp
+from FinCorrelations import WavyLouveredFins, HerringboneFins, PlainFins
 
 #Turn on virial correlations for air and water for speed in Humid Air routines
 #UseVirialCorrelations(1)
 #UseIsothermCompressCorrelation(1)
 #UseIdealGasEnthalpyCorrelations(1)
 class DWSVals():
-    print "using modified interleaved circuitry dry-wet segment"
     """ 
     Empty Class for passing data with DryWetSegment
     """
@@ -24,7 +24,7 @@ def DryWetSegment(DWS):
     """
     
     #List of required parameters
-    RequiredParameters=['Tin_a','h_a','cp_da','eta_a','A_a','pin_a','RHin_a','Tin_r','pin_r','h_r','cp_r','A_r','mdot_r','Fins']
+    RequiredParameters=['Tin_a','h_a','cp_da','eta_a','A_a','pin_a','RHin_a','Tin_r','pin_r','h_r','cp_r','A_r','mdot_r','Fins','FinsType']
     
     #Check that all the parameters are included, raise exception otherwise
     for param in RequiredParameters:
@@ -97,7 +97,7 @@ def DryWetSegment(DWS):
                 T_ac=Tin_a #temp at onset of wetted wall
                 h_ac=hin_a #enthalpy at onset of wetted surface
             else:
-                # Partially wet and dry
+                # Partially wet and dry (i.e T_so_b<Tdp<T_so_a)
 
                 # Air temperature at the interface between wet and dry surface
                 # Based on equating heat fluxes at the wall which is at dew point UA_i*(Tw-Ti)=UA_o*(To-Tw)
@@ -111,13 +111,21 @@ def DryWetSegment(DWS):
                 # Dry heat transfer
                 Q_dry=mdot_da*cp_da*(Tin_a-T_ac)
 
-            # Saturation specific heat at mean water temp
+            # Saturation specific heat at mean water temp (c_s : partial derivative dh_sat/dT @ Tsat_r)
             c_s=cair_sat(Tin_r)*1000  #[J/kg-K]
             # Find new, effective fin efficiency since cs/cp is changed from wetting
             # Ratio of specific heats [-]
             DWS.Fins.Air.cs_cp=c_s/cp_da
             DWS.Fins.WetDry='Wet'
-            WavyLouveredFins(DWS.Fins)
+            
+            #Compute the fin efficiency based on the user choice of FinsType
+            if DWS.FinsType == 'WavyLouveredFins':
+                WavyLouveredFins(DWS.Fins)
+            elif DWS.FinsType == 'HerringboneFins':
+                HerringboneFins(DWS.Fins)
+            elif DWS.FinsType == 'PlainFins':
+                PlainFins(DWS.Fins)
+            
             eta_a_wet=DWS.Fins.eta_a_wet
             UA_o=eta_a_wet*h_a*A_a
             Ntu_o=eta_a_wet*h_a*A_a/(mdot_da*cp_da)
@@ -141,7 +149,7 @@ def DryWetSegment(DWS):
             # Saturated air temp at effective surface temp [J/kg_da]
             h_s_s_e=h_ac-(h_ac-hout_a)/(1-exp(-(1-f_dry)*Ntu_o))
             # Effective surface temperature [K]
-            T_s_e = HAProps('T','H',h_s_s_e/1000.0,'P',pin_a,'R',1.0)
+            T_s_e = HAProps('T','H',h_s_s_e/1000.0,'P',pin_a,'R',1.0) #h_s_s_e/1000.0 is updated by removing /1000.0 in CP v5.x
             # Outlet dry-bulb temp [K]
             Tout_a = T_s_e+(T_ac-T_s_e)*exp(-(1-f_dry)*Ntu_o)
             #Sensible heat transfer rate [kW]
@@ -159,20 +167,22 @@ def DryWetSegment(DWS):
         C_star = Cmin / Cmax  #C_r acc. to incropera
         # Ntu overall [-]
         Ntu_dry = UA / Cmin
-
-        # Counterflow effectiveness [-]
-        #print "Ntu_dry, C_star", Ntu_dry, C_star
         
         if Ntu_dry<0.0000001:
             print "warning:  NTU_dry in dry wet segment was negative. forced it to positive value of 0.001!"
             Ntu_dry=0.0000001
-        
+
+        # Counterflow effectiveness [-]
         #epsilon_dry = ((1 - exp(-Ntu_dry * (1 - C_star))) / 
-        #    (1 - C_star * exp(-Ntu_dry * (1 - C_star))))  #counterflow acc. to incropera
-        if (cp_r * mdot_r)<(cp_da * mdot_da):  #crossflow, need to find side of cmax
-            epsilon_dry= 1-exp(-C_star**(-1)*(1-exp(-C_star*(Ntu_dry))))  #cross flow, single phase, cmax is airside, which is unmixed
+        #   (1 - C_star * exp(-Ntu_dry * (1 - C_star))))
+        
+        #Crossflow effectiveness (e.g. see Incropera - Fundamentals of Heat and Mass Transfer, 2007, p. 662)
+        if (cp_r * mdot_r)<(cp_da * mdot_da):
+            epsilon_dry= 1-exp(-C_star**(-1)*(1-exp(-C_star*(Ntu_dry))))
+            #Cross flow, single phase, cmax is airside, which is unmixed
         else:
-            epsilon_dry=(1/C_star)*(1-exp(-C_star*(1-exp(-Ntu_dry))))   #cross flow, single phase, cmax is refrigerant side, which is mixed
+            epsilon_dry=(1/C_star)*(1-exp(-C_star*(1-exp(-Ntu_dry))))
+            #Cross flow, single phase, cmax is refrigerant side, which is mixed
 
         # Dry heat transfer [W]
         Q_dry = epsilon_dry*Cmin*(Tin_a-Tin_r)
@@ -223,7 +233,13 @@ def DryWetSegment(DWS):
                 # Ratio of specific heats [-]
                 DWS.Fins.Air.cs_cp=c_s/cp_da
                 # Find new, effective fin efficiency since cs/cp is changed from wetting
-                WavyLouveredFins(DWS.Fins)
+                # Based on the user choice of FinsType
+                if DWS.FinsType == 'WavyLouveredFins':
+                    WavyLouveredFins(DWS.Fins)
+                elif DWS.FinsType == 'HerringboneFins':
+                    HerringboneFins(DWS.Fins)
+                elif DWS.FinsType == 'PlainFins':
+                    PlainFins(DWS.Fins)
                 # Effective humid air mass flow ratio
                 m_star=mdot_da/(mdot_r*(cp_r/c_s))
                 #compute the new Ntu_owet
@@ -255,7 +271,7 @@ def DryWetSegment(DWS):
                 # Wet-analysis saturation enthalpy [J/kg_da]
                 h_s_s_e=hin_a+(hout_a-hin_a)/(1-exp(-Ntu_owet))
                 # Surface effective temperature [K]
-                T_s_e=HAProps('T','H',h_s_s_e/1000.0,'P',pin_a,'R',1.0)
+                T_s_e=HAProps('T','H',h_s_s_e/1000.0,'P',pin_a,'R',1.0) #h_s_s_e/1000.0 is updated by removing /1000.0 in CP v5.x
                 # Air outlet temp based on effective temp [K]
                 Tout_a=T_s_e + (Tin_a-T_s_e)*exp(-Ntu_o)
                 #Sensible heat transfer rate [W]
@@ -357,7 +373,7 @@ def DryWetSegment(DWS):
                 # Wet-analysis saturation enthalpy [J/kg]
                 h_s_s_e=h_a_x+(hout_a-h_a_x)/(1-exp(-(1-f_dry)*Ntu_owet))
                 # Surface effective temperature [K]
-                T_s_e=HAProps('T','H',h_s_s_e/1000.0,'P',pin_a,'R',1.0)
+                T_s_e=HAProps('T','H',h_s_s_e/1000.0,'P',pin_a,'R',1.0)   #h_s_s_e/1000.0 is updated to by removing /1000.0 in CP v5.x
                 # Air outlet temp based on effective surface temp [K]
                 Tout_a=T_s_e + (T_a_x-T_s_e)*exp(-(1-f_dry)*Ntu_o)
                 # Heat transferred [W]
@@ -376,7 +392,7 @@ def DryWetSegment(DWS):
           
 
     DWS.f_dry=f_dry
-    DWS.omega_out=HAProps('W','T',Tout_a,'P',101.325,'H',hout_a/1000.0)
+    DWS.omega_out=HAProps('W','T',Tout_a,'P',101.325,'H',hout_a/1000.0)    ##hout_a/1000.0 is updated by removing /1000.0 in CP v5.x
     DWS.RHout_a=HAProps('R','T',Tout_a,'P',101.325,'W',DWS.omega_out)
     DWS.Tout_a=Tout_a
     DWS.Q=Q
