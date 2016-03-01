@@ -6,7 +6,7 @@ from Correlations import f_h_1phase_Tube,ShahEvaporation_Average, LockhartMartin
 from scipy.optimize import brentq #solver to find roots (zero points) of functions
 from scipy.interpolate import interp1d
 #import numpy as np
-from FinCorrelations import WavyLouveredFins,FinInputs,IsFinsClass
+from FinCorrelations import WavyLouveredFins,FinInputs,IsFinsClass, HerringboneFins, PlainFins
 from DryWetSegment import DWSVals, DryWetSegment
 from ACHPTools import ValidateFields
 import numpy as np
@@ -67,7 +67,7 @@ class EvaporatorClass():
             ('Outlet air temp','K',self.Tout_a),
             ('Evaporator P_sat in','kPa',self.psat_r),
             ('Evaporator inlet quality','-',self.xin_r),
-            ('Evaporator ref. flowrate','g/s',self.mdot_r*1000.0),
+            ('Evaporator ref. flowrate','kg/s',self.mdot_r),
             ('Pressure Drop Total','Pa',self.DP_r),
             ('Pressure Drop Superheat','Pa',self.DP_r_superheat),
             ('Pressure Drop Two-Phase','Pa',self.DP_r_2phase),
@@ -92,7 +92,13 @@ class EvaporatorClass():
         
     def AirSideCalcs(self):
         self.Fins.h_a_tuning= self.h_a_tuning #pass tuning factor
-        WavyLouveredFins(self.Fins)
+                #Update with user FinType
+        if self.FinsType == 'WavyLouveredFins':
+            WavyLouveredFins(self.Fins)
+        elif self.FinsType == 'HerringboneFins':
+            HerringboneFins(self.Fins)
+        elif self.FinsType == 'PlainFins':
+            PlainFins(self.Fins)
     
     def Initialize(self):
         #Input validation the first call of Initialize
@@ -102,6 +108,7 @@ class EvaporatorClass():
                        ('Ref',str,None,None),
                        ('psat_r',float,1e-6,100000),
                        ('Fins',IsFinsClass,None,None),
+                       ('FinsType',str,None,None),
                        ('hin_r',float,-100000,10000000),
                        ('mdot_r',float,0.000001,10),
                        ]
@@ -141,11 +148,19 @@ class EvaporatorClass():
         ## Mean temperature for use in HT relationships
         self.Tsat_r=(self.Tbubble_r+self.Tdew_r)/2
         # Latent heat
-        self.h_fg=(Props('H','T',self.Tdew_r,'Q',1.0,self.Ref)-Props('H','T',self.Tbubble_r,'Q',0.0,self.Ref))*1000. #[J/kg]
+        self.h_fg=(Props('H','T',self.Tdew_r,'Q',1.0,self.Ref)-Props('H','T',self.Tbubble_r,'Q',0.0,self.Ref))*1000.0 #[J/kg]
         
         self.Fins.Air.RHmean=self.Fins.Air.RH
         self.Fins.h_tp_tuning= self.h_tp_tuning #pass tuning factor
-        WavyLouveredFins(self.Fins)
+        
+        #Update with user FinType
+        if self.FinsType == 'WavyLouveredFins':
+            WavyLouveredFins(self.Fins)
+        elif self.FinsType == 'HerringboneFins':
+            HerringboneFins(self.Fins)
+        elif self.FinsType == 'PlainFins':
+            PlainFins(self.Fins)
+            
         self.mdot_ha=self.Fins.mdot_ha #[kg_ha/s]
         self.mdot_da=self.Fins.mdot_da #[kg_da/s]
 
@@ -190,7 +205,7 @@ class EvaporatorClass():
                 ## Mean temperature for use in HT relationships
                 self.Tsat_r=(self.Tbubble_r+self.Tdew_r)/2
                 # Latent heat
-                self.h_fg=(Props('H','T',self.Tdew_r,'Q',1.0,self.Ref)-Props('H','T',self.Tbubble_r,'Q',0.0,self.Ref))*1000. #[J/kg]
+                self.h_fg=(Props('H','T',self.Tdew_r,'Q',1.0,self.Ref)-Props('H','T',self.Tbubble_r,'Q',0.0,self.Ref))*1000.0 #[J/kg]
                 
                 #need to repeat part of the calculate function; already know length of two phase section...
                 if self.w_2phase>=0.0:  #already know outlet quality from finding the 2-phase pressure drop
@@ -271,6 +286,7 @@ class EvaporatorClass():
         #Outlet superheat an temperature (in case of two phase)
         if self.existsSuperheat:  #neglecting change in pressure for superheat calculation...
             try:
+                #self.Tout_r=Props('T','P',self.pout_r,'H',self.hout_r,self.Ref)
                 self.Tout_r=newton(lambda T: Props('H','T',T,'P',self.pout_r,self.Ref)-self.hout_r/1000.0,Props('T','P',self.pout_r,'Q',1.0,self.Ref))
                 self.sout_r=Props('S','T',self.Tout_r,'P',self.pout_r,self.Ref)*1000.0
                 self.DT_sh_calc=self.Tout_r-self.Tdew_r
@@ -293,7 +309,7 @@ class EvaporatorClass():
         self.UA_a=self.Fins.h_a*self.Fins.A_a*self.Fins.eta_a
         
         #Build a vector of temperatures at each point where there is a phase transition along the averaged circuit
-            #this is not updated or supported at this point
+            #NOTE: this is not updated or supported at this point!
         
     def Calculate(self):
         #calculate evaporator without consideration of pressure drop for HT
@@ -455,10 +471,10 @@ class EvaporatorClass():
         #Outlet superheat an temperature (in case of two phase)
         if existsSuperheat:
             try:
-                #self.Tout_r=PropsSI('T','P',self.pout_r,'H',self.hout_r/1000.0,self.Ref)
+                #self.Tout_r=Props('T','P',self.pout_r,'H',self.hout_r,self.Ref) 
                 self.Tout_r=newton(lambda T: Props('H','T',T,'P',self.pout_r,self.Ref)-self.hout_r/1000.0,Props('T','P',self.pout_r,'Q',1.0,self.Ref))
             except:
-                print "problem iwith calculating Tout_r in evaporator.py"
+                print "problem iwith calculating Tout_r in Christian_evaporator.py"
                 print "self.hout_r/1000.0",self.hout_r/1000.0,"self.hin_r/1000.0",self.hin_r/1000.0,"Props('H','Q',1.0,'P',self.pout_r,self.Ref)",Props('H','Q',1.0,'P',self.pout_r,self.Ref),"self.pout_r",self.pout_r,"self.psat_r",self.psat_r,"self.mdot_r",self.mdot_r,"self.xin_r",self.xin_r
                 print "Props('H','Q',0.0,'P',self.pout_r,self.Ref)",Props('H','Q',0.0,'P',self.pout_r,self.Ref),"self.Tin_a,self.Tsat_r",self.Tin_a,self.Tsat_r,"self.DP_r/1000.0",self.DP_r/1000.0,self.Q,self.Q_superheat,self.Q_2phase,existsSuperheat,self.w_2phase
                 print self.Fins.cp_da
@@ -498,6 +514,7 @@ class EvaporatorClass():
         Nbends=1+self.Lcircuit/self.Ltube
         #x-position of each point
         xv=np.linspace(0,1,Nbends)
+        
         self.Tbends=interp1d(x,Tv)(xv)
         
         self.existsSuperheat=existsSuperheat  #needed for Calculate_PD()
@@ -508,6 +525,7 @@ class EvaporatorClass():
     
         # Store temporary values to be passed to DryWetSegment
         DWS.Fins=self.Fins
+        DWS.FinsType = self.FinsType
         DWS.A_a=self.Fins.A_a*w_2phase
         DWS.cp_da=self.Fins.cp_da
         DWS.eta_a=self.Fins.eta_a
@@ -557,7 +575,7 @@ class EvaporatorClass():
         #Frictional pressure drop component
         DP_frict=LMPressureGradientAvg(self.xin_r,self.xout_2phase,self.Ref,self.G_r,self.ID,self.Tbubble_r,self.Tdew_r)*self.Lcircuit*w_2phase
         #Accelerational pressure drop component    
-        DP_accel=AccelPressureDrop(self.xin_r,self.xout_2phase,self.Ref,self.G_r,self.Tbubble_r,self.Tdew_r)
+        DP_accel=AccelPressureDrop(self.xin_r,self.xout_2phase,self.Ref,self.G_r,self.Tbubble_r,self.Tdew_r)*self.Lcircuit*w_2phase
         self.DP_r_2phase=DP_frict+DP_accel;
         
         if self.Verbosity>7:
@@ -578,6 +596,7 @@ class EvaporatorClass():
         DWS.mdot_da=self.mdot_da*w_superheat
         DWS.pin_a=self.Fins.Air.p
         DWS.Fins=self.Fins
+        DWS.FinsType = self.FinsType
     
         # Inputs on the air side to two phase region are inlet air again
         DWS.Tin_a=self.Tin_a
@@ -625,7 +644,7 @@ class EvaporatorClass():
         self.omega_out_superheat=DWS.omega_out
         
 if __name__=='__main__':
-    #This code runs if this file is run by itself, but otherwise doesn't run3
+    #This code runs if this file is run by itself, but otherwise doesn't run
     if 1:
         Ref='R410a'
         TT=[]
@@ -670,6 +689,7 @@ if __name__=='__main__':
                     'mdot_r':  0.0708,
                     'psat_r':  Props('P','T',Tdew,'Q',1.0,Ref),
                     'Fins': FinsTubes,
+                    'FinsType': 'WavyLouveredFins',
                     'hin_r':hin_r,
                     'Verbosity':0
             }
@@ -746,6 +766,7 @@ if __name__=='__main__':
                     'mdot_r':  0.0708,
                     'psat_r':  Props('P','T',Tdew,'Q',1.0,'R410A'),
                     'Fins': FinsTubes,
+                    'FinsType': 'WavyLouveredFins',
                     'hin_r':Props('H','P',Props('P','T',Tdew,'Q',1.0,'R410A'),'Q',0.15,'R410A')*1000,
                     'Verbosity':0
             }
@@ -777,9 +798,9 @@ if __name__=='__main__':
 #         start_time = time.clock()
 #         for i in range(10):
 #             Evap.Calculate()
-#         print time.clock() - start_time, "seconds to run normale calculate fct"
+#         print time.clock() - start_time, "seconds to run normal calculate function"
 #         print Evap.OutputList()
-
+        
         pylab.plot(TT,QQ,TT,Q,'x-')
         pylab.legend(['2-phase','total'])
         pylab.xlabel('Ref. Inlet Dew Temperature [K]')
