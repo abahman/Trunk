@@ -1,5 +1,6 @@
-from CoolProp.HumidAirProp import HAProps#,UseVirialCorrelations,UseIsothermCompressCorrelation,UseIdealGasEnthalpyCorrelations
-from math import sqrt,pi,log,tanh,exp,cos,log
+from CoolProp.HumidAirProp import HAProps #UseVirialCorrelation,UseIdealGasEnthalpyCorrelations,UseIsothermCompressCorrelation
+#from CoolProp.CoolProp import HAPropsSI #HAPropsSI updated from "CoolProp.HumidAirProp" to CoolProp.CoolProp 
+from math import sqrt,pi,tanh,exp,cos,log
 from ACHPTools import ValidateFields
 #from math import isnan
 #Turn on virial correlations for air and water for speed in Humid Air routines
@@ -55,7 +56,7 @@ class FinInputs():
             ('RH',float,0,1),
             ('Tdb',float,-80+273.15,200+273.15),
             ('FanPower',float,0,4000),
-            ('p',float,0.01,10000),
+            ('p',float,0.01,10000),             #0.01,10000 should updated to 10,10000000 in CP v5.x
             ('Vdot_ha',float,0.001,10)
         ]
         optFields=['RHmean','Tmean']
@@ -133,17 +134,17 @@ def WavyLouveredFins(Inputs):
               \ ___ /
     """
     
-    Ntubes_bank = Inputs.Tubes.NTubes_per_bank #tubes per bank
-    Nbank =       Inputs.Tubes.Nbank       #Number of banks
-    Ltube =       Inputs.Tubes.Ltube       #length of a single tube
-    D =           Inputs.Tubes.OD          #Outer diameter of tube
-    Pl =          Inputs.Tubes.Pl          #Horizontal spacing between banks (center to center)
-    Pt =          Inputs.Tubes.Pt          #Vertical spacing between tubes in a bank (center to center)
+    Ntubes_bank = Inputs.Tubes.NTubes_per_bank  #tubes per bank
+    Nbank =       Inputs.Tubes.Nbank            #Number of banks
+    Ltube =       Inputs.Tubes.Ltube            #length of a single tube
+    D =           Inputs.Tubes.OD               #Outer diameter of tube
+    Pl =          Inputs.Tubes.Pl               #Horizontal spacing between banks (center to center)
+    Pt =          Inputs.Tubes.Pt               #Vertical spacing between tubes in a bank (center to center)
 
     FPI =         Inputs.Fins.FPI
-    pd =          Inputs.Fins.Pd  #2 * amplitude of fin
-    xf =          Inputs.Fins.xf  #1/2 period of fin
-    t =           Inputs.Fins.t    #thicknes of fin material
+    pd =          Inputs.Fins.Pd
+    xf =          Inputs.Fins.xf
+    t =           Inputs.Fins.t
     k_fin =       Inputs.Fins.k_fin
 
     Vdot_ha =     Inputs.Air.Vdot_ha
@@ -166,6 +167,12 @@ def WavyLouveredFins(Inputs):
     else:
         isWet=False
         cs_cp=1.0
+        
+    #check that h_a_tuning is defined, else set to 1.0
+    if hasattr(Inputs,'h_a_tuning'):
+        h_a_tuning = Inputs.h_a_tuning
+    else:
+        h_a_tuning = 1.0
 
     #Film temperature [K]
     Tfilm = Temp
@@ -226,7 +233,7 @@ def WavyLouveredFins(Inputs):
     #Heat transfer
     j = 16.06 * pow(Re_D,-1.02 * (pf / D) - 0.256) * pow(A / Atube, -0.601) * pow(Nbank,-0.069) * pow(pf / D,0.84) #Colburn j-Factor
     h_a = j * rho_ha * umax * cp_ha / pow(Pr,2.0/3.0) #air side mean heat transfer coefficient
-    #h_a =h_a*Inputs.h_tp_tuning; #print 'wlfins - Inputs.h_tp_tuning ',Inputs.h_tp_tuning
+    h_a = h_a*Inputs.h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
     if h_a<0.00001:
         print "warning, h_a in FinCorrelations, Wavy Louvered fins was smaller 0: ",h_a," set to 0.00001"
         h_a=0.00001
@@ -262,7 +269,7 @@ def WavyLouveredFins(Inputs):
     eta_o = 1 - Af / A * (1 - eta_f)
 
     G_c=mdot_ha/Ac #air mass flux
-    DeltaP_air=A/Atube/rho_ha*G_c**2/2.0*fa_total #airside pressure drop
+    DeltaP_air=A/Ac/rho_ha*G_c**2/2.0*fa_total #airside pressure drop
     
     #write necessary values back into the given structure
     Inputs.A_a=A;
@@ -318,6 +325,11 @@ def HerringboneFins(Inputs):
     else:
         isWet=False
         cs_cp=1.0
+    #check that h_a_tuning is defined, else set to 1.0
+    if hasattr(Inputs,'h_a_tuning'):
+        h_a_tuning = Inputs.h_a_tuning
+    else:
+        h_a_tuning = 1.0
     
     #Dimensions and values used for both Reynolds number ranges:
     delta_f = Inputs.Fins.t     #fin thickness(m)
@@ -379,12 +391,16 @@ def HerringboneFins(Inputs):
     
     Pr = cp_ha * mu_ha / k_ha
     h_a = j * rho_ha * u_max * cp_ha / pow(Pr,2.0/3.0) #air side mean heat transfer coefficient using colborn j-factor
-    
+    h_a = h_a*Inputs.h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
+    if h_a<0.00001:
+        print "warning, h_a in FinCorrelations, Wavy Louvered fins was smaller 0: ",h_a," set to 0.00001"
+        h_a=0.00001
+        
     #calcs needed for specific fin types
     #additional parameters needed
-    k_fin =  Inputs.Fins.k_fin
-    Nbank =       Inputs.Tubes.Nbank       #Number of banks
-    secTheta=sqrt(X_f*X_f + P_d*P_d) / X_f  #secTheta
+    k_fin = Inputs.Fins.k_fin
+    Nbank = Inputs.Tubes.Nbank              #Number of banks
+    #secTheta=sqrt(X_f*X_f + P_d*P_d) / X_f  #secTheta : already calculated, no need to re-calculate it
     #Wetted Area of a single fin [m^2]
     A_1fin = 2.0 * (Height * P_L * (Nbank+1) * secTheta  - Ntubes_bank*Nbank * pi*D_o*D_o/4) #assuming that fin extends 1/2 pt in front/after last tube in bundle
     # Total wetted area of the fins [m^2]
@@ -419,7 +435,7 @@ def HerringboneFins(Inputs):
 
     G_c=mdot_ha/Ac #air mass flux
     Atube = Ntubes_bank * Nbank * pi * D_o * Ltube# Total outer area of the tubes [m^2]
-    DeltaP_air=A/Atube/rho_ha*G_c**2/2.0*f #airside pressure drop
+    DeltaP_air=A/Ac/rho_ha*G_c**2/2.0*f #airside pressure drop
     
     #write necessary values back into the given structure
     Inputs.A_a=A;
@@ -443,7 +459,7 @@ def PlainFins(Inputs):
     #Chi-Chuan Wang, Kuan-Yu Chi, Chun-Jung Chang
     
         #Properties:
-    p =  Inputs.Air.p #air pressure
+    p =  Inputs.Air.p #air pressure in Pa
     W=HAProps('W','T',Inputs.Air.Tdb,'P',p,'R',Inputs.Air.RH)
     #Transport properties of humid air from CoolProp
     mu_ha=HAProps('M','T',Inputs.Air.Tdb,'P',p,'W',W) 
@@ -470,6 +486,11 @@ def PlainFins(Inputs):
     else:
         isWet=False
         cs_cp=1.0
+    #check that h_a_tuning is defined, else set to 1.0
+    if hasattr(Inputs,'h_a_tuning'):
+        h_a_tuning = Inputs.h_a_tuning
+    else:
+        h_a_tuning = 1.0
     
     #Dimensions and values used for both Reynolds number ranges:
     delta_f = Inputs.Fins.t     #fin thickness(m)
@@ -520,13 +541,17 @@ def PlainFins(Inputs):
     #pressure drop
     F1=-0.764+0.739*P_t/P_L+0.177*F_p/D_c-0.00758/N
     F2=-15.689+64.021/log(Re_Dc)
-    F3=1.696-15.695*log(Re_Dc)
+    F3=1.696-15.695/log(Re_Dc)          #CORRECTION: division instead of multiplication >> bug solved!
     f=0.0267*pow(Re_Dc,F1)*pow(P_t/P_L,F2)*pow(F_p/D_c,F3)
     
     
     Pr = cp_ha * mu_ha / k_ha
     h_a = j * rho_ha * u_max * cp_ha / pow(Pr,2.0/3.0) #air side mean heat transfer coefficient using colborn j-factor
-    
+    h_a = h_a*Inputs.h_a_tuning; #print 'wlfins - Inputs.h_a_tuning ',Inputs.h_a_tuning
+    if h_a<0.00001:
+        print "warning, h_a in FinCorrelations, Wavy Louvered fins was smaller 0: ",h_a," set to 0.00001"
+        h_a=0.00001
+        
     #calcs needed for specific fin types
     #additional parameters needed
     k_fin =  Inputs.Fins.k_fin
@@ -560,7 +585,7 @@ def PlainFins(Inputs):
 
     G_c=mdot_ha/A_c #air mass flux
     Atube = Ntubes_bank * Nbank * pi * D_o * Ltube# Total outer area of the tubes [m^2]
-    DeltaP_air=A/Atube/rho_ha*G_c**2/2.0*f #airside pressure drop
+    DeltaP_air=A/A_c/rho_ha*G_c**2/2.0*f #airside pressure drop
     
     #write necessary values back into the given structure
     Inputs.A_a=A;
@@ -577,7 +602,6 @@ def PlainFins(Inputs):
     Inputs.dP_a=DeltaP_air
     Inputs.Re=Re_Dc
     
-    print "Warning! The PlainFins seem to be buggy, better use HerringboneFins with small waveiness"
     
     
     
@@ -603,24 +627,25 @@ if __name__=='__main__':
     FinsTubes.Air.Vdot_ha=0.5663
     FinsTubes.Air.Tmean=299.8
     FinsTubes.Air.Tdb=299.8
-    FinsTubes.Air.p=101.325
+    FinsTubes.Air.p=101.325    #updated from 101.325kPa to 101325Pa for CP v5.x
     FinsTubes.Air.RH=0.51
     FinsTubes.Air.RHmean=0.51
     FinsTubes.Air.FanPower=438
     
-    FinsTubes.h_a_tuning=1.0
+    FinsTubes.h_a_tuning=1.0 #for tunning the air heat transfer coefficient
     
     FinsTubes.Validate()
     
     print FinsTubes  #just print our inputs
     WavyLouveredFins(FinsTubes)  #calculate
-    #print "Wavy-Louvered fins:","eta_a is:"+str(FinsTubes.eta_a)+", dP_a is:"+str(FinsTubes.dP_a) #print some of the results
-    #HerringboneFins(FinsTubes) 
-    #print "Herringbone Fins fins:","eta_a is:"+str(FinsTubes.eta_a)+", dP_a is:"+str(FinsTubes.dP_a) #print some of the results
-    #PlainFins(FinsTubes) 
-    #print "Plain Fins fins:","eta_a is:"+str(FinsTubes.eta_a)+", dP_a is:"+str(FinsTubes.dP_a) #print some of the results
-    #print "a graph for the fin correlations can be found here: "+r"\achp\trunk\Documentation\Web\MPLPlots"
+    print "Wavy-Louvered fins:","eta_a is:"+str(FinsTubes.eta_a)+", dP_a is:"+str(FinsTubes.dP_a)+" Pa" #print some of the results
+    HerringboneFins(FinsTubes) 
+    print "Herringbone Fins fins:","eta_a is:"+str(FinsTubes.eta_a)+", dP_a is:"+str(FinsTubes.dP_a)+" Pa" #print some of the results
+    PlainFins(FinsTubes) 
+    print "Plain Fins fins:","eta_a is:"+str(FinsTubes.eta_a)+", dP_a is:"+str(FinsTubes.dP_a)+" Pa" #print some of the results
+    print "a graph for the fin correlations can be found here: "+r"\Documentation\Web\MPLPlots"
     
+    #This part copied from original Christian code 
     from convert_units import *
     import numpy as np
     T_in_air=C2K(np.array([21.91156557,35.00974256,34.62973333,1.887537563,11.93058636,22.03684101,34.88511447,34.21912972,46.13087575,21.98885524,34.89140381,46.04504935,21.83105245,34.93460259,46.07872677,35.00406406,35.00746031,35.05650785,12.07902318,21.96276869,34.96930278,45.99610218,45.82536445,22.01319628,34.97739709,46.03228081,22.04558986,34.98846756,46.01794557,45.82686894]))
@@ -638,6 +663,3 @@ if __name__=='__main__':
             print "error in run #",i,"calculated RH",RH_in_air[i],"inputs" 'T',T_in_air[i],'P',101.325,'D',DP_exp[i]
     print "using relative humidity calculated with formulas above, since it does not work in LRCS_condenser directly"
     print RH_in_air
-    
-    
-    
