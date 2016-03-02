@@ -474,7 +474,7 @@ class EvaporatorClass():
                 #self.Tout_r=Props('T','P',self.pout_r,'H',self.hout_r,self.Ref) 
                 self.Tout_r=newton(lambda T: Props('H','T',T,'P',self.pout_r,self.Ref)-self.hout_r/1000.0,Props('T','P',self.pout_r,'Q',1.0,self.Ref))
             except:
-                print "problem iwith calculating Tout_r in Christian_evaporator.py"
+                print "problem iwith calculating Tout_r in Evaporator.py"
                 print "self.hout_r/1000.0",self.hout_r/1000.0,"self.hin_r/1000.0",self.hin_r/1000.0,"Props('H','Q',1.0,'P',self.pout_r,self.Ref)",Props('H','Q',1.0,'P',self.pout_r,self.Ref),"self.pout_r",self.pout_r,"self.psat_r",self.psat_r,"self.mdot_r",self.mdot_r,"self.xin_r",self.xin_r
                 print "Props('H','Q',0.0,'P',self.pout_r,self.Ref)",Props('H','Q',0.0,'P',self.pout_r,self.Ref),"self.Tin_a,self.Tsat_r",self.Tin_a,self.Tsat_r,"self.DP_r/1000.0",self.DP_r/1000.0,self.Q,self.Q_superheat,self.Q_2phase,existsSuperheat,self.w_2phase
                 print self.Fins.cp_da
@@ -487,7 +487,7 @@ class EvaporatorClass():
                     self.hout_r=self.hin_r+self.Q/self.mdot_r
                     print "self.hout_r",self.hout_r
                 self.Tout_r=newton(lambda T: Props('H','T',T,'P',self.psat_r,self.Ref)-self.hout_r/1000.0,Props('T','P',self.psat_r,'Q',1.0,self.Ref))
-                self.sout_r=Props('S','T',self.Tout_r,'P',self.pin_r,self.Ref)*1000.0
+                self.sout_r=Props('S','T',self.Tout_r,'P',self.psat_r,self.Ref)*1000.0
             self.DT_sh_calc=self.Tout_r-self.Tdew_r
         else:
             xout_r=(self.hout_r-hsatL)/(hsatV-hsatL)
