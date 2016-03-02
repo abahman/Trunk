@@ -539,35 +539,33 @@ class MCE_N(EvaporatorClass):
             print " The flow directions is parallel!"
             print""
             for i in range(self.num_evaps):
-                self.EvapsA[i].Calculate()
-                self.EvapsB[i].hin_r = self.EvapsA[i].hout_r
+                self.EvapsB[i].Calculate()
+                self.EvapsA[i].hin_r = self.EvapsB[i].hout_r
                 
             for i in range(self.num_evaps):   #update and calculate second row
                 if self.interleaved:
                     " Use the function to find the profile order"
                     min_order = self.interleave_order[0]
                     max_order = self.interleave_order[1]
-                    self.EvapsB[min_order[i]].Fins.Air.RH= self.EvapsA[max_order[i]].Fins.Air.RH_out
-                    self.EvapsB[min_order[i]].Fins.Air.Tdb= self.EvapsA[max_order[i]].Tout_a
+                    self.EvapsA[min_order[i]].Fins.Air.RH= self.EvapsB[max_order[i]].Fins.Air.RH_out
+                    self.EvapsA[min_order[i]].Fins.Air.Tdb= self.EvapsB[max_order[i]].Tout_a
                 else:
-                    self.EvapsB[i].Fins.Air.RH= self.EvapsA[i].Fins.Air.RH_out
-                    self.EvapsB[i].Fins.Air.Tdb= self.EvapsA[i].Tout_a
+                    self.EvapsA[i].Fins.Air.RH= self.EvapsB[i].Fins.Air.RH_out
+                    self.EvapsA[i].Fins.Air.Tdb= self.EvapsB[i].Tout_a
             for i in range(self.num_evaps):
             #if we use the profile order function we need to take care the order of the iteration here (Update problem !!!!!!!)
-                self.EvapsB[i].Calculate()
+                self.EvapsA[i].Calculate()
             print""
             print " ######### The end of the Calculating Process ###############"
             print""
             print " ############### Calculated for each circuit, then out to next function ##################"
             print""
             h_guess_max=Props('H','P',self.psat_r,'T',self.EvapsA[0].Fins.Air.Tdb,self.Ref)-5.0
-            #guess_value=300000*h_guess_max*np.ones(self.num_evaps)
             guess_value=1000.0*h_guess_max**np.ones(self.num_evaps)
             
         else: #for counter flow (cross flow + ref and air are in counter)
             print " The flow directions is counter!"
             h_guess_max=Props('H','P',self.psat_r,'T',self.EvapsA[0].Fins.Air.Tdb,self.Ref)-5.0
-            #guess_value=300000*h_guess_max*np.ones(self.num_evaps)
             guess_value=1000.0*h_guess_max**np.ones(self.num_evaps)
             print""
             print " ######### The start of the fucntion residual ###############"
@@ -622,7 +620,7 @@ class MCE_N(EvaporatorClass):
             #import solver and solve
             from scipy.optimize import fsolve
             if self.same_direction_flow:  
-                actual_hinB = self.EvapsA[i].hout_r
+                actual_hinA = fsolve(residual, guess_value) #actual_hinB = self.EvapsA[i].hout_r
             else:
                 actual_hinA = fsolve(residual, guess_value)
         
@@ -742,7 +740,7 @@ class MCE_N(EvaporatorClass):
                 self.Q+=self.EvapsA[i].Q+self.EvapsB[i].Q
                 self.mdot_r_tot+=self.EvapsA[i].mdot_r
                 self.mdot_r_totB+=self.EvapsB[i].mdot_r
-                self.hout_r+=self.EvapsB[i].mdot_r*self.EvapsB[i].hout_r  #flow weighted average
+                self.hout_r+=self.EvapsA[i].mdot_r*self.EvapsA[i].hout_r  #flow weighted average
 #         for i in range(self.num_evaps):
 #             self.Q+=self.EvapsA[i].Q+self.EvapsB[i].Q
 #             self.mdot_r_tot+=self.EvapsA[i].mdot_r
