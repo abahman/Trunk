@@ -159,9 +159,9 @@ class MCE_N(EvaporatorClass):
         Evaporator=EvaporatorClass()
         Evaporator.Fins=FinInputs()
          
-        Evaporator.Fins.Tubes.NTubes_per_bank=3     #(each cell 1 tube)
-        Evaporator.Fins.Tubes.Nbank=2               #(half of actual number for a single cell)
-        Evaporator.Fins.Tubes.Ncircuits=1           #(each cell is part of 1 circuit)
+        Evaporator.Fins.Tubes.NTubes_per_bank=3     #No. of tubes per bank per cell
+        Evaporator.Fins.Tubes.Nbank=2               #No. of banks per cell
+        Evaporator.Fins.Tubes.Ncircuits=1           #each cell is part of 1 circuit
         Evaporator.Fins.Tubes.Ltube=in2m(24.875)    #measured fin pack length
         Evaporator.Fins.Tubes.OD=in2m(0.5)          #measured
         Evaporator.Fins.Tubes.ID=Evaporator.Fins.Tubes.OD - 2*in2m(0.019)  #guess of 1 mm for wall thickness
@@ -174,12 +174,13 @@ class MCE_N(EvaporatorClass):
         Evaporator.Fins.Fins.t=in2m(0.0075)         #thickness
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
-        Evaporator.Fins.Air.Vdot_ha=(1/6)*cfm2cms(1742)#flow rate divided by the number of citcuits
+        Evaporator.Fins.Air.Vdot_ha=cfm2cms(1742)*(1/6)*0.8#cfm2cms(1742)#flow rate divided by the number of circuits
         Evaporator.Fins.Air.Tdb=C2K(25.86)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
         Evaporator.Fins.Air.RH=0.3145               #relative humidity          
-        #Evaporator.Fins.Air.RHmean=0.3145
-        Evaporator.Fins.Air.FanPower=0#778.0       #fan power in W
+        Evaporator.Fins.Air.FanPower=778.0          #fan power in W
+        
+        Evaporator.Fins.h_a_tuning=0.4              #tune factor for air-side heat transfer coefficient (fin and tube)
         
         return Evaporator.Fins
     
@@ -218,6 +219,7 @@ class MCE_N(EvaporatorClass):
         Evaporator.Fins.Air.RHmean=0.48 #0.48
         #################################
         Evaporator.Fins.Air.FanPower=0#378  #W, average from clean coil hybrid measurements
+                
         return Evaporator.Fins
     
     def Evaporator_RAC_Fins(self):
@@ -270,17 +272,17 @@ class MCE_N(EvaporatorClass):
             self.num_evaps=2 #number of evaporators
         
         if evap_type=='60K':
-            self.Ref='R407c'
-            self.psat_r= 345.6  #in kPa
+            self.Ref='R407C'
+            self.psat_r= 361.5  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(92.92/1000.0)/(6.0)*1.0  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(92.92/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=PropsSI('H','P', 1732,'T',C2K(33.14),self.Ref)*1000
+            self.hin_r=Props('H','P', 1732,'T',C2K(33.14),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=1.0
+            self.h_tp_tuning=0.4
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -597,7 +599,7 @@ class MCE_N(EvaporatorClass):
                     self.hout_r+=self.EvapsA[i].mdot_r*self.EvapsA[i].hout_r
                 self.hout_r/=self.mdot_r_tot
                 self.resids=self.hout_r-self.hout_r_target #store nested for csv output
-                print " mdot_r_tot",self.mdot_r_tot,"evapa_hout_r",self.EvapsA[i].hout_r,"hout_r",self.hout_r,"target",self.hout_r_target,"resids",self.resids
+                print " mdot_r_tot",self.mdot_r_tot,"EvapA_hout_r",self.EvapsA[i].hout_r,"hout_r",self.hout_r,"target",self.hout_r_target,"resids",self.resids
                 return self.hout_r-self.hout_r_target
             
             T_sat=Props('T','P',self.psat_r,'Q',1.0,self.Ref)
@@ -1117,9 +1119,9 @@ def airside_maldistribution_study(evap_type='LRCS',MD_Type=None,interleave_order
     
     elif MD_Type=="60K":
         Original_Profile=np.array([0.19008887,0.14424539,0.2115167,0.17403436,0.11236396,0.16775072])*6.0 ##Update on 02/22/16
-        MD_severity=[0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
-        #MD_severity=[0,0.05,0.5,1.0]
-        #MD_severity=[1.0]
+        #MD_severity=[0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
+        #MD_severity=[0,0.05,0.3,0.5,0.7,1.0]
+        MD_severity=[1.0,0.5]
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
@@ -1143,7 +1145,7 @@ def airside_maldistribution_study(evap_type='LRCS',MD_Type=None,interleave_order
         print "using custum maldistribution as passed in"
     
     
-    Target_SH=5.0
+    Target_SH=15.5
     Parallel_flow = False #CHOOSE: True>>parallel flow OR False>>counter flow
     
     #===========================================================================
@@ -1420,9 +1422,9 @@ if __name__=='__main__':
     if 0: #test profiles
         flow_maldistribution_profiles_tester()
         air_temp_maldistribution_profiles_tester()
-    if 1: #run parametric study for 2-circuit cases only
+    if 0: #run parametric study for 2-circuit cases only
         airside_maldistribution_study(evap_type='LRCS',MD_Type=None,Hybrid='adjust_superheat_iter',adjust_area_fraction_iternum=30)  #this runs the 2-circuit case with the only possible maldistribution for that case (code is ugly...)
-    if 0: #run parametric studies
+    if 1: #run parametric studies
         airside_maldistribution_study(evap_type='60K',MD_Type="60K")
         #airside_maldistribution_study(evap_type='LRCS',MD_Type="LRCS_Type_A")
         #refside_maldistribution_study(evap_type='LRCS')
