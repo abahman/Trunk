@@ -1120,8 +1120,8 @@ def airside_maldistribution_study(evap_type='LRCS',MD_Type=None,interleave_order
     elif MD_Type=="60K":
         Original_Profile=np.array([0.19008887,0.14424539,0.2115167,0.17403436,0.11236396,0.16775072])*6.0 ##Update on 02/22/16
         #MD_severity=[0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
-        #MD_severity=[0,0.05,0.3,0.5,0.7,1.0]
-        MD_severity=[1.0,0.5]
+        MD_severity=[0,0.05,0.3,0.5,0.7,1.0]
+        #MD_severity=[1.0,0.5]
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
