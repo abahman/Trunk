@@ -56,6 +56,8 @@ class MCE_N(EvaporatorClass):
                                     ('Inlet DB_A'+' '+str(i),'K',self.EvapsA[i].Fins.Air.Tdb),  ('Inlet DB_B'+' '+str(i),'K',self.EvapsB[i].Fins.Air.Tdb),
                                     ('Inlet Air pressure_A'+' '+str(i),'kP_A',self.EvapsA[i].Fins.Air.p),    ('Inlet Air pressure_B'+' '+str(i),'kP_B',self.EvapsB[i].Fins.Air.p),
                                     ('Inlet Air Relative Humidity_A'+' '+str(i),'-',self.EvapsA[i].Fins.Air.RH),    ('Inlet Air Relative Humidity_B'+' '+str(i),'-',self.EvapsB[i].Fins.Air.RH),
+                                    ('Outlet Air pressure_A'+' '+str(i),'kP_A',self.EvapsA[i].Fins.Air.p-self.EvapsA[i].Fins.dP_a),    ('Outlet Air pressure_B'+' '+str(i),'kP_B',self.EvapsB[i].Fins.Air.p-self.EvapsB[i].Fins.dP_a),
+                                    ('Outlet Air Relative Humidity_A'+' '+str(i),'-',self.EvapsA[i].Fins.Air.RH_out),    ('Outlet Air Relative Humidity_B'+' '+str(i),'-',self.EvapsB[i].Fins.Air.RH_out),
                                     ('Tubes per bank_A'+' '+str(i),'-',self.EvapsA[i].Fins.Tubes.NTubes_per_bank),  ('Tubes per bank_B'+' '+str(i),'-',self.EvapsB[i].Fins.Tubes.NTubes_per_bank),
                                     ('Number of banks_A'+' '+str(i),'-',self.EvapsA[i].Fins.Tubes.Nbank),   ('Number of banks_B'+' '+str(i),'-',self.EvapsB[i].Fins.Tubes.Nbank),
                                     ('Number circuits_A'+' '+str(i),'-',self.EvapsA[i].Fins.Tubes.Ncircuits),    ('Number circuits_B'+' '+str(i),'-',self.EvapsB[i].Fins.Tubes.Ncircuits),
@@ -174,13 +176,13 @@ class MCE_N(EvaporatorClass):
         Evaporator.Fins.Fins.t=in2m(0.0075)         #thickness
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
-        Evaporator.Fins.Air.Vdot_ha=cfm2cms(1742)*(1/6)*0.65#flow rate divided by the number of circuits
+        Evaporator.Fins.Air.Vdot_ha=cfm2cms(1742)*(1/6)#flow rate divided by the number of circuits
         Evaporator.Fins.Air.Tdb=C2K(25.86)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
         Evaporator.Fins.Air.RH=0.3145               #relative humidity          
         Evaporator.Fins.Air.FanPower=778.0          #fan power in W
         
-        Evaporator.Fins.h_a_tuning=0.4              #tune factor for air-side heat transfer coefficient (fin and tube)
+        Evaporator.Fins.h_a_tuning=0.2              #tune factor for air-side heat transfer coefficient (fin and tube)
         
         return Evaporator.Fins
     
@@ -282,7 +284,7 @@ class MCE_N(EvaporatorClass):
             self.hin_r=Props('H','P', 1732,'T',C2K(33.14),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=0.4
+            self.h_tp_tuning=0.5
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
