@@ -284,7 +284,7 @@ class MCE_N(EvaporatorClass):
             self.hin_r=Props('H','P', 1732,'T',C2K(33.14),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=0.5
+            self.h_tp_tuning=0.45
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -1426,7 +1426,7 @@ if __name__=='__main__':
         air_temp_maldistribution_profiles_tester()
     if 0: #run parametric study for 2-circuit cases only
         airside_maldistribution_study(evap_type='LRCS',MD_Type=None,Hybrid='adjust_superheat_iter',adjust_area_fraction_iternum=30)  #this runs the 2-circuit case with the only possible maldistribution for that case (code is ugly...)
-    if 1: #run parametric studies
+    if 0: #run parametric studies
         airside_maldistribution_study(evap_type='60K',MD_Type="60K")
         #airside_maldistribution_study(evap_type='LRCS',MD_Type="LRCS_Type_A")
         #refside_maldistribution_study(evap_type='LRCS')
@@ -1436,15 +1436,16 @@ if __name__=='__main__':
         #combined_maldistribution_study(evap_type='RAC',MD_Type='RAC_combined')
     if 0: #test superheat equalizer
         sh_equalizer_tester()
-    if 0: #run different flow distribution profiles
-        MD_severity=[0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7]
-        #MD_severity=[0.0,0.1,0.5,0.7,1.0]
+    if 1: #run different flow distribution profiles
+        #MD_severity=[0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7]
+        MD_severity=[0.0,0.05,0.3,0.5,0.7,1.0]
         #MD_severity=[0.5]
-        for md_type in ["60K"]:
+        #for md_type in ["60K"]:
         #for md_type in ['pyramid']:
-        #for md_type in ['linear','pyramid','Halflinear A','Halflinear B']:
-            #maldistributions=flow_maldistribution_profiles(Number_cir=6,md_type,severity=MD_severity,parametric_study=True,custom=False,profile=np.array(range(6)))
-            maldistributions=flow_maldistribution_profiles(8,md_type,severity=MD_severity,parametric_study=True,custom=False,profile=np.array(range(5)))
+        for md_type in ['linear','pyramid','Halflinear A','Halflinear B']:
+            Number_cir=6
+            maldistributions=flow_maldistribution_profiles(Number_cir,md_type,severity=MD_severity,parametric_study=True,custom=False,profile=np.array(range(6)))
+            #maldistributions=flow_maldistribution_profiles(8,md_type,severity=MD_severity,parametric_study=True,custom=False,profile=np.array(range(5)))
             #print maldistributions[1][1],md_type
             if 0:
                 sh_equalizer_tester(evap_type='LRCS',num_evaps=8,md_type=md_type,Target_SH=5.0,MD_severity=MD_severity)
