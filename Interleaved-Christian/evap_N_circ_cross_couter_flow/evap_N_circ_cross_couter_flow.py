@@ -1004,7 +1004,7 @@ def flow_maldistribution_profiles_tester():
                 labels = [str(item) for item in ax.xaxis.get_majorticklocs()]
                 #labels[0]='0'
                 ax.set_xticklabels(labels)
-                plt.savefig(str(num_evaps)+type+str(np.round(dim_md[0],2))+'.png',bbox_inches='tight',dpi=600)
+                plt.savefig(str(num_evaps)+type+str(np.round(dim_md[0],2))+'.pdf',bbox_inches='tight')
         plt.close('all')
         #plt.show()
 
@@ -1426,7 +1426,7 @@ if __name__=='__main__':
         air_temp_maldistribution_profiles_tester()
     if 0: #run parametric study for 2-circuit cases only
         airside_maldistribution_study(evap_type='LRCS',MD_Type=None,Hybrid='adjust_superheat_iter',adjust_area_fraction_iternum=30)  #this runs the 2-circuit case with the only possible maldistribution for that case (code is ugly...)
-    if 0: #run parametric studies
+    if 1: #run parametric studies
         airside_maldistribution_study(evap_type='60K',MD_Type="60K")
         #airside_maldistribution_study(evap_type='LRCS',MD_Type="LRCS_Type_A")
         #refside_maldistribution_study(evap_type='LRCS')
@@ -1436,15 +1436,15 @@ if __name__=='__main__':
         #combined_maldistribution_study(evap_type='RAC',MD_Type='RAC_combined')
     if 0: #test superheat equalizer
         sh_equalizer_tester()
-    if 1: #run different flow distribution profiles
+    if 0: #run different flow distribution profiles
         #MD_severity=[0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7]
-        MD_severity=[0.0,0.05,0.3,0.5,0.7,1.0]
+        MD_severity=[0.0,0.1,0.3,0.5,0.7,0.9]
         #MD_severity=[0.5]
         #for md_type in ["60K"]:
         #for md_type in ['pyramid']:
         for md_type in ['linear','pyramid','Halflinear A','Halflinear B']:
             Number_cir=6
-            maldistributions=flow_maldistribution_profiles(Number_cir,md_type,severity=MD_severity,parametric_study=True,custom=False,profile=np.array(range(6)))
+            maldistributions=flow_maldistribution_profiles(Number_cir,md_type,severity=MD_severity,parametric_study=True,custom=False,profile=np.array(range(5)))
             #maldistributions=flow_maldistribution_profiles(8,md_type,severity=MD_severity,parametric_study=True,custom=False,profile=np.array(range(5)))
             #print maldistributions[1][1],md_type
             if 0:
