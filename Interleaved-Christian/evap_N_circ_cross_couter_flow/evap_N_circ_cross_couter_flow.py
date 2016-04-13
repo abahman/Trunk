@@ -176,13 +176,13 @@ class MCE_N(EvaporatorClass):
         Evaporator.Fins.Fins.t=in2m(0.0075)         #thickness
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
-        Evaporator.Fins.Air.Vdot_ha=cfm2cms(1742)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(25.86)
+        Evaporator.Fins.Air.Vdot_ha=cfm2cms(1707)*(1/6)#flow rate divided by the number of circuits
+        Evaporator.Fins.Air.Tdb=C2K(33.17)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.3145               #relative humidity          
-        Evaporator.Fins.Air.FanPower=778.0          #fan power in W
+        Evaporator.Fins.Air.RH=0.4764               #relative humidity          
+        Evaporator.Fins.Air.FanPower=750.2          #fan power in W
         
-        Evaporator.Fins.h_a_tuning=0.2              #tune factor for air-side heat transfer coefficient (fin and tube)
+        Evaporator.Fins.h_a_tuning=0.3485              #tune factor for air-side heat transfer coefficient (fin and tube)
         
         return Evaporator.Fins
     
@@ -275,16 +275,16 @@ class MCE_N(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 361.5  #in kPa
+            self.psat_r= 655.6  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(92.92/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(143.3/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 1732,'T',C2K(33.14),self.Ref)*1000
+            self.hin_r=Props('H','P', 3097,'T',C2K(61.19),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=0.45
+            self.h_tp_tuning=0.5693
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -1120,14 +1120,15 @@ def airside_maldistribution_study(evap_type='LRCS',MD_Type=None,interleave_order
         filenameMDair =evap_type+'-NCircuit_airMD_linear.csv'
     
     elif MD_Type=="60K":
-        Original_Profile=np.array([0.19008887,0.14424539,0.2115167,0.17403436,0.11236396,0.16775072])*6.0 ##Update on 02/22/16
+        #Original_Profile=np.array([0.19008887,0.14424539,0.2115167,0.17403436,0.11236396,0.16775072])*6.0 ##Update on 02/22/16
+        Original_Profile=np.array([0.16075005,0.15097187,0.22788295,0.18484725,0.10406957,0.17147832])*6.0 #Test fan only #Update on 04/11/16
         #MD_severity=[0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
         MD_severity=[0,0.05,0.3,0.5,0.7,1.0]
         #MD_severity=[1.0,0.5]
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
-        filenameMDair =evap_type+'-6Circuit_airMD_Ammar.csv'
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_purdue_conf.csv'
     
     elif MD_Type=="LRCS_Type_A":  #see D:\Purdue\Thesis\Tex-document\source files and links\interleaved circuitry\LRCS\maldistribution profiles.xlsx
         Original_Profile=np.array([0.0135415976822403,0.0221506896994024,0.0369272399580833,0.111895731459975,0.106096750782192,0.265750418904745,0.196007841404425,0.247629730108938])*8.0  #different definition compared to normal ACHP MCE
@@ -1147,7 +1148,7 @@ def airside_maldistribution_study(evap_type='LRCS',MD_Type=None,interleave_order
         print "using custum maldistribution as passed in"
     
     
-    Target_SH=15.5
+    Target_SH=11.42
     Parallel_flow = False #CHOOSE: True>>parallel flow OR False>>counter flow
     
     #===========================================================================
