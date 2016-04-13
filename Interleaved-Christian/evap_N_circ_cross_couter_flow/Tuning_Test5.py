@@ -182,7 +182,7 @@ class MCE_N(EvaporatorClass):
         Evaporator.Fins.Air.RH=0.3145               #relative humidity          
         Evaporator.Fins.Air.FanPower=778.0          #fan power in W
         
-        Evaporator.Fins.h_a_tuning=0.3485              #tune factor for air-side heat transfer coefficient (fin and tube)
+        Evaporator.Fins.h_a_tuning=0.25              #tune factor for air-side heat transfer coefficient (fin and tube)
         
         return Evaporator.Fins
     
@@ -284,7 +284,7 @@ class MCE_N(EvaporatorClass):
             self.hin_r=Props('H','P', 1732,'T',C2K(33.14),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=0.5693
+            self.h_tp_tuning=0.53
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -1129,7 +1129,7 @@ def airside_maldistribution_study(evap_type='LRCS',MD_Type=None,interleave_order
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
-        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_Test5_run2.csv'
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_Test5_run4.csv'
     
     elif MD_Type=="LRCS_Type_A":  #see D:\Purdue\Thesis\Tex-document\source files and links\interleaved circuitry\LRCS\maldistribution profiles.xlsx
         Original_Profile=np.array([0.0135415976822403,0.0221506896994024,0.0369272399580833,0.111895731459975,0.106096750782192,0.265750418904745,0.196007841404425,0.247629730108938])*8.0  #different definition compared to normal ACHP MCE
