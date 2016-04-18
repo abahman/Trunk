@@ -176,7 +176,7 @@ class MCE_N(EvaporatorClass):
         Evaporator.Fins.Fins.t=in2m(0.0075)         #thickness
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
-        Evaporator.Fins.Air.Vdot_ha=cfm2cms(1707)*(1/6)#flow rate divided by the number of circuits
+        Evaporator.Fins.Air.Vdot_ha=cfm2cms(1750)*(1/6)#flow rate divided by the number of circuits
         Evaporator.Fins.Air.Tdb=F2K(90)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
         Evaporator.Fins.Air.RH=0.50               #relative humidity          
@@ -276,7 +276,6 @@ class MCE_N(EvaporatorClass):
         if evap_type=='60K':
             self.Ref='R407C'
             T_pinch = 10
-            T_sup = 10
             self.psat_r= Props('P','T',C2K(F2C(90)-T_pinch-T_sup),'Q',1,self.Ref) #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
@@ -1435,8 +1434,8 @@ if __name__=='__main__':
             T_pinch = 10
             T_sub = 5
             for T in [125]:
-                P=Props('P','T',C2K(F2C(T)+T_pinch+T_sub),'Q',0,'R407C')
-                airside_maldistribution_study(evap_type='60K',MD_Type="60K",Target_SH=T_SH,P_cond=P,T_cond=F2C(T)+T_pinch)
+                P=Props('P','T',C2K(F2C(T)+T_pinch),'Q',0,'R407C')
+                airside_maldistribution_study(evap_type='60K',MD_Type="60K",Target_SH=T_SH,P_cond=P,T_cond=F2C(T)+T_pinch-T_sub)
         #airside_maldistribution_study(evap_type='LRCS',MD_Type="LRCS_Type_A")
         #refside_maldistribution_study(evap_type='LRCS')
         #airside_temp_maldistribution_study(evap_type='RAC',MD_Type="RAC_Temp")

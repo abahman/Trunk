@@ -177,7 +177,7 @@ class MCE_N(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(1750)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=F2K(75)
+        Evaporator.Fins.Air.Tdb=F2K(85)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
         Evaporator.Fins.Air.RH=0.2151               #relative humidity          
         Evaporator.Fins.Air.FanPower=750          #fan power in W
@@ -276,8 +276,7 @@ class MCE_N(EvaporatorClass):
         if evap_type=='60K':
             self.Ref='R407C'
             T_pinch = 10
-            T_sup = 10
-            self.psat_r= Props('P','T',C2K(F2C(75)-T_pinch-T_sup),'Q',1,self.Ref) #in kPa
+            self.psat_r= Props('P','T',C2K(F2C(85)-T_pinch),'Q',1,self.Ref) #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
@@ -1130,7 +1129,7 @@ def airside_maldistribution_study(evap_type='LRCS',MD_Type=None,interleave_order
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
-        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_purdue_conf_T_in=vary1_T_out='+str(C2F(T_cond-10))+'a_T_sup='+str(Target_SH)+'.csv'
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_purdue_conf_T_in=vary1_T_out='+str(C2F(T_cond-10))+'c_T_sup='+str(Target_SH)+'.csv'
     
     elif MD_Type=="LRCS_Type_A":  #see D:\Purdue\Thesis\Tex-document\source files and links\interleaved circuitry\LRCS\maldistribution profiles.xlsx
         Original_Profile=np.array([0.0135415976822403,0.0221506896994024,0.0369272399580833,0.111895731459975,0.106096750782192,0.265750418904745,0.196007841404425,0.247629730108938])*8.0  #different definition compared to normal ACHP MCE
@@ -1435,8 +1434,8 @@ if __name__=='__main__':
             T_pinch = 10
             T_sub = 5
             for T in [125]:
-                P=Props('P','T',C2K(F2C(T)+T_pinch+T_sub),'Q',0,'R407C')
-                airside_maldistribution_study(evap_type='60K',MD_Type="60K",Target_SH=T_SH,P_cond=P,T_cond=F2C(T)+T_pinch)
+                P=Props('P','T',C2K(F2C(T)+T_pinch),'Q',0,'R407C')
+                airside_maldistribution_study(evap_type='60K',MD_Type="60K",Target_SH=T_SH,P_cond=P,T_cond=F2C(T)+T_pinch-T_sub)
         #airside_maldistribution_study(evap_type='LRCS',MD_Type="LRCS_Type_A")
         #refside_maldistribution_study(evap_type='LRCS')
         #airside_temp_maldistribution_study(evap_type='RAC',MD_Type="RAC_Temp")
