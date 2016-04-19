@@ -49,70 +49,70 @@ mpl.rcParams.update(pgf_with_latex)
 # END of Latex render
 #===============================================================================
 
-#Experimental Results
-T_sup = np.array([5,10,15])
-#Import data from CSV file
-data1 = csv2rec('60K_Ammar_purdue_conf_linear_T_sup=5.0.csv',delimiter=',')
-data2 = csv2rec('60K_Ammar_purdue_conf_linear_T_sup=10.0.csv',delimiter=',')
-data3 = csv2rec('60K_Ammar_purdue_conf_linear_T_sup=15.0.csv',delimiter=',')
-#Arrange data in Numpy array for the 5 different tests
-capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6]])
-capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6]])
-capacity_interleave = np.array([data1[4][6],data2[4][6],data3[4][6]])
-#to convert string array to integer array
-capacity_uniform = capacity_uniform.astype(np.float)
-capacity_baseline = capacity_baseline.astype(np.float)
-capacity_interleave = capacity_interleave.astype(np.float)
-#plots
-#Plot cooling capacity comparison
-plt.plot(T_sup,capacity_uniform,'-ob',label='Uniform')
-plt.plot(T_sup,capacity_baseline,'--or',label='Baseline')
-plt.plot(T_sup,capacity_interleave,'-ok',label='Interleaved')
-#plt.ylim(0.025,0.055)
-plt.xlim(0,20)
-plt.legend(loc='best',fancybox=False)
-plt.xlabel(r'$T_{sup}$ [\textdegree$\mathrm{C}]$')
-plt.ylabel(r'$\dot Q$ $[\mathrm{W}]$')
-plt.title(r'Effect of changing $T_{sup}$ for linear profile $T_{H}$=125[\textdegree$\mathrm{F}]$ $T_{L}$=90[\textdegree$\mathrm{F}]$ $T_{sup}$=5-15[\textdegree$\mathrm{C}]$')
-plt.savefig('plots/purdue_conf_1_linear.pdf')
-plt.show()
+# #Experimental Results
+# T_sup = np.array([5,10,15])
+# #Import data from CSV file
+# data1 = csv2rec('60K_Ammar_purdue_conf_linear_T_sup=5.0.csv',delimiter=',')
+# data2 = csv2rec('60K_Ammar_purdue_conf_linear_T_sup=10.0.csv',delimiter=',')
+# data3 = csv2rec('60K_Ammar_purdue_conf_linear_T_sup=15.0.csv',delimiter=',')
+# #Arrange data in Numpy array for the 5 different tests
+# capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6]])
+# capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6]])
+# capacity_interleave = np.array([data1[4][6],data2[4][6],data3[4][6]])
+# #to convert string array to integer array
+# capacity_uniform = capacity_uniform.astype(np.float)
+# capacity_baseline = capacity_baseline.astype(np.float)
+# capacity_interleave = capacity_interleave.astype(np.float)
+# #plots
+# #Plot cooling capacity comparison
+# plt.plot(T_sup,capacity_uniform,'-ob',label='Uniform')
+# plt.plot(T_sup,capacity_baseline,'--or',label='Baseline')
+# plt.plot(T_sup,capacity_interleave,'-ok',label='Interleaved')
+# #plt.ylim(0.025,0.055)
+# plt.xlim(0,20)
+# plt.legend(loc='best',fancybox=False)
+# plt.xlabel(r'$T_{sup}$ [\textdegree$\mathrm{C}]$')
+# plt.ylabel(r'$\dot Q$ $[\mathrm{W}]$')
+# plt.title(r'Effect of changing $T_{sup}$ for linear profile $T_{H}$=125[\textdegree$\mathrm{F}]$ $T_{L}$=90[\textdegree$\mathrm{F}]$ $T_{sup}$=5-15[\textdegree$\mathrm{C}]$')
+# plt.savefig('plots/purdue_conf_1_linear.pdf')
+# plt.show()
 
-#Experimental Results
-T_sup = np.array([5,10,15])
-#Import data from CSV file
-data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_sup=5.csv',delimiter=',')
-data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_sup=10.csv',delimiter=',')
-data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_sup=15.csv',delimiter=',')
-#Arrange data in Numpy array for the 5 different tests
-capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6]])
-capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6]])
-capacity_interleave = np.array([data1[4][6],data2[4][6],data3[4][6]])
-#to convert string array to integer array
-capacity_uniform = capacity_uniform.astype(np.float)
-capacity_baseline = capacity_baseline.astype(np.float)
-capacity_interleave = capacity_interleave.astype(np.float)
-#plots
-#Plot cooling capacity comparison
-plt.plot(T_sup,capacity_uniform,'-ob',label='Uniform')
-plt.plot(T_sup,capacity_baseline,'--or',label='Baseline')
-plt.plot(T_sup,capacity_interleave,'-ok',label='Interleaved')
-#plt.ylim(0.025,0.055)
-plt.xlim(0,20)
-plt.legend(loc='best',fancybox=False)
-plt.xlabel(r'$T_{sup}$ [\textdegree$\mathrm{C}]$')
-plt.ylabel(r'$\dot Q$ $[\mathrm{W}]$')
-plt.title(r'Effect of changing $T_{sup}$ for measured profile $T_{H}$=125 [\textdegree$\mathrm{F}]$ $T_{L}$=90 [\textdegree$\mathrm{F}]$ $T_{sup}$=5-15 [\textdegree$\mathrm{C}]$')
-plt.savefig('plots/purdue_conf_1.pdf')
-plt.show()
+# #Experimental Results
+# T_sup = np.array([5,10,15])
+# #Import data from CSV file
+# data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_sup=5.csv',delimiter=',')
+# data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_sup=10.csv',delimiter=',')
+# data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_sup=15.csv',delimiter=',')
+# #Arrange data in Numpy array for the 5 different tests
+# capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6]])
+# capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6]])
+# capacity_interleave = np.array([data1[4][6],data2[4][6],data3[4][6]])
+# #to convert string array to integer array
+# capacity_uniform = capacity_uniform.astype(np.float)
+# capacity_baseline = capacity_baseline.astype(np.float)
+# capacity_interleave = capacity_interleave.astype(np.float)
+# #plots
+# #Plot cooling capacity comparison
+# plt.plot(T_sup,capacity_uniform,'-ob',label='Uniform')
+# plt.plot(T_sup,capacity_baseline,'--or',label='Baseline')
+# plt.plot(T_sup,capacity_interleave,'-ok',label='Interleaved')
+# #plt.ylim(0.025,0.055)
+# plt.xlim(0,20)
+# plt.legend(loc='best',fancybox=False)
+# plt.xlabel(r'$T_{sup}$ [\textdegree$\mathrm{C}]$')
+# plt.ylabel(r'$\dot Q$ $[\mathrm{W}]$')
+# plt.title(r'Effect of changing $T_{sup}$ for measured profile $T_{H}$=125 [\textdegree$\mathrm{F}]$ $T_{L}$=90 [\textdegree$\mathrm{F}]$ $T_{sup}$=5-15 [\textdegree$\mathrm{C}]$')
+# plt.savefig('plots/purdue_conf_1.pdf')
+# plt.show()
 
 #Experimental Results
 T_env = np.array([75,85,95,115,125])
 #Import data from CSV file
-data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed1_T_out=75.0_T_sup=10.csv',delimiter=',')
-data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed1_T_out=85.0_T_sup=10.csv',delimiter=',')
-data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed1_T_out=95.0_T_sup=10.csv',delimiter=',')
-data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed1_T_out=115.0_T_sup=10.csv',delimiter=',')
-data5 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed1_T_out=125.0_T_sup=10.csv',delimiter=',')
+data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=wet_T_out=75.0_T_sup=10.csv',delimiter=',')
+data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=wet_T_out=85.0_T_sup=10.csv',delimiter=',')
+data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=wet_T_out=95.0_T_sup=10.csv',delimiter=',')
+data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=wet_T_out=115.0_T_sup=10.csv',delimiter=',')
+data5 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=wet_T_out=125.0_T_sup=10.csv',delimiter=',')
 #Arrange data in Numpy array for the 5 different tests
 capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6],data4[2][6],data5[2][6]])
 capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6],data4[3][6],data5[3][6]])
@@ -138,11 +138,11 @@ plt.show()
 #Experimental Results
 T_env = np.array([75,85,95,115,125])
 #Import data from CSV file
-data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed2_T_out=75.0_T_sup=10.csv',delimiter=',')
-data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed2_T_out=85.0_T_sup=10.csv',delimiter=',')
-data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed2_T_out=95.0_T_sup=10.csv',delimiter=',')
-data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed2_T_out=115.0_T_sup=10.csv',delimiter=',')
-data5 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=fixed2_T_out=125.0_T_sup=10.csv',delimiter=',')
+data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=dry_T_out=75.0_T_sup=10.csv',delimiter=',')
+data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=dry_T_out=85.0_T_sup=10.csv',delimiter=',')
+data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=dry_T_out=95.0_T_sup=10.csv',delimiter=',')
+data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=dry_T_out=115.0_T_sup=10.csv',delimiter=',')
+data5 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=dry_T_out=125.0_T_sup=10.csv',delimiter=',')
 #Arrange data in Numpy array for the 5 different tests
 capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6],data4[2][6],data5[2][6]])
 capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6],data4[3][6],data5[3][6]])
@@ -168,10 +168,10 @@ plt.show()
 #Experimental Results
 T_in = np.array([75,80,85,90])
 #Import data from CSV file
-data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=vary1_T_out=125.0a_T_sup=10.csv',delimiter=',')
-data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=vary1_T_out=125.0b_T_sup=10.csv',delimiter=',')
-data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=vary1_T_out=125.0c_T_sup=10.csv',delimiter=',')
-data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=vary1_T_out=125.0d_T_sup=10.csv',delimiter=',')
+data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=75_dry_T_out=115.0_T_sup=10.csv',delimiter=',')
+data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=80_dry_T_out=115.0_T_sup=10.csv',delimiter=',')
+data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=85_dry_T_out=115.0_T_sup=10.csv',delimiter=',')
+data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=90_dry_T_out=115.0_T_sup=10.csv',delimiter=',')
 #Arrange data in Numpy array for the 5 different tests
 capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6],data4[2][6]])
 capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6],data4[3][6]])
@@ -185,7 +185,7 @@ capacity_interleave = capacity_interleave.astype(np.float)
 plt.plot(T_in,capacity_uniform,'-ob',label='Uniform')
 plt.plot(T_in,capacity_baseline,'--or',label='Baseline')
 plt.plot(T_in,capacity_interleave,'-ok',label='Interleaved')
-plt.ylim(10000,11800)
+#plt.ylim(10000,11800)
 plt.xlim(70,95)
 plt.legend(loc='best',fancybox=False)
 plt.xlabel(r'$T_{L}$ [\textdegree$\mathrm{F}]$')
@@ -197,10 +197,10 @@ plt.show()
 #Experimental Results
 T_in = np.array([75,80,85,90])
 #Import data from CSV file
-data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=vary2_T_out=125.0a_T_sup=10.csv',delimiter=',')
-data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=vary2_T_out=125.0b_T_sup=10.csv',delimiter=',')
-data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=vary2_T_out=125.0c_T_sup=10.csv',delimiter=',')
-data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=vary2_T_out=125.0d_T_sup=10.csv',delimiter=',')
+data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=75_wet_T_out=115.0_T_sup=10.csv',delimiter=',')
+data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=80_wet_T_out=115.0_T_sup=10.csv',delimiter=',')
+data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=85_wet_T_out=115.0_T_sup=10.csv',delimiter=',')
+data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_T_in=90_wet_T_out=115.0_T_sup=10.csv',delimiter=',')
 #Arrange data in Numpy array for the 5 different tests
 capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6],data4[2][6]])
 capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6],data4[3][6]])
@@ -214,7 +214,7 @@ capacity_interleave = capacity_interleave.astype(np.float)
 plt.plot(T_in,capacity_uniform,'-ob',label='Uniform')
 plt.plot(T_in,capacity_baseline,'--or',label='Baseline')
 plt.plot(T_in,capacity_interleave,'-ok',label='Interleaved')
-plt.ylim(15000,16600)
+#plt.ylim(15000,16600)
 plt.xlim(70,95)
 plt.legend(loc='best',fancybox=False)
 plt.xlabel(r'$T_{L}$ [\textdegree$\mathrm{F}]$')
@@ -226,11 +226,11 @@ plt.show()
 #Experimental Results
 RH_in = np.array([0.01,25,50,75,99.9])
 #Import data from CSV file
-data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RH6a_T_out=125.0_T_sup=10.csv',delimiter=',')
-data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RH6b_T_out=125.0_T_sup=10.csv',delimiter=',')
-data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RH6c_T_out=125.0_T_sup=10.csv',delimiter=',')
-data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RH6d_T_out=125.0_T_sup=10.csv',delimiter=',')
-data5 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RH6e_T_out=125.0_T_sup=10.csv',delimiter=',')
+data1 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RHin=0_T_out=115.0_T_sup=10.csv',delimiter=',')
+data2 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RHin=0.25_T_out=115.0_T_sup=10.csv',delimiter=',')
+data3 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RHin=0.5_T_out=115.0_T_sup=10.csv',delimiter=',')
+data4 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RHin=0.75_T_out=115.0_T_sup=10.csv',delimiter=',')
+data5 = csv2rec('60K-6Circuit_airMD_Ammar_purdue_conf_RHin=1_T_out=115.0_T_sup=10.csv',delimiter=',')
 #Arrange data in Numpy array for the 5 different tests
 capacity_uniform = np.array([data1[2][6],data2[2][6],data3[2][6],data4[2][6],data5[2][6]])
 capacity_baseline = np.array([data1[3][6],data2[3][6],data3[3][6],data4[3][6],data5[2][6]])
@@ -245,7 +245,7 @@ plt.plot(RH_in,capacity_uniform,'-ob',label='Uniform')
 plt.plot(RH_in,capacity_baseline,'--or',label='Baseline')
 plt.plot(RH_in,capacity_interleave,'-ok',label='Interleaved')
 #plt.plot(np.array([47.64]),np.array([18050.0]),'Dy',label='Baseline (experimental)')
-plt.ylim(5000,45000)
+#plt.ylim(5000,45000)
 plt.xlim(0,100)
 plt.legend(loc='best',fancybox=False)
 plt.xlabel(r'$\mathrm{RH}_{L}$ $[\%]$')
