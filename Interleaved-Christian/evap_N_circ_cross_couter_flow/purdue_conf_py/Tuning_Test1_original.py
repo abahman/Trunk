@@ -176,10 +176,10 @@ class MCE_N(EvaporatorClass):
         Evaporator.Fins.Fins.t=in2m(0.0075)         #thickness
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
-        Evaporator.Fins.Air.Vdot_ha=cfm2cms(1707)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(33.17)
+        Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
+        Evaporator.Fins.Air.Tdb=F2K(90)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.4764               #relative humidity          
+        Evaporator.Fins.Air.RH=0.5023               #relative humidity          
         Evaporator.Fins.Air.FanPower=750.2          #fan power in W
         
         Evaporator.Fins.h_a_tuning=0.3              #tune factor for air-side heat transfer coefficient (fin and tube)
