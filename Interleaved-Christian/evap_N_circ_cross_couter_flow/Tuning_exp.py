@@ -1051,7 +1051,7 @@ class MCE_N2(EvaporatorClass):
             self.hin_r=Props('H','P', 2917,'T',C2K(56),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=x[1]
+            self.h_tp_tuning=self.x[1]
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -1816,7 +1816,7 @@ class MCE_N3(EvaporatorClass):
             self.hin_r=Props('H','P', 2501,'T',C2K(48.61),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=x[1]
+            self.h_tp_tuning=self.x[1]
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -2581,7 +2581,7 @@ class MCE_N4(EvaporatorClass):
             self.hin_r=Props('H','P', 2152,'T',C2K(43.23),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=x[1]
+            self.h_tp_tuning=self.x[1]
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -3346,7 +3346,7 @@ class MCE_N5(EvaporatorClass):
             self.hin_r=Props('H','P', 1732,'T',C2K(33.14),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=x[1]
+            self.h_tp_tuning=self.x[1]
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -4111,7 +4111,7 @@ class MCE_N6(EvaporatorClass):
             self.hin_r=Props('H','P', 1672,'T',C2K(28.66),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=x[1]
+            self.h_tp_tuning=self.x[1]
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -4876,7 +4876,7 @@ class MCE_NB(EvaporatorClass):
             self.hin_r=Props('H','P', 1705,'T',C2K(33.95),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=x[1]
+            self.h_tp_tuning=self.x[1]
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
@@ -5641,7 +5641,7 @@ class MCE_NC(EvaporatorClass):
             self.hin_r=Props('H','P', 1653,'T',C2K(31.24),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
-            self.h_tp_tuning=x[1]
+            self.h_tp_tuning=self.x[1]
             self.FinsType = 'WavyLouveredFins'
         
         elif evap_type=='LRCS':
