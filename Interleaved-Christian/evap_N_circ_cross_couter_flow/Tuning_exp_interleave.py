@@ -178,10 +178,10 @@ class MCE_N1(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=F2K(90)
+        Evaporator.Fins.Air.Tdb=C2K(32.19)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.5023               #relative humidity          
-        Evaporator.Fins.Air.FanPower=750.2          #fan power in W
+        Evaporator.Fins.Air.RH=0.5021               #relative humidity          
+        Evaporator.Fins.Air.FanPower=754.7          #fan power in W
         
         Evaporator.Fins.h_a_tuning=self.x[0]              #tune factor for air-side heat transfer coefficient (fin and tube)
         
@@ -276,13 +276,13 @@ class MCE_N1(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 655.6  #in kPa
+            self.psat_r= 721.4  #in kPa ##P[9] in EES file
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(143.3/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(161.7/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 3097,'T',C2K(61.19),self.Ref)*1000
+            self.hin_r=Props('H','P', 3118,'T',C2K(60.65),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
             self.h_tp_tuning=self.x[1]
@@ -944,10 +944,10 @@ class MCE_N2(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(30.74)
+        Evaporator.Fins.Air.Tdb=C2K(29.95)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.2626               #relative humidity          
-        Evaporator.Fins.Air.FanPower=761.3          #fan power in W
+        Evaporator.Fins.Air.RH=0.2819               #relative humidity          
+        Evaporator.Fins.Air.FanPower=769.6          #fan power in W
         
         Evaporator.Fins.h_a_tuning=self.x[0]              #tune factor for air-side heat transfer coefficient (fin and tube)
         
@@ -1042,13 +1042,13 @@ class MCE_N2(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 522  #in kPa
+            self.psat_r= 629  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(118.3/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(146.6/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 2917,'T',C2K(56),self.Ref)*1000
+            self.hin_r=Props('H','P', 2974,'T',C2K(60.54),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
             self.h_tp_tuning=self.x[1]
@@ -1709,10 +1709,10 @@ class MCE_N3(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(30.78)
+        Evaporator.Fins.Air.Tdb=C2K(29.73)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.2624               #relative humidity          
-        Evaporator.Fins.Air.FanPower=761.2          #fan power in W
+        Evaporator.Fins.Air.RH=0.283               #relative humidity          
+        Evaporator.Fins.Air.FanPower=763.9          #fan power in W
         
         Evaporator.Fins.h_a_tuning=self.x[0]              #tune factor for air-side heat transfer coefficient (fin and tube)
         
@@ -1807,13 +1807,13 @@ class MCE_N3(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 485.5  #in kPa
+            self.psat_r= 576.8  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(113.5/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(138.2/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 2501,'T',C2K(48.61),self.Ref)*1000
+            self.hin_r=Props('H','P', 2577,'T',C2K(53.04),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
             self.h_tp_tuning=self.x[1]
@@ -2474,10 +2474,10 @@ class MCE_N4(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(28.36)
+        Evaporator.Fins.Air.Tdb=C2K(27.51)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.4624               #relative humidity          
-        Evaporator.Fins.Air.FanPower=758.1          #fan power in W
+        Evaporator.Fins.Air.RH=0.5108               #relative humidity          
+        Evaporator.Fins.Air.FanPower=760.2          #fan power in W
         
         Evaporator.Fins.h_a_tuning=self.x[0]              #tune factor for air-side heat transfer coefficient (fin and tube)
         
@@ -2572,13 +2572,13 @@ class MCE_N4(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 507.5  #in kPa
+            self.psat_r= 583.9  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(120.4/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(140.3/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 2152,'T',C2K(43.23),self.Ref)*1000
+            self.hin_r=Props('H','P', 2231,'T',C2K(46.28),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
             self.h_tp_tuning=self.x[1]
@@ -3239,10 +3239,10 @@ class MCE_N5(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(25.86)
+        Evaporator.Fins.Air.Tdb=C2K(25.29)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.3145               #relative humidity          
-        Evaporator.Fins.Air.FanPower=778.0          #fan power in W
+        Evaporator.Fins.Air.RH=0.3144               #relative humidity          
+        Evaporator.Fins.Air.FanPower=778.6          #fan power in W
         
         Evaporator.Fins.h_a_tuning=self.x[0]              #tune factor for air-side heat transfer coefficient (fin and tube)
         
@@ -3337,13 +3337,13 @@ class MCE_N5(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 361.5  #in kPa
+            self.psat_r= 458.5  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(92.92/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(115.9/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 1732,'T',C2K(33.14),self.Ref)*1000
+            self.hin_r=Props('H','P', 1797,'T',C2K(36.5),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
             self.h_tp_tuning=self.x[1]
@@ -4004,10 +4004,10 @@ class MCE_N6(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(26.5)
+        Evaporator.Fins.Air.Tdb=C2K(25.86)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.2481               #relative humidity          
-        Evaporator.Fins.Air.FanPower=779.9          #fan power in W
+        Evaporator.Fins.Air.RH=0.2707               #relative humidity          
+        Evaporator.Fins.Air.FanPower=780.1          #fan power in W
         
         Evaporator.Fins.h_a_tuning=self.x[0]              #tune factor for air-side heat transfer coefficient (fin and tube)
         
@@ -4102,13 +4102,13 @@ class MCE_N6(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 369.3  #in kPa
+            self.psat_r= 450.6  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(94.08/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(115.3/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 1672,'T',C2K(28.66),self.Ref)*1000
+            self.hin_r=Props('H','P', 1761,'T',C2K(33.57),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
             self.h_tp_tuning=self.x[1]
@@ -4769,10 +4769,10 @@ class MCE_NB(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(28.23)
+        Evaporator.Fins.Air.Tdb=C2K(27.22)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.4663               #relative humidity          
-        Evaporator.Fins.Air.FanPower=759.5          #fan power in W
+        Evaporator.Fins.Air.RH=0.5111               #relative humidity          
+        Evaporator.Fins.Air.FanPower=764.8          #fan power in W
         
         Evaporator.Fins.h_a_tuning=self.x[0]              #tune factor for air-side heat transfer coefficient (fin and tube)
         
@@ -4867,13 +4867,13 @@ class MCE_NB(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 485.4  #in kPa
+            self.psat_r= 537.2  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(117.8/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(130.6/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 1705,'T',C2K(33.95),self.Ref)*1000
+            self.hin_r=Props('H','P', 1781,'T',C2K(35.53),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
             self.h_tp_tuning=self.x[1]
@@ -5534,10 +5534,10 @@ class MCE_NC(EvaporatorClass):
         Evaporator.Fins.Fins.k_fin=237              #Thermal conductivity of fin material, aluminum, from wikipedia (replace with other source)
          
         Evaporator.Fins.Air.Vdot_ha=cfm2cms(2000)*(1/6)#flow rate divided by the number of circuits
-        Evaporator.Fins.Air.Tdb=C2K(28.09)
+        Evaporator.Fins.Air.Tdb=C2K(27.23)
         Evaporator.Fins.Air.p=101.325               #Air pressure in kPa
-        Evaporator.Fins.Air.RH=0.1979               #relative humidity          
-        Evaporator.Fins.Air.FanPower=764.2          #fan power in W
+        Evaporator.Fins.Air.RH=0.2155               #relative humidity          
+        Evaporator.Fins.Air.FanPower=778.9          #fan power in W
         
         Evaporator.Fins.h_a_tuning=self.x[0]              #tune factor for air-side heat transfer coefficient (fin and tube)
         
@@ -5632,13 +5632,13 @@ class MCE_NC(EvaporatorClass):
         
         if evap_type=='60K':
             self.Ref='R407C'
-            self.psat_r= 387.7  #in kPa
+            self.psat_r= 458.2  #in kPa
             if hasattr(self,'mdot_r'):
                 self.mdot_r=self.mdot_r/float(self.num_evaps) #internally using individual circuit average flowrate
             else:
-                self.mdot_r=(97.07/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
+                self.mdot_r=(115.2/1000.0)/(6.0)*0.8  # #later on add handling to automatically get back to flowrate of one circuit from total flowrate
             self.mdot_r_=self.mdot_r*1.0   #used as backup if first value in superheat iteration does not converge
-            self.hin_r=Props('H','P', 1653,'T',C2K(31.24),self.Ref)*1000
+            self.hin_r=Props('H','P', 1706,'T',C2K(33.97),self.Ref)*1000
             self.Verbosity=0
             self.cp_r_iter=False  #iterate for CP in evaporator?
             self.h_tp_tuning=self.x[1]
@@ -6782,26 +6782,26 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
-        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp.csv'
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp_interleaved.csv'
         
     Target_SH=5
     Parallel_flow = False #CHOOSE: True>>parallel flow OR False>>counter flow
     #===========================================================================
-    # Calculate the Standard cycle (MD_severity with NO interleaving) 
+    # Calculate the Standard cycle (MD_severity with interleaving) 
     #===========================================================================
     for i in range(len(airside_maldistributions)):
         evap=MCE_N1() 
         evap.x = x
         evap.Target_SH=Target_SH
         evap.same_direction_flow=Parallel_flow
-        evap.interleaved=False
+        evap.interleaved=True
         evap.num_evaps=num_evaps #update evaporator
-#        evap.interleave_order = interleave_order
+        evap.interleave_order = interleave_order
         evap.maldistributed=airside_maldistributions[i]
         evap.Calculate(evap_type)
-        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
         evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
-        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
         Write2CSV(evap,open(filenameMDair,'w'),append=False)
         Q1=evap.Q
         m_r1=evap.mdot_r_tot
@@ -6811,14 +6811,14 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         evap.x = x
         evap.Target_SH=Target_SH
         evap.same_direction_flow=Parallel_flow
-        evap.interleaved=False
+        evap.interleaved=True
         evap.num_evaps=num_evaps #update evaporator
-#        evap.interleave_order = interleave_order
+        evap.interleave_order = interleave_order
         evap.maldistributed=airside_maldistributions[i]
         evap.Calculate(evap_type)
-        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
         evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
-        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
         Write2CSV(evap,open(filenameMDair,'a'),append=True)
         Q2=evap.Q
         m_r2=evap.mdot_r_tot
@@ -6828,14 +6828,14 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         evap.x = x
         evap.Target_SH=Target_SH
         evap.same_direction_flow=Parallel_flow
-        evap.interleaved=False
+        evap.interleaved=True
         evap.num_evaps=num_evaps #update evaporator
-#        evap.interleave_order = interleave_order
+        evap.interleave_order = interleave_order
         evap.maldistributed=airside_maldistributions[i]
         evap.Calculate(evap_type)
-        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
         evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
-        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
         Write2CSV(evap,open(filenameMDair,'a'),append=True)
         Q3=evap.Q
         m_r3=evap.mdot_r_tot
@@ -6845,14 +6845,14 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         evap.x = x
         evap.Target_SH=Target_SH
         evap.same_direction_flow=Parallel_flow
-        evap.interleaved=False
+        evap.interleaved=True
         evap.num_evaps=num_evaps #update evaporator
-#        evap.interleave_order = interleave_order
+        evap.interleave_order = interleave_order
         evap.maldistributed=airside_maldistributions[i]
         evap.Calculate(evap_type)
-        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
         evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
-        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
         Write2CSV(evap,open(filenameMDair,'a'),append=True)
         Q4=evap.Q
         m_r4=evap.mdot_r_tot
@@ -6862,14 +6862,14 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         evap.x = x
         evap.Target_SH=Target_SH
         evap.same_direction_flow=Parallel_flow
-        evap.interleaved=False
+        evap.interleaved=True
         evap.num_evaps=num_evaps #update evaporator
-#        evap.interleave_order = interleave_order
+        evap.interleave_order = interleave_order
         evap.maldistributed=airside_maldistributions[i]
         evap.Calculate(evap_type)
-        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
         evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
-        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
         Write2CSV(evap,open(filenameMDair,'a'),append=True)
         Q5=evap.Q
         m_r5=evap.mdot_r_tot
@@ -6879,14 +6879,14 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         evap.x = x
         evap.Target_SH=Target_SH
         evap.same_direction_flow=Parallel_flow
-        evap.interleaved=False
+        evap.interleaved=True
         evap.num_evaps=num_evaps #update evaporator
-#        evap.interleave_order = interleave_order
+        evap.interleave_order = interleave_order
         evap.maldistributed=airside_maldistributions[i]
         evap.Calculate(evap_type)
-        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
         evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
-        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
         Write2CSV(evap,open(filenameMDair,'a'),append=True)
         Q6=evap.Q
         m_r6=evap.mdot_r_tot
@@ -6896,14 +6896,14 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         evap.x = x
         evap.Target_SH=Target_SH
         evap.same_direction_flow=Parallel_flow
-        evap.interleaved=False
+        evap.interleaved=True
         evap.num_evaps=num_evaps #update evaporator
-#        evap.interleave_order = interleave_order
+        evap.interleave_order = interleave_order
         evap.maldistributed=airside_maldistributions[i]
         evap.Calculate(evap_type)
-        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
         evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
-        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
         Write2CSV(evap,open(filenameMDair,'a'),append=True)
         QB=evap.Q
         m_rB=evap.mdot_r_tot
@@ -6913,19 +6913,19 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         evap.x = x
         evap.Target_SH=Target_SH
         evap.same_direction_flow=Parallel_flow
-        evap.interleaved=False
+        evap.interleaved=True
         evap.num_evaps=num_evaps #update evaporator
-#        evap.interleave_order = interleave_order
+        evap.interleave_order = interleave_order
         evap.maldistributed=airside_maldistributions[i]
         evap.Calculate(evap_type)
-        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
         evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
-        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
         Write2CSV(evap,open(filenameMDair,'a'),append=True)
         QC=evap.Q
         m_rC=evap.mdot_r_tot
                        
-    df = pd.read_excel("tuning_exp.xlsx")
+    df = pd.read_excel("tuning_exp_interleaved.xlsx")
     df.m_r *= 1000 #convert kg to g
     df.Q *= 1000 #convert kW to W
     df.T_a += 273.15 #convert C to K

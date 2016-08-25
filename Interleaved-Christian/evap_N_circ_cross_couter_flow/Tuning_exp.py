@@ -6946,7 +6946,7 @@ def objective(x,evap_type='60K',MD_Type="60K"):
     
 def optimize():
     cons = ()
-    bnds = ((0.2, 0.7), (0.2, 0.7))
+    bnds = ((0.1, 0.7), (0.2, 0.7))
     guess = (0.2, 0.2) #(h_a, h_tp)
     res = minimize(objective, guess, method='SLSQP', bounds=bnds, constraints=cons, tol=1e-6) 
     
