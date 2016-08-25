@@ -35,11 +35,14 @@ f=pylab.figure(figsize=(3.5,3.5))
 ax=f.add_axes((0.18,0.15,0.77,0.8))
 
 w=0.30 #Error
-ax.plot(np.r_[0,0.2],np.r_[0,0.2],'k-',lw=1)
-ax.plot(np.r_[0,0.2],np.r_[0,0.2*(1-0.3)],'k-.',lw=1)
-ax.plot(np.r_[0,0.2],np.r_[0,0.2*(1+0.3)],'k-.',lw=1)
-ax.text(0.17-0.002,0.17*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
-ax.text(0.1-0.002,0.1*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax_max = 0.2 #x and y-axes max scale tick
+upp_txt = ax_max / 1.8 #location of upper error text on plot -- adjust the number to adjust the location
+low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the number to adjust the location
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
+ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
 
 ax.set_xlabel('$\dot m_{exp}$ [kg/s]')
 ax.set_ylabel('$\dot m_{model}$ [kg/s]')
@@ -50,8 +53,8 @@ leg=ax.legend(loc='upper left',numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 
-ax.set_xlim((0,0.2))
-ax.set_ylim((0,0.2))
+ax.set_xlim((0,ax_max))
+ax.set_ylim((0,ax_max))
 
 pylab.savefig('images/Evap_parity.pdf')
 pylab.show()
