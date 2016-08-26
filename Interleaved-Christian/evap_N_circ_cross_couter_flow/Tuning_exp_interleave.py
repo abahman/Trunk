@@ -7038,7 +7038,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
     evap.num_evaps=num_evaps #update evaporator
 #    evap.interleave_order = interleave_order
     evap.Calculate(evap_type)
-    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.TestDescription='Base' #to use for plotting in Excel Details
     evap.md_severity=str(0) #to use for plotting in Excel 
     evap.Details="without maldistribution"
     Write2CSV(evap,open(filenameMDair,'a'),append=True)
@@ -7086,7 +7086,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
     evap.num_evaps=num_evaps #update evaporator
 #    evap.interleave_order = interleave_order
     evap.Calculate(evap_type)
-    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.TestDescription='Base' #to use for plotting in Excel Details
     evap.md_severity=str(0) #to use for plotting in Excel 
     evap.Details="without maldistribution"
     Write2CSV(evap,open(filenameMDair,'a'),append=True)
@@ -7133,7 +7133,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
     evap.num_evaps=num_evaps #update evaporator
 #    evap.interleave_order = interleave_order
     evap.Calculate(evap_type)
-    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.TestDescription='Base' #to use for plotting in Excel Details
     evap.md_severity=str(0) #to use for plotting in Excel 
     evap.Details="without maldistribution"
     Write2CSV(evap,open(filenameMDair,'a'),append=True)
@@ -7180,7 +7180,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
     evap.num_evaps=num_evaps #update evaporator
 #    evap.interleave_order = interleave_order
     evap.Calculate(evap_type)
-    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.TestDescription='Base' #to use for plotting in Excel Details
     evap.md_severity=str(0) #to use for plotting in Excel 
     evap.Details="without maldistribution"
     Write2CSV(evap,open(filenameMDair,'a'),append=True)
@@ -7227,7 +7227,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
     evap.num_evaps=num_evaps #update evaporator
 #    evap.interleave_order = interleave_order
     evap.Calculate(evap_type)
-    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.TestDescription='Base' #to use for plotting in Excel Details
     evap.md_severity=str(0) #to use for plotting in Excel 
     evap.Details="without maldistribution"
     Write2CSV(evap,open(filenameMDair,'a'),append=True)
@@ -7274,7 +7274,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
     evap.num_evaps=num_evaps #update evaporator
 #    evap.interleave_order = interleave_order
     evap.Calculate(evap_type)
-    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.TestDescription='Base' #to use for plotting in Excel Details
     evap.md_severity=str(0) #to use for plotting in Excel 
     evap.Details="without maldistribution"
     Write2CSV(evap,open(filenameMDair,'a'),append=True)
@@ -7321,7 +7321,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
     evap.num_evaps=num_evaps #update evaporator
 #    evap.interleave_order = interleave_order
     evap.Calculate(evap_type)
-    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.TestDescription='Base' #to use for plotting in Excel Details
     evap.md_severity=str(0) #to use for plotting in Excel 
     evap.Details="without maldistribution"
     Write2CSV(evap,open(filenameMDair,'a'),append=True)
