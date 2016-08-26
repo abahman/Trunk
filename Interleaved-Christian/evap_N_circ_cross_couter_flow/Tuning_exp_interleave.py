@@ -6952,9 +6952,412 @@ def optimize():
     
     return res
 
+def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave_order=None,MD_severity=None,airside_maldistributions=None,num_evaps=2,filenameMDair='debug.csv',Hybrid='equal_flow',adjust_area_fraction_iternum=10):
+    
+    if MD_Type=="60K":
+        #Original_Profile=np.array([0.19008887,0.14424539,0.2115167,0.17403436,0.11236396,0.16775072])*6.0 #Test 5 #Update on 02/22/16
+        Original_Profile=np.array([0.16075005,0.15097187,0.22788295,0.18484725,0.10406957,0.17147832])*6.0 #Test fan only #Update on 04/11/16
+        #MD_severity=[0,0.05,0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1.0]
+        #MD_severity=[0,0.05,0.3,0.5,0.7,1.0]
+        #MD_severity=[1.0,0.5]
+        MD_severity=[1.0]   #1.0 represents the actual air flow (i.e original profile)
+        airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
+        interleave_order = Profile_order(Original_Profile)
+        num_evaps=6 #number of evaporators
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp_interleaved_sim.csv'
+    
+    x = [ 0.34839585,  0.66763226]  #Tuning factors [h_a, h_tp]
+    Target_SH=5
+    Parallel_flow = False #CHOOSE: True>>parallel flow OR False>>counter flow
+    
+    #===========================================================================
+    # Calculate the Base cycle (uniform air flow)
+    #===========================================================================
+    evap=MCE_N1()
+    evap.x = x
+    evap.Target_SH=Target_SH
+    evap.same_direction_flow=Parallel_flow
+    evap.interleaved=False
+    evap.maldistributed=False
+    evap.num_evaps=num_evaps #update evaporator
+#    evap.interleave_order = interleave_order
+    evap.Calculate(evap_type)
+    evap.TestDescription='Base' #to use for plotting in Excel Details
+    evap.md_severity=str(0) #to use for plotting in Excel 
+    evap.Details="without maldistribution"
+    Write2CSV(evap,open(filenameMDair,'w'),append=False)
 
+
+    #===========================================================================
+    # Calculate the Standard cycle (MD_severity with NO interleaving) 
+    #===========================================================================
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N1()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=False
+        evap.num_evaps=num_evaps #update evaporator
+#        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+        
+    #===========================================================================
+    # Calculate the Standard cycle (MD_severity with interleaving) 
+    #===========================================================================
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N1() 
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=True
+        evap.num_evaps=num_evaps #update evaporator
+        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+
+    #===========================================================================
+    # MCE_N2
+    #===========================================================================
+    evap=MCE_N2()
+    evap.x = x
+    evap.Target_SH=Target_SH
+    evap.same_direction_flow=Parallel_flow
+    evap.interleaved=False
+    evap.maldistributed=False
+    evap.num_evaps=num_evaps #update evaporator
+#    evap.interleave_order = interleave_order
+    evap.Calculate(evap_type)
+    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.md_severity=str(0) #to use for plotting in Excel 
+    evap.Details="without maldistribution"
+    Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N2()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=False
+        evap.num_evaps=num_evaps #update evaporator
+#        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+        
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N2()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=True
+        evap.num_evaps=num_evaps #update evaporator
+        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    
+    #===========================================================================
+    # MCE_N3
+    #===========================================================================
+    evap=MCE_N3()
+    evap.x = x
+    evap.Target_SH=Target_SH
+    evap.same_direction_flow=Parallel_flow
+    evap.interleaved=False
+    evap.maldistributed=False
+    evap.num_evaps=num_evaps #update evaporator
+#    evap.interleave_order = interleave_order
+    evap.Calculate(evap_type)
+    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.md_severity=str(0) #to use for plotting in Excel 
+    evap.Details="without maldistribution"
+    Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N3()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=False
+        evap.num_evaps=num_evaps #update evaporator
+#        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+          
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N3()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=True
+        evap.num_evaps=num_evaps #update evaporator
+        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    #===========================================================================
+    # MCE_N4
+    #===========================================================================
+    evap=MCE_N4()
+    evap.x = x
+    evap.Target_SH=Target_SH
+    evap.same_direction_flow=Parallel_flow
+    evap.interleaved=False
+    evap.maldistributed=False
+    evap.num_evaps=num_evaps #update evaporator
+#    evap.interleave_order = interleave_order
+    evap.Calculate(evap_type)
+    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.md_severity=str(0) #to use for plotting in Excel 
+    evap.Details="without maldistribution"
+    Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N4()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=False
+        evap.num_evaps=num_evaps #update evaporator
+#        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+        
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N4()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=True
+        evap.num_evaps=num_evaps #update evaporator
+        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    #===========================================================================
+    # MCE_N5
+    #===========================================================================
+    evap=MCE_N5()
+    evap.x = x
+    evap.Target_SH=Target_SH
+    evap.same_direction_flow=Parallel_flow
+    evap.interleaved=False
+    evap.maldistributed=False
+    evap.num_evaps=num_evaps #update evaporator
+#    evap.interleave_order = interleave_order
+    evap.Calculate(evap_type)
+    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.md_severity=str(0) #to use for plotting in Excel 
+    evap.Details="without maldistribution"
+    Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N5()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=False
+        evap.num_evaps=num_evaps #update evaporator
+#        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+        
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N5()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=True
+        evap.num_evaps=num_evaps #update evaporator
+        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    #===========================================================================
+    # MCE_N6
+    #===========================================================================
+    evap=MCE_N6()
+    evap.x = x
+    evap.Target_SH=Target_SH
+    evap.same_direction_flow=Parallel_flow
+    evap.interleaved=False
+    evap.maldistributed=False
+    evap.num_evaps=num_evaps #update evaporator
+#    evap.interleave_order = interleave_order
+    evap.Calculate(evap_type)
+    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.md_severity=str(0) #to use for plotting in Excel 
+    evap.Details="without maldistribution"
+    Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N6()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=False
+        evap.num_evaps=num_evaps #update evaporator
+#        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+        
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_N6()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=True
+        evap.num_evaps=num_evaps #update evaporator
+        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    #===========================================================================
+    # MCE_NB
+    #===========================================================================
+    evap=MCE_NB()
+    evap.x = x
+    evap.Target_SH=Target_SH
+    evap.same_direction_flow=Parallel_flow
+    evap.interleaved=False
+    evap.maldistributed=False
+    evap.num_evaps=num_evaps #update evaporator
+#    evap.interleave_order = interleave_order
+    evap.Calculate(evap_type)
+    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.md_severity=str(0) #to use for plotting in Excel 
+    evap.Details="without maldistribution"
+    Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_NB()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=False
+        evap.num_evaps=num_evaps #update evaporator
+#        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+        
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_NB()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=True
+        evap.num_evaps=num_evaps #update evaporator
+        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    #===========================================================================
+    # MCE_NC
+    #===========================================================================
+    evap=MCE_NC()
+    evap.x = x
+    evap.Target_SH=Target_SH
+    evap.same_direction_flow=Parallel_flow
+    evap.interleaved=False
+    evap.maldistributed=False
+    evap.num_evaps=num_evaps #update evaporator
+#    evap.interleave_order = interleave_order
+    evap.Calculate(evap_type)
+    evap.TestDescription='Standard' #to use for plotting in Excel Details
+    evap.md_severity=str(0) #to use for plotting in Excel 
+    evap.Details="without maldistribution"
+    Write2CSV(evap,open(filenameMDair,'a'),append=True)
+
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_NC()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=False
+        evap.num_evaps=num_evaps #update evaporator
+#        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Standard' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Standard ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+        
+    for i in range(len(airside_maldistributions)):
+        evap=MCE_NC()
+        evap.x = x
+        evap.Target_SH=Target_SH
+        evap.same_direction_flow=Parallel_flow
+        evap.interleaved=True
+        evap.num_evaps=num_evaps #update evaporator
+        evap.interleave_order = interleave_order
+        evap.maldistributed=airside_maldistributions[i]
+        evap.Calculate(evap_type)
+        evap.TestDescription='Interleaved' #to use for plotting in Excel Details
+        evap.md_severity=str(MD_severity[i]) #to use for plotting in Excel 
+        evap.Details=make_name('Interleaved ',str(np.round(airside_maldistributions[i],2)),'air flow MD') 
+        Write2CSV(evap,open(filenameMDair,'a'),append=True)
+        
 if __name__=='__main__':
-    if 1:
+    if 0:
         print optimize()
     if 0:
         maldistribution_profile=np.array([0.0135415976822403,0.0221506896994024,0.0369272399580833,0.111895731459975,0.106096750782192,0.265750418904745,0.196007841404425,0.247629730108938])
@@ -6967,8 +7370,9 @@ if __name__=='__main__':
         air_temp_maldistribution_profiles_tester()
     if 0: #run parametric study for 2-circuit cases only
         airside_maldistribution_study(evap_type='LRCS',MD_Type=None,Hybrid='adjust_superheat_iter',adjust_area_fraction_iternum=30)  #this runs the 2-circuit case with the only possible maldistribution for that case (code is ugly...)
-    if 0: #run parametric studies
-        airside_maldistribution_study(evap_type='60K',MD_Type="60K")
+    if 1: #run parametric studies
+        airside_maldistribution_study_tuned(evap_type='60K',MD_Type="60K")
+        #airside_maldistribution_study(evap_type='60K',MD_Type="60K")
         #airside_maldistribution_study(evap_type='LRCS',MD_Type="LRCS_Type_A")
         #refside_maldistribution_study(evap_type='LRCS')
         #airside_temp_maldistribution_study(evap_type='RAC',MD_Type="RAC_Temp")
