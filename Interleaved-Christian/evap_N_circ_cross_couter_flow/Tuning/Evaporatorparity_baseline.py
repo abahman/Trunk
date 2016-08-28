@@ -25,8 +25,8 @@ pylab.rcParams.update(params)
 
 ############# Evaporator parity plot ####################
 
-r = pd.read_excel('tuning_exp.xlsx') #file name
-df = pd.read_csv('60K-6Circuit_airMD_Ammar_Tuning_exp_sim.csv', sep = ',', header =1)
+r = pd.read_excel('tuning_exp_baseline.xlsx') #file name
+df = pd.read_csv('60K-6Circuit_airMD_Ammar_Tuning_exp_baseline_sim.csv', sep = ',', header =1)
 
 mdot_exp=np.array(r[-1::-1]['m_r'], dtype=float) # selcect the mass flow rate backward because we need to start from test#1
 mdot_model=np.array(df[3::3]['m_dot Total'], dtype=float) #only select the values for interleaved options
@@ -64,7 +64,7 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((0,ax_max))
 ax.set_ylim((0,ax_max))
-pylab.savefig('images_baseline/Evap_parity_mass.pdf')
+pylab.savefig('images_baseline/Evap_parity_baseline_mass.pdf')
 pylab.show()
 pylab.close()
 
@@ -90,16 +90,48 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((0,ax_max))
 ax.set_ylim((0,ax_max))
-pylab.savefig('images_baseline/Evap_parity_Q.pdf')
+pylab.savefig('images_baseline/Evap_parity_baseline_Q.pdf')
 pylab.show()
 pylab.close()
 
 
+#########################
+#####Combined plot#######
+#########################
+m_mean=np.mean(mdot_exp)
+Q_mean=np.mean(Q_exp)
 
+f=pylab.figure(figsize=(3.5,3.5))
+ax=f.add_axes((0.18,0.15,0.77,0.8))
+
+w=0.20 #Error
+ax_max = 2 #x and y-axes max scale tick
+upp_txt = ax_max / 1.8 #location of upper error text on plot -- adjust the number to adjust the location
+low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the number to adjust the location
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
+ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax.set_xlabel('Normalized experiment value')
+ax.set_ylabel('Normalized model value')
+ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate',mec='b',mew=1)
+ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity',mec='r',mew=1)
+leg=ax.legend(loc='upper left',numpoints=1)
+frame  = leg.get_frame()  
+frame.set_linewidth(0.5)
+ax.set_xlim((0,ax_max))
+ax.set_ylim((0,ax_max))
+pylab.savefig('images_baseline/Evap_parity_baseline_combined.pdf')
+pylab.show()
+pylab.close()
+
+
+############################################################################
 ############# Predict Interleave Evaporator parity plot ####################
-
+############################################################################
 r = pd.read_excel('tuning_exp_interleaved.xlsx') #file name
-df = pd.read_csv('60K-6Circuit_airMD_Ammar_Tuning_exp_sim.csv', sep = ',', header =1)
+df = pd.read_csv('60K-6Circuit_airMD_Ammar_Tuning_exp_baseline_sim.csv', sep = ',', header =1)
 
 mdot_exp=np.array(r[-1::-1]['m_r'], dtype=float) # selcect the mass flow rate backward because we need to start from test#1
 mdot_model=np.array(df[3::3]['m_dot Total'], dtype=float) #only select the values for interleaved options
@@ -137,7 +169,7 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((0,ax_max))
 ax.set_ylim((0,ax_max))
-pylab.savefig('images_baseline/Evap_parity_mass_pred_interleaved.pdf')
+pylab.savefig('images_baseline/Evap_parity_baseline_mass_PedictInterleaved.pdf')
 pylab.show()
 pylab.close()
 
@@ -163,6 +195,37 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((0,ax_max))
 ax.set_ylim((0,ax_max))
-pylab.savefig('images_baseline/Evap_parity_pred_Q_interleaved.pdf')
+pylab.savefig('images_baseline/Evap_parity_baseline_Q_PredictInterleaved.pdf')
+pylab.show()
+pylab.close()
+
+#########################
+#####Combined plot#######
+#########################
+m_mean=np.mean(mdot_exp)
+Q_mean=np.mean(Q_exp)
+
+f=pylab.figure(figsize=(3.5,3.5))
+ax=f.add_axes((0.18,0.15,0.77,0.8))
+
+w=0.20 #Error
+ax_max = 2 #x and y-axes max scale tick
+upp_txt = ax_max / 1.8 #location of upper error text on plot -- adjust the number to adjust the location
+low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the number to adjust the location
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
+ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax.set_xlabel('Normalized experiment value')
+ax.set_ylabel('Normalized model value')
+ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate',mec='b',mew=1)
+ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity',mec='r',mew=1)
+leg=ax.legend(loc='upper left',numpoints=1)
+frame  = leg.get_frame()  
+frame.set_linewidth(0.5)
+ax.set_xlim((0,ax_max))
+ax.set_ylim((0,ax_max))
+pylab.savefig('images_baseline/Evap_parity_baseline_combined_PredictInterleaved.pdf')
 pylab.show()
 pylab.close()
