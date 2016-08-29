@@ -23,11 +23,17 @@ params = {'axes.labelsize': 10,
 pylab.rcParams.update(params)
 
 def rmse(predictions, targets):
+    '''
+    Root Mean Square Error
+    '''
     n = len(predictions)
     RMSE = np.linalg.norm(predictions - targets) / np.sqrt(n)
     return RMSE
 
 def mape(y_pred, y_true):  #maps==mean_absolute_percentage_error
+    '''
+    Mean Absolute Percentage Error
+    '''
     MAPE = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
     return MAPE
 ############# Evaporator parity plot ####################
@@ -133,8 +139,8 @@ ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
 ax.set_xlabel('Normalized experiment value')
 ax.set_ylabel('Normalized model value')
-ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate',mec='b',mew=1)
-ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity',mec='r',mew=1)
+ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate (RMSE = %0.1f%%)' %(rmse_mass*100),mec='b',mew=1)
+ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity (RMSE = %0.1f%%)' %(rmse_Q*100),mec='r',mew=1)
 leg=ax.legend(loc='upper left',numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
@@ -249,8 +255,8 @@ ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
 ax.set_xlabel('Normalized experiment value')
 ax.set_ylabel('Normalized model value')
-ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate',mec='b',mew=1)
-ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity',mec='r',mew=1)
+ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate (RMSE = %0.1f%%)' %(rmse_mass*100),mec='b',mew=1)
+ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity (RMSE = %0.1f%%)' %(rmse_Q*100),mec='r',mew=1)
 leg=ax.legend(loc='upper left',numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
