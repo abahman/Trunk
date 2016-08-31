@@ -562,11 +562,11 @@ class MCE_N1(EvaporatorClass):
             for i in range(self.num_evaps):
             #if we use the profile order function we need to take care the order of the iteration here (Update problem !!!!!!!)
                 self.EvapsA[i].Calculate()
-            print""
-            print " ######### The end of the Calculating Process ###############"
-            print""
-            print " ############### Calculated for each circuit, then out to next function ##################"
-            print""
+#             print""
+#             print " ######### The end of the Calculating Process ###############"
+#             print""
+#             print " ############### Calculated for each circuit, then out to next function ##################"
+#             print""
             h_guess_max=Props('H','P',self.psat_r,'T',self.EvapsA[0].Fins.Air.Tdb,self.Ref)-5.0
             guess_value=1000.0*h_guess_max**np.ones(self.num_evaps)
             
@@ -574,13 +574,13 @@ class MCE_N1(EvaporatorClass):
             print " The flow directions is counter!"
             h_guess_max=Props('H','P',self.psat_r,'T',self.EvapsA[0].Fins.Air.Tdb,self.Ref)-5.0
             guess_value=1000.0*h_guess_max**np.ones(self.num_evaps)
-            print""
-            print " ######### The start of the fucntion residual ###############"
-            print""
-            print " The residual fucntion process: ",residual(guess_value)
-            print ""
-            print " ############### Calculated for each circuit, then out to next function (mass)##################"
-            print""
+#             print""
+#             print " ######### The start of the fucntion residual ###############"
+#             print""
+#             print " The residual fucntion process: ",residual(guess_value)
+#             print ""
+#             print " ############### Calculated for each circuit, then out to next function (mass)##################"
+#             print""
         
         def solve_for_exit_sh(self):
             "solve for the mass flow rate for a given target super-heat (Target_SH)"
@@ -588,7 +588,7 @@ class MCE_N1(EvaporatorClass):
             #import solver and solve
             from scipy.optimize import fsolve
             def objective_SH_out(mdot_guess):
-                print "mdot_guess",mdot_guess
+#                 print "mdot_guess",mdot_guess
                 if mdot_guess<0.001:
                     print 'warning - mass flowrate has a negative value during solving process - constrained to 0.002'
                     mdot_guess=[0.001]
@@ -602,18 +602,18 @@ class MCE_N1(EvaporatorClass):
                     self.hout_r+=self.EvapsA[i].mdot_r*self.EvapsA[i].hout_r
                 self.hout_r/=self.mdot_r_tot
                 self.resids=self.hout_r-self.hout_r_target #store nested for csv output
-                print " mdot_r_tot",self.mdot_r_tot,"EvapA_hout_r",self.EvapsA[i].hout_r,"hout_r",self.hout_r,"target",self.hout_r_target,"resids",self.resids
+#                 print " mdot_r_tot",self.mdot_r_tot,"EvapA_hout_r",self.EvapsA[i].hout_r,"hout_r",self.hout_r,"target",self.hout_r_target,"resids",self.resids
                 return self.hout_r-self.hout_r_target
             
             T_sat=Props('T','P',self.psat_r,'Q',1.0,self.Ref)
             self.hout_r_target=Props('H','T',self.Target_SH+T_sat,'P',self.psat_r,self.Ref)*1000.0
             fsolve(objective_SH_out, self.mdot_r*1.0)  #note - flowrate is based on single evaporator up to here; mdot_r used as initial guess
-            print "residual for superheat is",self.resids
+#             print "residual for superheat is",self.resids
             if self.resids>0.5:
                 fsolve(objective_SH_out, self.mdot_r_*0.8)  #backup massflow
             if self.resids<-0.5:
                 fsolve(objective_SH_out, self.mdot_r_*1.2)  #backup massflow
-            print "result of fsolve is that target superheat is ",np.float(self.Target_SH), "actual value is ", self.EvapsA[0].Tout_r-T_sat,self.EvapsA[1].Tout_r-T_sat
+#             print "result of fsolve is that target superheat is ",np.float(self.Target_SH), "actual value is ", self.EvapsA[0].Tout_r-T_sat,self.EvapsA[1].Tout_r-T_sat
             
         if hasattr(self,'Target_SH'):
             if hasattr(self,'Hybrid'):
@@ -6830,7 +6830,7 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
-        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp.csv'
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp_3JsNO.csv'
         
     Target_SH=5
     Parallel_flow = False #CHOOSE: True>>parallel flow OR False>>counter flow
@@ -7002,7 +7002,9 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         ((T_outB - df.T_a[1])/df.T_a[1])**2 + ((T_outC - df.T_a[0])/df.T_a[0])**2)    
     
     fun = J1 + J2 + J3
-            
+    
+    print ' '
+    print x       
     return fun
     
 def optimize():
@@ -7025,9 +7027,9 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
-        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp_sim.csv'
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp_sim_3JsNO.csv'
     
-    x = [0.17593071,  0.7]  #Tuning factors [h_a, h_tp]
+    x = [1 ,  1]  #Tuning factors [h_a, h_tp]
     Target_SH=5
     Parallel_flow = False #CHOOSE: True>>parallel flow OR False>>counter flow
     
@@ -7419,7 +7421,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
         
         
 if __name__=='__main__':
-    if 0:
+    if 1:
         print optimize()
     if 0:
         maldistribution_profile=np.array([0.0135415976822403,0.0221506896994024,0.0369272399580833,0.111895731459975,0.106096750782192,0.265750418904745,0.196007841404425,0.247629730108938])
@@ -7432,7 +7434,7 @@ if __name__=='__main__':
         air_temp_maldistribution_profiles_tester()
     if 0: #run parametric study for 2-circuit cases only
         airside_maldistribution_study(evap_type='LRCS',MD_Type=None,Hybrid='adjust_superheat_iter',adjust_area_fraction_iternum=30)  #this runs the 2-circuit case with the only possible maldistribution for that case (code is ugly...)
-    if 1: #run parametric studies
+    if 0: #run parametric studies
         airside_maldistribution_study_tuned(evap_type='60K',MD_Type="60K")
         #airside_maldistribution_study(evap_type='60K',MD_Type="60K")
         #airside_maldistribution_study(evap_type='LRCS',MD_Type="LRCS_Type_A")
