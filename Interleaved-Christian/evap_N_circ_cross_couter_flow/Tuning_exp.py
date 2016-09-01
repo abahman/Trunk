@@ -6830,7 +6830,7 @@ def objective(x,evap_type='60K',MD_Type="60K"):
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
-        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp_3Js_N.csv'
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp.csv'
         
     Target_SH=5
     Parallel_flow = False #CHOOSE: True>>parallel flow OR False>>counter flow
@@ -7007,8 +7007,8 @@ def objective(x,evap_type='60K',MD_Type="60K"):
     
 def optimize():
     cons = ()
-    bnds = ((0.1, 0.7), (0.1, 0.8))
-    guess = (0.2, 0.2) #(h_a, h_tp)
+    bnds = ((0.1, 0.7), (0.1, 0.7))
+    guess = (0.2, 0.5) #(h_a, h_tp)
     res = minimize(objective, guess, method='SLSQP', bounds=bnds, constraints=cons, tol=1e-6) 
     
     return res
@@ -7025,7 +7025,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
         airside_maldistributions=maldistribution_scaler(Original_Profile,severity=MD_severity,parametric_study=True)
         interleave_order = Profile_order(Original_Profile)
         num_evaps=6 #number of evaporators
-        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp_sim_3Js_N.csv'
+        filenameMDair =evap_type+'-6Circuit_airMD_Ammar_Tuning_exp_sim.csv'
     
     x = [0.17593071,  0.7]  #Tuning factors [h_a, h_tp]
     Target_SH=5
@@ -7419,7 +7419,7 @@ def airside_maldistribution_study_tuned(evap_type='LRCS',MD_Type=None,interleave
         
         
 if __name__=='__main__':
-    if 1:
+    if 0:
         print optimize()
     if 0:
         maldistribution_profile=np.array([0.0135415976822403,0.0221506896994024,0.0369272399580833,0.111895731459975,0.106096750782192,0.265750418904745,0.196007841404425,0.247629730108938])
@@ -7432,7 +7432,7 @@ if __name__=='__main__':
         air_temp_maldistribution_profiles_tester()
     if 0: #run parametric study for 2-circuit cases only
         airside_maldistribution_study(evap_type='LRCS',MD_Type=None,Hybrid='adjust_superheat_iter',adjust_area_fraction_iternum=30)  #this runs the 2-circuit case with the only possible maldistribution for that case (code is ugly...)
-    if 0: #run parametric studies
+    if 1: #run parametric studies
         airside_maldistribution_study_tuned(evap_type='60K',MD_Type="60K")
         #airside_maldistribution_study(evap_type='60K',MD_Type="60K")
         #airside_maldistribution_study(evap_type='LRCS',MD_Type="LRCS_Type_A")
