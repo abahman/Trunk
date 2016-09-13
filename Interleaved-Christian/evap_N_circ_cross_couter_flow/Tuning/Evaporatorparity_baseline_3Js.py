@@ -9,18 +9,38 @@ import numpy as np
 import shutil
 from scipy import polyval, polyfit
 import pandas as pd
+import matplotlib as mpl
 
-params = {'axes.labelsize': 10,
-          'axes.linewidth':0.5,
-          'font.size': 10,
-          'legend.fontsize': 8,
-          'legend.labelspacing':0.2,
-          'xtick.labelsize': 10,
-          'ytick.labelsize': 10,
-          'lines.linewidth': 0.5,
-          'text.usetex': False,
-          'font.family':'Times New Roman'}
-pylab.rcParams.update(params)
+def figsize(scale):
+    fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
+    inches_per_pt = 1.0/72.27                       # Convert pt to inch
+    golden_mean = (np.sqrt(5.0)-1.0)/2.0            # Aesthetic ratio (you could change this)
+    fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
+    fig_height = fig_width*golden_mean              # height in inches
+    fig_size = [fig_width,fig_height]
+    return fig_size
+ 
+pgf_with_latex = {                      # setup matplotlib to use latex for output
+"pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+"text.usetex": True,                # use LaTeX to write all text
+"font.family": "serif",
+"font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
+"font.sans-serif": [],
+"font.monospace": [],
+"axes.labelsize": 10,               # LaTeX default is 10pt font.
+"font.size": 10,
+"legend.fontsize": 8,               # Make the legend/label fonts a little smaller
+"legend.labelspacing":0.2,
+"xtick.labelsize": 8,
+"ytick.labelsize": 8,
+"figure.figsize": figsize(0.9),     # default fig size of 0.9 textwidth
+"pgf.preamble": [
+r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
+r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
+        ]
+    }
+mpl.rcParams.update(pgf_with_latex)
+
 
 def rmse(predictions, targets):
     '''
@@ -71,8 +91,8 @@ low_txt = ax_max / 2.0 #location of lower error text on plot -- adjust the numbe
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'-{:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
 ##########
 #comment out if second error line is not required
 # w1=0.10 #Error
@@ -107,8 +127,8 @@ low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the numbe
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'-{:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
 ax.set_xlabel('$\dot Q_{exp}$ [kW]')
 ax.set_ylabel('$\dot Q_{model}$ [kW]')
 ax.plot(Q_exp,Q_model,'s',ms=4,markerfacecolor='None',label='Cooling capacity',mec='r',mew=1)
@@ -135,12 +155,12 @@ low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the numbe
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'-{:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
 ax.set_xlabel('Normalized experiment value')
 ax.set_ylabel('Normalized model value')
-ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate (RMSE = %0.1f%%)' %(rmse_mass*100),mec='b',mew=1)
-ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity (RMSE = %0.1f%%)' %(rmse_Q*100),mec='r',mew=1)
+ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate (RMSE = {:0.1f}\%)'.format(rmse_mass*100),mec='b',mew=1)
+ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity (RMSE = {:0.1f}\%)'.format(rmse_Q*100),mec='r',mew=1)
 leg=ax.legend(loc='upper left',numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
@@ -188,8 +208,8 @@ low_txt = ax_max / 2.0 #location of lower error text on plot -- adjust the numbe
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'-{:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
 ##########
 #comment out if second error line is not required
 # w1=0.10 #Error
@@ -224,8 +244,8 @@ low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the numbe
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'-{:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
 ax.set_xlabel('$\dot Q_{exp}$ [kW]')
 ax.set_ylabel('$\dot Q_{model}$ [kW]')
 ax.plot(Q_exp,Q_model,'s',ms=4,markerfacecolor='None',label='Cooling capacity',mec='r',mew=1)
@@ -251,12 +271,12 @@ low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the numbe
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'-%0.0f%%' %(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+%0.0f%%' %(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'-{:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
 ax.set_xlabel('Normalized experiment value')
 ax.set_ylabel('Normalized model value')
-ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate (RMSE = %0.1f%%)' %(rmse_mass*100),mec='b',mew=1)
-ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity (RMSE = %0.1f%%)' %(rmse_Q*100),mec='r',mew=1)
+ax.plot(mdot_exp/m_mean,mdot_model/m_mean,'o',ms=4,markerfacecolor='None',label='Mass flow rate (RMSE = {:0.1f}\%)'.format(rmse_mass*100),mec='b',mew=1)
+ax.plot(Q_exp/Q_mean,Q_model/Q_mean,'s',ms=4,markerfacecolor='None',label='Cooling capacity (RMSE = {:0.1f}\%)'.format(rmse_Q*100),mec='r',mew=1)
 leg=ax.legend(loc='upper left',numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
