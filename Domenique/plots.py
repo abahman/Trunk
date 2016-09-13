@@ -3,7 +3,7 @@ Created on Sep 13, 2016
 
 @author: ammarbahman
 
-Note: this file plots the countor of velocity profile in 60K ECU
+Note: this plots for calorimter paper
 
 '''
 import numpy as np
@@ -85,7 +85,7 @@ T_data = [T1,T2,T3,T4,T5,T6,TB,TC]
 
 x = np.random.random(50)
 y = np.random.random(50)
-c = np.random.random(50)  # color of points
+c = np.random.random(50)  # color of points (color bar points)
 s = 500 * np.random.random(50)  # size of points
 
 fig, ax = plt.subplots()
@@ -109,20 +109,3 @@ plt.ylabel('Pressure ratio [-]')
               
 plt.savefig('pressure_ratio.pdf')
 plt.show()
-####################
-
-# x = np.random.random(50)
-# y = np.random.random(50)
-# c = np.random.random(50)  # color of points
-# s = 500 * np.random.random(50)  # size of points
-# 
-# fig, ax = plt.subplots()
-# im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
-# 
-# # Add a colorbar
-# fig.colorbar(im, ax=ax)
-# 
-# # set the color limits - not necessary here, but good to know how.
-# im.set_clim(0.0, 1.0)
-# plt.savefig('pressure_ratio.pdf')
-# plt.show()
