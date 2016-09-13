@@ -50,7 +50,7 @@ mpl.rcParams.update(pgf_with_latex)
 # END of Latex render
 #===============================================================================
 
-df = pd.read_excel("/Users/ammarbahman/desktop/Eclipse Mars/Test/Domenique/results.xlsx")
+df = pd.read_excel("results.xlsx")
 
 x = np.array(df[1:]['PE1_p_comp_suc'], dtype=float) * 6.89476 #convert from psia to kPa
 y = np.array(df[1:]['PR'], dtype=float)
@@ -66,7 +66,7 @@ cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(1000, 2600)
 cbar.ax.set_ylabel('Discharge Pressure [kPa]')
-ax.text(np.mean(x)/2,np.mean(y)/2,'Marker size ()')#,ha='right',va='top')
+ax.text(0.75,0.9,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes)
 #plt.ylim(0,22.5)
 #plt.xlim(0,24.875)
 plt.xlabel('Suction pressure [kPa]')
@@ -77,8 +77,8 @@ plt.close()
 
 ##################################################
 
-x = np.array(df[1:]['m_dot_ref'], dtype=float) * 0.000125998 #convert from lbm/hr to kg/s
-y = np.array(df[1:]['m_dot_inj'], dtype=float) * 0.000125998 #convert from lbm/hr to kg/s
+y = np.array(df[1:]['m_dot_ref']/df[1:]['m_dot_total'], dtype=float) * 100 #normalized flow rate
+x = np.array(df[1:]['m_dot_inj']/df[1:]['m_dot_total'], dtype=float) * 100 #normalized flow rate
 c = np.array(df[1:]['PR'], dtype=float)  # color of points (color bar points)
 s = 60  # size of points
 
@@ -89,14 +89,69 @@ im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
 cbar = plt.colorbar(im, ax=ax)
 
 # set the color limits
-im.set_clim(1000, 2600)
-cbar.ax.set_ylabel('Discharge Pressure [kPa]')
-
-#plt.ylim(0,22.5)
-#plt.xlim(0,24.875)
-plt.xlabel('Suction pressure [kPa]')
-plt.ylabel('Pressure ratio [-]')
+im.set_clim(0, 6.4)
+cbar.ax.set_ylabel('Pressure ratio [-]')
+ax.text(0.75,0.9,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes)
+plt.ylim(70,100)
+plt.xlim(0,30)
+plt.ylabel('Norm. suction mass flow rate [\%]')
+plt.xlabel('Norm. injection mass flow rate [\%]')
               
 plt.savefig('injection_flow.pdf')
 plt.show()
 plt.close()
+
+##################################################
+
+
+x = np.array(df[1:]['PE1_p_comp_suc'], dtype=float) * 6.89476 #convert from psia to kPa
+y = np.array(df[1:]['DELTAT_sh_suc'], dtype=float) * 0.555556 #convert delta R to delta K
+c = np.array(df[1:]['PR'], dtype=float)  # color of points (color bar points)
+s = 60  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+
+# set the color limits
+im.set_clim(0, 6.4)
+cbar.ax.set_ylabel('Pressure ratio[-]')
+ax.text(0.75,0.9,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes)
+#plt.ylim(0,22.5)
+#plt.xlim(0,24.875)
+plt.xlabel('Suction pressure [kPa]')
+plt.ylabel('Suction superheat [K]')           
+plt.savefig('suction_superheat.pdf')
+plt.show()
+plt.close()
+
+
+##################################################
+
+
+x = np.array(df[1:]['DELTAT_sh_suc'], dtype=float) * 0.555556 #convert delta R to delta K
+y = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 0.555556 #convert delta R to delta K
+c = np.array(df[1:]['PR'], dtype=float)  # color of points (color bar points)
+s = 60  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+
+# set the color limits
+im.set_clim(0, 6.4)
+cbar.ax.set_ylabel('Pressure ratio[-]')
+ax.text(0.75,0.9,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes)
+#plt.ylim(0,22.5)
+#plt.xlim(0,24.875)
+plt.xlabel('Suction superheat [K]')
+plt.ylabel('Injection superheat [K]')           
+plt.savefig('injection_superheat.pdf')
+plt.show()
+plt.close()
+
+
