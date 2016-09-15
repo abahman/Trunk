@@ -178,7 +178,7 @@ plt.ylim(60,70)
 #plt.xlim(0,24.875)
 plt.ylabel('$\eta_{isen}$ [\%]')
 plt.xlabel('Injection saturated temperature [K]')           
-plt.savefig('isentropic efficiency-injection mass flow rate-discharge temp.pdf')
+plt.savefig('isentropic efficiency-injection sat temp-discharge temp.pdf')
 #plt.show()
 plt.close()
 
