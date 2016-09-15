@@ -75,7 +75,7 @@ cbar.ax.set_ylabel('Pressure ratio [-]')
 plt.ylabel('$f_Q$ [\%]')
 plt.xlabel('Injection superheat [K]')           
 plt.savefig('f_q-injection superheat-pressure ratio.pdf')
-plt.show()
+#plt.show()
 plt.close()
 
 
@@ -85,7 +85,7 @@ plt.close()
 #assign axes
 y = np.array(df[1:]['f_Q'], dtype=float)
 x = np.array(df[1:]['PR'], dtype=float)
-c = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 0.555556 # color of points (color bar points)
+c = np.array(df[1:]['m_dot_inj'], dtype=float) * 0.45359237 # color of points (color bar points)
 s = 20  # size of points
 
 fig, ax = plt.subplots()
@@ -94,16 +94,41 @@ im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 #im.set_clim(2, 7)
-cbar.ax.set_ylabel('Injection superheat [K]')
+cbar.ax.set_ylabel('Injection mass flow rate [kg/hr]')
 #ax.text(0.75,0.95,'Markersize ($P_{dis}$)'+' {:0.0f} to '.format(np.min(s)) +'{:0.0f} psia'.format(np.max(s)),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
 #plt.ylim(0,30)
 #plt.xlim(70,100)
 plt.ylabel('$f_Q$ [\%]')
 plt.xlabel('Pressure ratio [-]')              
 plt.savefig('f_q-pressure ratio-injection mass flow.pdf')
-plt.show()
+#plt.show()
 plt.close()
 
+
+################################################################################
+# f_q / pressure ratio / Norm injection mass flow
+################################################################################
+#assign axes
+y = np.array(df[1:]['f_Q'], dtype=float)
+x = np.array(df[1:]['PR'], dtype=float)
+c = np.array(df[1:]['NormalizedInjectionMassFlow'], dtype=float) * 100  # color of points (color bar points)
+s = 20  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(0, 30)
+cbar.ax.set_ylabel('Norm. inject. mass flow rate [\%]')
+#ax.text(0.75,0.95,'Markersize ($P_{dis}$)'+' {:0.0f} to '.format(np.min(s)) +'{:0.0f} psia'.format(np.max(s)),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+#plt.ylim(0,30)
+#plt.xlim(70,100)
+plt.ylabel('$f_Q$ [\%]')
+plt.xlabel('Pressure ratio [-]')              
+plt.savefig('f_q-pressure ratio-Norm injection mass flow.pdf')
+plt.show()
+plt.close()
 
 ################################################################################
 # f_q / suction temp / injection temp
@@ -127,7 +152,7 @@ cbar.ax.set_ylabel('Injection temperature [K]')
 plt.ylabel('$f_Q$ [\%]')
 plt.xlabel('Suction temperature [K]')           
 plt.savefig('f_q-suction temp-injection temp.pdf')
-plt.show()
+#plt.show()
 plt.close()
 
 
@@ -153,7 +178,7 @@ cbar.ax.set_ylabel('Injection superheat [K]')
 plt.ylabel('$f_Q$ [\%]')
 plt.xlabel('Suction temperature [K]')           
 plt.savefig('f_q-suction temp-injection superheat.pdf')
-plt.show()
+#plt.show()
 plt.close()
 
 
@@ -179,5 +204,31 @@ cbar.ax.set_ylabel('Injection mass flow rate [kg/hr]')
 plt.ylabel('$f_Q$ [\%]')
 plt.xlabel('Suction temperature [K]')           
 plt.savefig('f_q-suction temp-injection mass flow.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# f_q / suction temp / Norm injection mass flow
+################################################################################
+#assign axes
+y = np.array(df[1:]['f_Q'], dtype=float)
+x = (np.array(df[1:]['TC2_T_comp_suc'], dtype=float)  + 459.67) * 5.0/9.0
+c = np.array(df[1:]['NormalizedInjectionMassFlow'], dtype=float) * 100 # color of points (color bar points)
+s = 20  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(0, 30)
+cbar.ax.set_ylabel('Norm. inject. mass flow rate [\%]')
+#ax.text(0.75,0.95,'Markersize ($P_{dis}$)'+' {:0.0f} to '.format(np.min(s)) +'{:0.0f} psia'.format(np.max(s)),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+#plt.ylim(0,40)
+#plt.xlim(0,20)
+plt.ylabel('$f_Q$ [\%]')
+plt.xlabel('Suction temperature [K]')           
+plt.savefig('f_q-suction temp-norm injection mass flow.pdf')
 plt.show()
 plt.close()

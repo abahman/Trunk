@@ -75,7 +75,7 @@ plt.ylim(80,100)
 plt.ylabel('$\eta_v$ [\%]')
 plt.xlabel('Pressure ratio [-]')           
 plt.savefig('volumetric efficiency-pressure ratio-injection temp.pdf')
-plt.show()
+#plt.show()
 plt.close()
 
 
@@ -101,7 +101,7 @@ plt.ylim(80,100)
 plt.ylabel('$\eta_v$ [\%]')
 plt.xlabel('Pressure ratio [-]')           
 plt.savefig('volumetric efficiency-pressure ratio-injection superheat.pdf')
-plt.show()
+#plt.show()
 plt.close()
 
 
@@ -127,6 +127,32 @@ plt.ylim(80,100)
 plt.ylabel('$\eta_v$ [\%]')
 plt.xlabel('Pressure ratio [-]')           
 plt.savefig('volumetric efficiency-pressure ratio-injection mass flow rate.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# volumetric efficiency /pressure ratio / Norm injection mass flow rate
+################################################################################
+#assign axes
+y = np.array(df[1:]['eta_vol'], dtype=float)
+x = np.array(df[1:]['PR'], dtype=float)
+c = np.array(df[1:]['NormalizedInjectionMassFlow'], dtype=float) * 100 # color of points (color bar points)
+s = 20  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(0, 30)
+cbar.ax.set_ylabel('Norm. inject. mass flow rate [\%]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+plt.ylim(80,100)
+#plt.xlim(0,24.875)
+plt.ylabel('$\eta_v$ [\%]')
+plt.xlabel('Pressure ratio [-]')           
+plt.savefig('volumetric efficiency-pressure ratio-norm injection mass flow rate.pdf')
 plt.show()
 plt.close()
 
@@ -153,5 +179,31 @@ plt.ylim(80,100)
 plt.ylabel('$\eta_v$ [\%]')
 plt.xlabel('Suction temperature [K]')           
 plt.savefig('volumetric efficiency-suction temperature-injection mass flow rate.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# volumetric efficiency /suction temperature / Norm injection mass flow rate
+################################################################################
+#assign axes
+y = np.array(df[1:]['eta_vol'], dtype=float)
+x = (np.array(df[1:]['TC2_T_comp_suc'], dtype=float)  + 459.67) * 5.0/9.0
+c = np.array(df[1:]['NormalizedInjectionMassFlow'], dtype=float) * 100 # color of points (color bar points)
+s = 20  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(0, 30)
+cbar.ax.set_ylabel('Norm. inject. mass flow rate [\%]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+plt.ylim(80,100)
+#plt.xlim(0,24.875)
+plt.ylabel('$\eta_v$ [\%]')
+plt.xlabel('Suction temperature [K]')           
+plt.savefig('volumetric efficiency-suction temperature-norm injection mass flow rate.pdf')
 plt.show()
 plt.close()
