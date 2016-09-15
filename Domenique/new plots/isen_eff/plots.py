@@ -57,7 +57,7 @@ df = pd.read_excel("results.xlsx")
 # eta_isen / pressure ratio / injection superheat
 ################################################################################
 #assign axes
-y = np.array(df[1:]['eta_isen_postinj'], dtype=float) * 100 
+y = np.array(df[1:]['eta_isen'], dtype=float) 
 x = np.array(df[1:]['PR'], dtype=float)
 c = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 0.555556  # color of points (color bar points)
 s = 20  # size of points
@@ -70,9 +70,9 @@ cbar = plt.colorbar(im, ax=ax)
 #im.set_clim(1000, 2600)
 cbar.ax.set_ylabel('Injection superheat [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-#plt.ylim(0,22.5)
+plt.ylim(60,70)
 #plt.xlim(0,24.875)
-plt.ylabel('$\eta_{isen,post-inj}$ [\%]')
+plt.ylabel('$\eta_{isen}$ [\%]')
 plt.xlabel('Pressure ratio [-]')           
 plt.savefig('eta_isen-pressure ratio-injection superheat.pdf')
 plt.show()
@@ -83,7 +83,7 @@ plt.close()
 # eta_isen / pressure ratio / injection temperature
 ################################################################################
 #assign axes
-y = np.array(df[1:]['eta_isen_postinj'], dtype=float) * 100 
+y = np.array(df[1:]['eta_isen'], dtype=float) 
 x = np.array(df[1:]['PR'], dtype=float)
 c = (np.array(df[1:]['TC16_T_comp_inj'], dtype=float) + 459.67) * 5.0/9.0  # color of points (color bar points)
 s = 20  # size of points
@@ -96,9 +96,9 @@ cbar = plt.colorbar(im, ax=ax)
 #im.set_clim(2, 7)
 cbar.ax.set_ylabel('Injection temperature [K]')
 #ax.text(0.75,0.95,'Markersize ($P_{dis}$)'+' {:0.0f} to '.format(np.min(s)) +'{:0.0f} psia'.format(np.max(s)),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-#plt.ylim(0,30)
+plt.ylim(60,70)
 #plt.xlim(70,100)
-plt.ylabel('$\eta_{isen,post-inj}$ [\%]')
+plt.ylabel('$\eta_{isen}$ [\%]')
 plt.xlabel('Pressure ratio [-]')              
 plt.savefig('eta_isen-pressure ratio-injection temperature.pdf')
 plt.show()

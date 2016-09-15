@@ -83,7 +83,7 @@ plt.close()
 # isentropic efficiency / injection mass flow rate / discharge temp
 ################################################################################
 #assign axes
-y = np.array(df[1:]['eta_isen_postinj'], dtype=float) * 100
+y = np.array(df[1:]['eta_isen'], dtype=float)
 x = np.array(df[1:]['m_dot_inj'], dtype=float) * 0.45359237
 c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
 s = 20  # size of points
@@ -96,9 +96,9 @@ cbar = plt.colorbar(im, ax=ax)
 #im.set_clim(1000, 2600)
 cbar.ax.set_ylabel('Discharge temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(60,80)
+plt.ylim(60,70)
 #plt.xlim(0,24.875)
-plt.ylabel('$\eta_{isen,post-inj}$ [\%]')
+plt.ylabel('$\eta_{isen}$ [\%]')
 plt.xlabel('Injection mass flow rate [kg/hr]')           
 plt.savefig('isentropic efficiency-injection mass flow rate-discharge temp.pdf')
 plt.show()
@@ -109,7 +109,7 @@ plt.close()
 # isentropic efficiency / injection sat temp / discharge temp
 ################################################################################
 #assign axes
-y = np.array(df[1:]['eta_isen_postinj'], dtype=float) * 100
+y = np.array(df[1:]['eta_isen'], dtype=float)
 x = (np.array(df[1:]['T_inj_dewpt'], dtype=float) + 459.67) * 5.0/9.0
 c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
 s = 20  # size of points
@@ -122,9 +122,9 @@ cbar = plt.colorbar(im, ax=ax)
 #im.set_clim(1000, 2600)
 cbar.ax.set_ylabel('Discharge temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(60,80)
+plt.ylim(60,70)
 #plt.xlim(0,24.875)
-plt.ylabel('$\eta_{isen,post-inj}$ [\%]')
+plt.ylabel('$\eta_{isen}$ [\%]')
 plt.xlabel('Injection saturated temperature [K]')           
 plt.savefig('isentropic efficiency-injection mass flow rate-discharge temp.pdf')
 plt.show()
@@ -135,7 +135,7 @@ plt.close()
 # isentropic efficiency / injection superheat / discharge temp
 ################################################################################
 #assign axes
-y = np.array(df[1:]['eta_isen_postinj'], dtype=float) * 100
+y = np.array(df[1:]['eta_isen'], dtype=float)
 x = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 0.555556
 c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
 s = 20  # size of points
@@ -148,9 +148,9 @@ cbar = plt.colorbar(im, ax=ax)
 #im.set_clim(1000, 2600)
 cbar.ax.set_ylabel('Discharge temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(60,80)
+plt.ylim(60,70)
 #plt.xlim(0,24.875)
-plt.ylabel('$\eta_{isen,post-inj}$ [\%]')
+plt.ylabel('$\eta_{isen}$ [\%]')
 plt.xlabel('Injection superheat [K]')           
 plt.savefig('isentropic efficiency-injection superheat-discharge temp.pdf')
 plt.show()
