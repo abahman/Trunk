@@ -153,7 +153,7 @@ plt.ylim(0,20)
 plt.xlabel('Discharge pressure [kPa]')
 plt.ylabel('Suction superheat [K]')           
 plt.savefig('suction_superheat_vs_discharge_pressure.pdf')
-plt.show()
+#plt.show()
 plt.close()
 
 
