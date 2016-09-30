@@ -46,7 +46,6 @@ mpl.rcParams.update(pgf_with_latex)
 
 fig = pylab.figure()
 ax = fig.add_subplot(111)
-ax.set_xlim(xmin=-3, xmax=7)
 
 # pylab.plot(np.r_[0,4,4,0,0],np.r_[0,0,1,1,0],'k')
 # pylab.plot(np.r_[1,1],np.r_[0,1],'k-.')
@@ -118,7 +117,7 @@ bb.set_boxstyle("rarrow", pad=0.5)
 #plot color gradient 2nd plot
 gradient2 = np.linspace(0, 1, 2)
 gradient2 = np.vstack((gradient2, gradient2))
-imgplot = pylab.imshow(gradient2, extent=[0,4,-1.7,-0.7], aspect=4, cmap=plt.get_cmap('bwr'))
+imgplot = pylab.imshow(gradient2, extent=[0,3.98,-1.7,-0.71], aspect=4, cmap=plt.get_cmap('bwr'))
 imgplot.set_clim(-0.15,0.5)
 
 pylab.gca().axis('equal')
