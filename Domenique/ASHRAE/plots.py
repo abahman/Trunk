@@ -1,5 +1,5 @@
 '''
-Created on Sep 14, 2016
+Created on Nov 8, 2016
 
 @author: ammarbahman
 
@@ -54,156 +54,156 @@ mpl.rcParams.update(pgf_with_latex)
 df = pd.read_excel("results.xlsx")
 
 ################################################################################
-# volumetric efficiency / injection mass flow rate / discharge temp
+# T_cond / T_evap / T_sh
 ################################################################################
 #assign axes
-y = np.array(df[1:]['eta_vol'], dtype=float)
-x = np.array(df[1:]['m_dot_inj'], dtype=float) * 0.45359237
-c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
-s = 20  # size of points
+y = (np.array(df[1:]['T_cond_stpt'], dtype=float) + 459.67) * 5.0/9.0
+x = (np.array(df[1:]['T_evap_stpt'], dtype=float) + 459.67) * 5.0/9.0
+c = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 5.0/9.0
+s = 2*c  # size of points
 
 fig, ax = plt.subplots()
 im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
 # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
-#im.set_clim(1000, 2600)
-cbar.ax.set_ylabel('Discharge temperature [K]')
+im.set_clim(0, 32)
+cbar.ax.set_ylabel('Injection supeheat temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(80,100)
+#plt.ylim(80,100)
 #plt.xlim(0,24.875)
-plt.ylabel('$\eta_v$ [\%]')
-plt.xlabel('Injection mass flow rate [kg/hr]')           
-plt.savefig('volumetric efficiency-injection mass flow rate-discharge temp.pdf')
-#plt.show()
-plt.close()
-
-
-################################################################################
-# volumetric efficiency / Norm injection mass flow rate / discharge temp
-################################################################################
-#assign axes
-y = np.array(df[1:]['eta_vol'], dtype=float)
-x = np.array(df[1:]['NormalizedInjectionMassFlow'], dtype=float) * 100
-c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
-s = 20  # size of points
-
-fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
-# Add a colorbar
-cbar = plt.colorbar(im, ax=ax)
-# set the color limits
-#im.set_clim(1000, 2600)
-cbar.ax.set_ylabel('Discharge temperature [K]')
-#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(80,100)
-plt.xlim(0,30)
-plt.ylabel('$\eta_v$ [\%]')
-plt.xlabel('Norm. inject. mass flow rate [\%]')           
-plt.savefig('volumetric efficiency-norm injection mass flow rate-discharge temp.pdf')
+plt.ylabel('Condensation temperature [K]')
+plt.xlabel('Evaporation temperature [K]')           
+plt.savefig('Tcond_Tevap_Tsup.pdf')
 plt.show()
 plt.close()
 
 
-################################################################################
-# isentropic efficiency / injection mass flow rate / discharge temp
-################################################################################
-#assign axes
-y = np.array(df[1:]['eta_isen'], dtype=float)
-x = np.array(df[1:]['m_dot_inj'], dtype=float) * 0.45359237
-c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
-s = 20  # size of points
-
-fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
-# Add a colorbar
-cbar = plt.colorbar(im, ax=ax)
-# set the color limits
-#im.set_clim(1000, 2600)
-cbar.ax.set_ylabel('Discharge temperature [K]')
-#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(60,70)
-#plt.xlim(0,24.875)
-plt.ylabel('$\eta_{isen}$ [\%]')
-plt.xlabel('Injection mass flow rate [kg/hr]')           
-plt.savefig('isentropic efficiency-injection mass flow rate-discharge temp.pdf')
-#plt.show()
-plt.close()
-
-
-################################################################################
-# isentropic efficiency / Norm injection mass flow rate / discharge temp
-################################################################################
-#assign axes
-y = np.array(df[1:]['eta_isen'], dtype=float)
-x = np.array(df[1:]['NormalizedInjectionMassFlow'], dtype=float) * 100
-c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
-s = 20  # size of points
-
-fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
-# Add a colorbar
-cbar = plt.colorbar(im, ax=ax)
-# set the color limits
-#im.set_clim(1000, 2600)
-cbar.ax.set_ylabel('Discharge temperature [K]')
-#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(60,70)
-plt.xlim(0,30)
-plt.ylabel('$\eta_{isen}$ [\%]')
-plt.xlabel('Norm. inject. mass flow rate [\%]')           
-plt.savefig('isentropic efficiency-norm injection mass flow rate-discharge temp.pdf')
-plt.show()
-plt.close()
-
-
-################################################################################
-# isentropic efficiency / injection sat temp / discharge temp
-################################################################################
-#assign axes
-y = np.array(df[1:]['eta_isen'], dtype=float)
-x = (np.array(df[1:]['T_inj_dewpt'], dtype=float) + 459.67) * 5.0/9.0
-c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
-s = 20  # size of points
-
-fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
-# Add a colorbar
-cbar = plt.colorbar(im, ax=ax)
-# set the color limits
-#im.set_clim(1000, 2600)
-cbar.ax.set_ylabel('Discharge temperature [K]')
-#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(60,70)
-#plt.xlim(0,24.875)
-plt.ylabel('$\eta_{isen}$ [\%]')
-plt.xlabel('Injection saturated temperature [K]')           
-plt.savefig('isentropic efficiency-injection sat temp-discharge temp.pdf')
-#plt.show()
-plt.close()
-
-
-################################################################################
-# isentropic efficiency / injection superheat / discharge temp
-################################################################################
-#assign axes
-y = np.array(df[1:]['eta_isen'], dtype=float)
-x = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 0.555556
-c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
-s = 20  # size of points
-
-fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
-# Add a colorbar
-cbar = plt.colorbar(im, ax=ax)
-# set the color limits
-#im.set_clim(1000, 2600)
-cbar.ax.set_ylabel('Discharge temperature [K]')
-#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(60,70)
-#plt.xlim(0,24.875)
-plt.ylabel('$\eta_{isen}$ [\%]')
-plt.xlabel('Injection superheat [K]')           
-plt.savefig('isentropic efficiency-injection superheat-discharge temp.pdf')
-#plt.show()
-plt.close()
+# ################################################################################
+# # volumetric efficiency / Norm injection mass flow rate / discharge temp
+# ################################################################################
+# #assign axes
+# y = np.array(df[1:]['eta_vol'], dtype=float)
+# x = np.array(df[1:]['NormalizedInjectionMassFlow'], dtype=float) * 100
+# c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
+# s = 20  # size of points
+# 
+# fig, ax = plt.subplots()
+# im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# # Add a colorbar
+# cbar = plt.colorbar(im, ax=ax)
+# # set the color limits
+# #im.set_clim(1000, 2600)
+# cbar.ax.set_ylabel('Discharge temperature [K]')
+# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+# plt.ylim(80,100)
+# plt.xlim(0,30)
+# plt.ylabel('$\eta_v$ [\%]')
+# plt.xlabel('Norm. inject. mass flow rate [\%]')           
+# plt.savefig('volumetric efficiency-norm injection mass flow rate-discharge temp.pdf')
+# plt.show()
+# plt.close()
+#
+#
+# ################################################################################
+# # isentropic efficiency / injection mass flow rate / discharge temp
+# ################################################################################
+# #assign axes
+# y = np.array(df[1:]['eta_isen'], dtype=float)
+# x = np.array(df[1:]['m_dot_inj'], dtype=float) * 0.45359237
+# c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
+# s = 20  # size of points
+# 
+# fig, ax = plt.subplots()
+# im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# # Add a colorbar
+# cbar = plt.colorbar(im, ax=ax)
+# # set the color limits
+# #im.set_clim(1000, 2600)
+# cbar.ax.set_ylabel('Discharge temperature [K]')
+# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+# plt.ylim(60,70)
+# #plt.xlim(0,24.875)
+# plt.ylabel('$\eta_{isen}$ [\%]')
+# plt.xlabel('Injection mass flow rate [kg/hr]')           
+# plt.savefig('isentropic efficiency-injection mass flow rate-discharge temp.pdf')
+# #plt.show()
+# plt.close()
+# 
+# 
+# ################################################################################
+# # isentropic efficiency / Norm injection mass flow rate / discharge temp
+# ################################################################################
+# #assign axes
+# y = np.array(df[1:]['eta_isen'], dtype=float)
+# x = np.array(df[1:]['NormalizedInjectionMassFlow'], dtype=float) * 100
+# c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
+# s = 20  # size of points
+# 
+# fig, ax = plt.subplots()
+# im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# # Add a colorbar
+# cbar = plt.colorbar(im, ax=ax)
+# # set the color limits
+# #im.set_clim(1000, 2600)
+# cbar.ax.set_ylabel('Discharge temperature [K]')
+# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+# plt.ylim(60,70)
+# plt.xlim(0,30)
+# plt.ylabel('$\eta_{isen}$ [\%]')
+# plt.xlabel('Norm. inject. mass flow rate [\%]')           
+# plt.savefig('isentropic efficiency-norm injection mass flow rate-discharge temp.pdf')
+# plt.show()
+# plt.close()
+# 
+# 
+# ################################################################################
+# # isentropic efficiency / injection sat temp / discharge temp
+# ################################################################################
+# #assign axes
+# y = np.array(df[1:]['eta_isen'], dtype=float)
+# x = (np.array(df[1:]['T_inj_dewpt'], dtype=float) + 459.67) * 5.0/9.0
+# c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
+# s = 20  # size of points
+# 
+# fig, ax = plt.subplots()
+# im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# # Add a colorbar
+# cbar = plt.colorbar(im, ax=ax)
+# # set the color limits
+# #im.set_clim(1000, 2600)
+# cbar.ax.set_ylabel('Discharge temperature [K]')
+# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+# plt.ylim(60,70)
+# #plt.xlim(0,24.875)
+# plt.ylabel('$\eta_{isen}$ [\%]')
+# plt.xlabel('Injection saturated temperature [K]')           
+# plt.savefig('isentropic efficiency-injection sat temp-discharge temp.pdf')
+# #plt.show()
+# plt.close()
+# 
+# 
+# ################################################################################
+# # isentropic efficiency / injection superheat / discharge temp
+# ################################################################################
+# #assign axes
+# y = np.array(df[1:]['eta_isen'], dtype=float)
+# x = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 0.555556
+# c = (np.array(df[1:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
+# s = 20  # size of points
+# 
+# fig, ax = plt.subplots()
+# im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# # Add a colorbar
+# cbar = plt.colorbar(im, ax=ax)
+# # set the color limits
+# #im.set_clim(1000, 2600)
+# cbar.ax.set_ylabel('Discharge temperature [K]')
+# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+# plt.ylim(60,70)
+# #plt.xlim(0,24.875)
+# plt.ylabel('$\eta_{isen}$ [\%]')
+# plt.xlabel('Injection superheat [K]')           
+# plt.savefig('isentropic efficiency-injection superheat-discharge temp.pdf')
+# #plt.show()
+# plt.close()
