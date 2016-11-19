@@ -144,7 +144,7 @@ cbar.ax.set_ylabel('Evaporation temperature [K]')
  
  
 #error axes
-w=0.05 #Error
+w=0.01 #Error
 ax_min = 0
 ax_max = 65 #x and y-axes max scale tick
 upp_txt = (ax_min+ax_max) / 2.05 #location of upper error text on plot -- adjust the number to adjust the location
@@ -163,7 +163,7 @@ ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\dot m_{inj}$/$\dot m_{tot}$ predicted [\%]')
 plt.xlabel('$\dot m_{inj}$/$\dot m_{tot}$ measured [\%]')           
 plt.savefig('parity_m_inj.pdf')
-#plt.show()
+plt.show()
 plt.close()
   
   
@@ -315,5 +315,5 @@ ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\\eta_{v}$ predicted [kW]')
 plt.xlabel('$\\eta_{v}$ measured [kW]')           
 plt.savefig('parity_eta_v.pdf')
-plt.show()
+#plt.show()
 plt.close()
