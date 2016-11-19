@@ -160,10 +160,10 @@ frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
  
-plt.ylabel('$\dot m_{inj}$/$\dot m_{tot}$ predicted [\%]')
-plt.xlabel('$\dot m_{inj}$/$\dot m_{tot}$ measured [\%]')           
+plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [\%]')
+plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')           
 plt.savefig('parity_m_inj.pdf')
-plt.show()
+#plt.show()
 plt.close()
   
   
