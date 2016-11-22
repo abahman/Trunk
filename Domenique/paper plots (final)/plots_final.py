@@ -186,27 +186,27 @@ plt.close()
 ################################################################################
 # f_loss / T_inj_sh
 ################################################################################
-# #assign axes
-# y = np.array(df[1:][''], dtype=float)
-# x = np.array(df[1:]['Injection Superheat (K)'], dtype=float)
-# #c = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 5.0/9.0
-# #s = 2*c  # size of points
-# 
-# fig, ax = plt.subplots()
-# im = ax.scatter(x, y)#, c=c, s=s, cmap=plt.cm.jet)
-# # Add a colorbar
-# #cbar = plt.colorbar(im, ax=ax)
-# # set the color limits
-# #im.set_clim(0, 32)
-# #cbar.ax.set_ylabel('Injection supeheat temperature [K]')
-# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-# #plt.ylim(80,100)
-# #plt.xlim(0,24.875)
-# plt.ylabel('$f_{loss}$ [\%]')
-# plt.xlabel('Injection superheat temperature [K]')           
-# plt.savefig('floss_Tinj.pdf')
-# plt.show()
-# plt.close()
+#assign axes
+y = np.array(df[1:]['actual heat loss'], dtype=float)
+x = np.array(df[1:]['Injection Superheat (K)'], dtype=float)
+#c = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 5.0/9.0
+#s = 2*c  # size of points
+  
+fig, ax = plt.subplots()
+im = ax.scatter(x, y)#, c=c, s=s, cmap=plt.cm.jet)
+# Add a colorbar
+#cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+#im.set_clim(0, 32)
+#cbar.ax.set_ylabel('Injection supeheat temperature [K]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+#plt.ylim(80,100)
+#plt.xlim(0,24.875)
+plt.ylabel('$f_{loss}$ [\%]')
+plt.xlabel('Injection superheat temperature [K]')           
+plt.savefig('floss_Tinj.pdf')
+#plt.show()
+plt.close()
 
 
 ################################################################################
@@ -316,24 +316,24 @@ plt.close()
 ################################################################################
 # f_loss / T_inj_sh /T_cond / T_evap 
 ################################################################################
-# #assign axes
-# y = np.array(df[1:]['T_cond [K]'], dtype=float)
-# x = np.array(df[1:]['T_evap [K]'], dtype=float)
-# c = np.array(df[1:][''], dtype=float)
-# s = np.array(df[1:]['Injection Superheat (K)'], dtype=float)
-#  
-# fig, ax = plt.subplots()
-# im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
-# # Add a colorbar
-# cbar = plt.colorbar(im, ax=ax)
-# # set the color limits
-# im.set_clim(0, 30)
-# cbar.ax.set_ylabel('$f_{loss}$ [\%]')
-# ax.text(0.7,0.05,'Markersize (injection superheat) {:0.0g}'.format(min(s))+'$-${:0.0f} K'.format(max(s)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
-# #plt.ylim(30,100)
-# #plt.xlim(0,24.875)
-# plt.ylabel('Condensation tempearture [K]')
-# plt.xlabel('Evaporation temperature [K]')           
-# plt.savefig('floss_Tinj_Tcond_Tevap.pdf')
-# plt.show()
-# plt.close()
+#assign axes
+y = np.array(df[1:]['T_cond [K]'], dtype=float)
+x = np.array(df[1:]['T_evap [K]'], dtype=float)
+c = np.array(df[1:]['actual heat loss'], dtype=float)
+s = np.array(df[1:]['Injection Superheat (K)'], dtype=float)
+  
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(0, 8)
+cbar.ax.set_ylabel('$f_{loss}$ [\%]')
+ax.text(0.7,0.05,'Markersize (injection superheat) {:0.0g}'.format(min(s))+'$-${:0.0f} K'.format(max(s)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#plt.ylim(30,100)
+#plt.xlim(0,24.875)
+plt.ylabel('Condensation tempearture [K]')
+plt.xlabel('Evaporation temperature [K]')           
+plt.savefig('floss_Tinj_Tcond_Tevap.pdf')
+#plt.show()
+plt.close()

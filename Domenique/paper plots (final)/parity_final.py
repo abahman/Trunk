@@ -73,6 +73,9 @@ eta_c_exp = np.array(df[1:]['Actual Isentropic Efficiency'], dtype=float) * 100
 eta_c_corr = np.array(df[1:]['Predicted Isentropic Efficiency'], dtype=float) * 100
 eta_v_exp = np.array(df[1:]['Actual Volumetric Efficiency'], dtype=float) * 100
 eta_v_corr = np.array(df[1:]['Predicted Volumetric Efficiency'], dtype=float) * 100
+f_q_exp = np.array(df[1:]['actual heat loss'], dtype=float)
+f_q_corr1 = np.array(df[1:]['predicted heat loss (w/o T_amb)'], dtype=float)
+f_q_corr2 = np.array(df[1:]['predicted heat loss (w/ T_amb)'], dtype=float)
 
 #Dardenne data
 T_evap_dar = np.array(df_dar[1:]['T_evap [K]'], dtype=float)
@@ -84,6 +87,8 @@ eta_c_exp_dar = np.array(df_dar[1:]['Actual Isentropic Efficiency'], dtype=float
 eta_c_corr_dar = np.array(df_dar[1:]['Predicted Isentropic Efficiency'], dtype=float) * 100
 eta_v_exp_dar = np.array(df_dar[1:]['Actual Volumetric Efficiency'], dtype=float) * 100
 eta_v_corr_dar = np.array(df_dar[1:]['Predicted Volumetric Efficiency'], dtype=float) * 100
+f_q_exp_dar = np.array(df_dar[1:]['Actual Heat Loss'], dtype=float)
+f_q_corr_dar = np.array(df_dar[1:]['Predicted Heat Loss'], dtype=float)
 
 # 
 # #my correlation A and B
@@ -144,7 +149,7 @@ cbar.ax.set_ylabel('Evaporation temperature [K]')
  
  
 #error axes
-w=0.01 #Error
+w=0.1 #Error
 ax_min = 0
 ax_max = 65 #x and y-axes max scale tick
 upp_txt = (ax_min+ax_max) / 2.05 #location of upper error text on plot -- adjust the number to adjust the location
@@ -163,7 +168,7 @@ ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [\%]')
 plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')           
 plt.savefig('parity_m_inj.pdf')
-#plt.show()
+plt.show()
 plt.close()
   
   
@@ -315,5 +320,55 @@ ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\\eta_{v}$ predicted [kW]')
 plt.xlabel('$\\eta_{v}$ measured [kW]')           
 plt.savefig('parity_eta_v.pdf')
+#plt.show()
+plt.close()
+
+
+#########################
+##### f_q #######
+#########################
+#assign axes
+y1 = f_q_corr1
+y2 = f_q_corr_dar
+#y3 = my_p_B
+#y4 = dom_p
+x1 = f_q_exp
+x2 = f_q_exp_dar
+c1 = T_evap
+c2 = T_evap_dar
+s = 20  # size of points
+  
+fig, ax = plt.subplots()
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, label='over spectrum'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
+#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
+#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(245, 290)
+cbar.ax.set_ylabel('Evaporation temperature [K]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+  
+#error axes
+w=0.2 #Error
+ax_min = 0
+ax_max = 10 #x and y-axes max scale tick
+upp_txt = (ax_min+ax_max) / 1.90 #location of upper error text on plot -- adjust the number to adjust the location
+low_txt = (ax_min+ax_max) / 1.70 #location of lower error text on plot -- adjust the number to adjust the location
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
+ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+leg=ax.legend(loc='upper left',numpoints=1)
+frame  = leg.get_frame()  
+frame.set_linewidth(0.5)
+ax.set_xlim((ax_min,ax_max))
+ax.set_ylim((ax_min,ax_max))
+  
+plt.ylabel('$f_{loss}$ predicted [kW]')
+plt.xlabel('$f_{loss}$ measured [kW]')           
+plt.savefig('parity_floss.pdf')
 #plt.show()
 plt.close()
