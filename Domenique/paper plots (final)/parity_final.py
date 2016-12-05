@@ -64,31 +64,31 @@ df = pd.read_excel('data_final.xlsx') #file name
 df_dar = pd.read_excel('Dardenne.xlsx') #file name
 
 #experimental data
-T_evap = np.array(df[1:]['T_evap [K]'], dtype=float)
-T_dis_exp = np.array(df[1:]['Actual Discharge Temperature (K)'], dtype=float)
-T_dis_corr = np.array(df[1:]['Predicted Discharge Temperature (K)'], dtype=float)
-m_ratio_exp = np.array(df[1:]['Actual Injection Ratio'], dtype=float) * 100
-m_ratio_corr = np.array(df[1:]['Predicted Injection Ratio'], dtype=float) * 100
-eta_c_exp = np.array(df[1:]['Actual Isentropic Efficiency'], dtype=float) * 100
-eta_c_corr = np.array(df[1:]['Predicted Isentropic Efficiency'], dtype=float) * 100
-eta_v_exp = np.array(df[1:]['Actual Volumetric Efficiency'], dtype=float) * 100
-eta_v_corr = np.array(df[1:]['Predicted Volumetric Efficiency'], dtype=float) * 100
-f_q_exp = np.array(df[1:]['actual heat loss'], dtype=float)
-f_q_corr1 = np.array(df[1:]['predicted heat loss (w/o T_amb)'], dtype=float)
-f_q_corr2 = np.array(df[1:]['predicted heat loss (w/ T_amb)'], dtype=float)
+T_evap = np.array(df[0:]['T_evap [K]'], dtype=float)
+T_dis_exp = np.array(df[0:]['Actual Discharge Temperature (K)'], dtype=float)
+T_dis_corr = np.array(df[0:]['Predicted Discharge Temperature (K)'], dtype=float)
+m_ratio_exp = np.array(df[0:]['Actual Injection Ratio'], dtype=float) * 100
+m_ratio_corr = np.array(df[0:]['Predicted Injection Ratio'], dtype=float) * 100
+eta_c_exp = np.array(df[0:]['Actual Isentropic Efficiency'], dtype=float) * 100
+eta_c_corr = np.array(df[0:]['Predicted Isentropic Efficiency'], dtype=float) * 100
+eta_v_exp = np.array(df[0:]['Actual Volumetric Efficiency'], dtype=float) * 100
+eta_v_corr = np.array(df[0:]['Predicted Volumetric Efficiency'], dtype=float) * 100
+f_q_exp = np.array(df[0:]['actual heat loss'], dtype=float)
+f_q_corr1 = np.array(df[0:]['predicted heat loss (w/o T_amb)'], dtype=float)
+f_q_corr2 = np.array(df[0:]['predicted heat loss (w/ T_amb)'], dtype=float)
 
 #Dardenne data
-T_evap_dar = np.array(df_dar[1:]['T_evap [K]'], dtype=float)
-T_dis_exp_dar = np.array(df_dar[1:]['Actual Discharge Temperature (K)'], dtype=float)
-T_dis_corr_dar = np.array(df_dar[1:]['Predicted Discharge Temperature (K)'], dtype=float)
-m_ratio_exp_dar = np.array(df_dar[1:]['Actual injection rate'], dtype=float) * 100
-m_ratio_corr_dar = np.array(df_dar[1:]['Predicted injection rate'], dtype=float) * 100
-eta_c_exp_dar = np.array(df_dar[1:]['Actual Isentropic Efficiency'], dtype=float) * 100
-eta_c_corr_dar = np.array(df_dar[1:]['Predicted Isentropic Efficiency'], dtype=float) * 100
-eta_v_exp_dar = np.array(df_dar[1:]['Actual Volumetric Efficiency'], dtype=float) * 100
-eta_v_corr_dar = np.array(df_dar[1:]['Predicted Volumetric Efficiency'], dtype=float) * 100
-f_q_exp_dar = np.array(df_dar[1:]['Actual Heat Loss'], dtype=float)
-f_q_corr_dar = np.array(df_dar[1:]['Predicted Heat Loss'], dtype=float)
+T_evap_dar = np.array(df_dar[0:]['T_evap [K]'], dtype=float)
+T_dis_exp_dar = np.array(df_dar[0:]['Actual Discharge Temperature (K)'], dtype=float)
+T_dis_corr_dar = np.array(df_dar[0:]['Predicted Discharge Temperature (K)'], dtype=float)
+m_ratio_exp_dar = np.array(df_dar[0:]['Actual injection rate'], dtype=float) * 100
+m_ratio_corr_dar = np.array(df_dar[0:]['Predicted injection rate'], dtype=float) * 100
+eta_c_exp_dar = np.array(df_dar[0:]['Actual Isentropic Efficiency'], dtype=float) * 100
+eta_c_corr_dar = np.array(df_dar[0:]['Predicted Isentropic Efficiency'], dtype=float) * 100
+eta_v_exp_dar = np.array(df_dar[0:]['Actual Volumetric Efficiency'], dtype=float) * 100
+eta_v_corr_dar = np.array(df_dar[0:]['Predicted Volumetric Efficiency'], dtype=float) * 100
+f_q_exp_dar = np.array(df_dar[0:]['Actual Heat Loss'], dtype=float)
+f_q_corr_dar = np.array(df_dar[0:]['Predicted Heat Loss'], dtype=float)
 
 # 
 # #my correlation A and B
@@ -159,7 +159,7 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',numpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
@@ -168,7 +168,7 @@ ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [\%]')
 plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')           
 plt.savefig('parity_m_inj.pdf')
-plt.show()
+#plt.show()
 plt.close()
   
   
@@ -209,7 +209,7 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',numpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
@@ -260,7 +260,7 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',numpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
@@ -311,7 +311,7 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',numpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
@@ -361,7 +361,7 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',numpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
