@@ -67,12 +67,10 @@ class struct(object):
         S.N = 3
     """
     pass
+
+class HeatExchanger(object):
     
-class HeatExchanger():
-    
-    def __init__(self,**kwargs):
-        
-        self.__dict__.update(kwargs)
+    def __init__(self, Fluid_h, mdot_h, p_hi, h_hi, Fluid_c, mdot_c, p_ci, h_ci):
         """
         
         Parameters
@@ -81,14 +79,14 @@ class HeatExchanger():
         """
         
         # Set variables in the class instance
-#         self.Fluid_h = Fluid_h
-#         self.mdot_h = mdot_h
-#         self.h_hi = h_hi
-#         self.p_hi = p_hi
-#         self.Fluid_c = Fluid_c
-#         self.mdot_c = mdot_c
-#         self.h_ci = h_ci
-#         self.p_ci = p_ci
+        self.Fluid_h = Fluid_h
+        self.mdot_h = mdot_h
+        self.h_hi = h_hi
+        self.p_hi = p_hi
+        self.Fluid_c = Fluid_c
+        self.mdot_c = mdot_c
+        self.h_ci = h_ci
+        self.p_ci = p_ci
         
         # Determine the inlet temperatures from the pressure/enthalpy pairs
         self.T_ci = CP.PropsSI('T', 'P', self.p_ci, 'H', self.h_ci, self.Fluid_c)
@@ -104,25 +102,7 @@ class HeatExchanger():
         self.h_hbubble = CP.PropsSI('H', 'T', self.T_hbubble, 'Q', 0, self.Fluid_h)
         self.h_hdew    = CP.PropsSI('H', 'T', self.T_hdew, 'Q', 1, self.Fluid_h)
         
-    def Update(self,**kwargs):
-        #Update the parameters passed in
-        # using the dictionary
-        self.__dict__.update(kwargs)
-        
-        # Determine the inlet temperatures from the pressure/enthalpy pairs
-        self.T_ci = CP.PropsSI('T', 'P', self.p_ci, 'H', self.h_ci, self.Fluid_c)
-        self.T_hi = CP.PropsSI('T', 'P', self.p_hi, 'H', self.h_hi, self.Fluid_h)
-        
-        # Calculate the bubble and dew enthalpies for each stream
-        self.T_cbubble = CP.PropsSI('T', 'P', self.p_ci, 'Q', 0, self.Fluid_c)
-        self.T_cdew    = CP.PropsSI('T', 'P', self.p_ci, 'Q', 1, self.Fluid_c)
-        self.T_hbubble = CP.PropsSI('T', 'P', self.p_hi, 'Q', 0, self.Fluid_h)
-        self.T_hdew    = CP.PropsSI('T', 'P', self.p_hi, 'Q', 1, self.Fluid_h)
-        self.h_cbubble = CP.PropsSI('H', 'T', self.T_cbubble, 'Q', 0, self.Fluid_c)
-        self.h_cdew    = CP.PropsSI('H', 'T', self.T_cdew, 'Q', 1, self.Fluid_c)
-        self.h_hbubble = CP.PropsSI('H', 'T', self.T_hbubble, 'Q', 0, self.Fluid_h)
-        self.h_hdew    = CP.PropsSI('H', 'T', self.T_hdew, 'Q', 1, self.Fluid_h)
-        
+    
     def external_pinching(self):
         """ Determine the maximum heat transfer rate based on the external pinching analysis """
 
@@ -438,7 +418,7 @@ class HeatExchanger():
         plt.tight_layout(pad = 0.2)
         if fName != '':
             plt.savefig(fName, dpi = dpi)
-        
+
 def PropaneEvaporatorPinching():
     p_Water = 101325
     h_Water = CP.PropsSI('H','T',330,'P',p_Water,'Water')
@@ -467,21 +447,9 @@ def VICompEcon():
     h_c = CP.PropsSI('H','P',816322.314008,'Q',0.57,'R407C')
     mdot_c = 0.016
     
-    params = {
-        'Fluid_h':'R407C',
-        'mdot_h':mdot_h,
-        'h_hi': h_h,
-        'p_hi': p_h,
-        'Fluid_c': 'R407C',
-        'mdot_c':mdot_c,
-        'h_ci':h_c,
-        'p_ci':p_c,
-        'A_h':4,
-        'A_c':4,
-        }
+    HX = HeatExchanger('R407C',mdot_h,p_h,h_h,'R407C',mdot_c,p_c,h_c) 
     
-    HX = HeatExchanger(**params) 
-        
+    HX.A_h = HX.A_c = 4
     #Actually run the HX code
     HX.run(and_solve = True)
     #HX.plot_cells('full.pdf')
@@ -493,30 +461,20 @@ def VICompEconRes():
     Tdew_c = CP.PropsSI('T','P',816322.314008,'Q',1.0,'R407C')
     Tinj = Tdew_c + 5
     hinj = CP.PropsSI('H','P',816322.314008,'T',Tinj,'R407C')
+     
     p_h = CP.PropsSI('P','T',315,'Q',1,'R407C')
     h_h = CP.PropsSI('H','P',CP.PropsSI('P','T',315,'Q',1,'R407C'),'T',CP.PropsSI('T','P',CP.PropsSI('P','T',315,'Q',1,'R407C'),'Q',0,'R407C')-5,'R407C')
     mdot_h = 0.059
     p_c = 816322.314008
     mdot_c = 0.016
-    params = {
-        'Fluid_h':'R407C',
-        'mdot_h':mdot_h,
-        'h_hi': h_h,
-        'p_hi': p_h,
-        'Fluid_c': 'R407C',
-        'mdot_c':mdot_c,
-        'h_ci':CP.PropsSI('H','P',816322.314008,'Q',0.9,'R407C'),
-        'p_ci':p_c,
-        'A_h':4,
-        'A_c':4,
-        }
-    HX = HeatExchanger(**params)
-    
     def residual(x_in):
-        params = {
-        'h_ci':CP.PropsSI('H','P',816322.314008,'Q',x_in,'R407C'),
-        }
-        HX.Update(**params)
+         
+        h_c = CP.PropsSI('H','P',816322.314008,'Q',x_in,'R407C')
+         
+        HX = HeatExchanger('R407C',mdot_h,p_h,h_h,'R407C',mdot_c,p_c,h_c) 
+     
+        HX.A_h = HX.A_c = 4
+        #Actually run the HX code
         HX.run(and_solve = True)
          
         resid = HX.Tvec_c[-1] - Tinj#mdot_c*(HX.h_co - hinj)
@@ -524,10 +482,9 @@ def VICompEconRes():
      
     x_in_actual = scipy.optimize.brentq(residual,0.01,0.99)
     print('x_in_actual = ', x_in_actual)
-    params = {
-            'h_ci':CP.PropsSI('H','P',816322.314008,'Q',x_in_actual,'R407C')
-            }
-    HX.Update(**params)
+    h_c = CP.PropsSI('H','P',816322.314008,'Q',x_in_actual,'R407C')
+    HX = HeatExchanger('R407C',mdot_h,p_h,h_h,'R407C',mdot_c,p_c,h_c)
+    HX.A_h = HX.A_c = 4
     #Actually run the HX code
     HX.run(and_solve = True)
     #HX.plot_cells('full.pdf')
@@ -535,7 +492,7 @@ def VICompEconRes():
     HX.plot_Ts_pair()
     #HX.plot_ph_pair()
 
-            
+               
 if __name__=='__main__':
     # If the script is run directly, this code will be executed.
     #PropaneEvaporatorPinching()
