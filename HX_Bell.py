@@ -314,7 +314,7 @@ class HeatExchanger():
         # Check the external pinching & update cell boundaries  
         Qmax_ext = self.external_pinching()
         Qmax = Qmax_ext
-    
+
         if not only_external:
             # Check the internal pinching
             for stream in ['hot','cold']:
@@ -322,14 +322,14 @@ class HeatExchanger():
                 Qmax_int = self.internal_pinching(stream)
                 if Qmax_int is not None:
                     Qmax = Qmax_int
-                
+       
         self.Qmax = Qmax
-        
+
         if and_solve and not only_external:
             Q = self.solve()
             
         Qtotal = self.mdot_c*(self.hvec_c[-1]-self.hvec_c[0])
-        
+        print ('Qtotal = '+str(Qtotal)+' W')
         # Build the normalized enthalpy vectors
         self.hnorm_h = self.mdot_h*(np.array(self.hvec_h)-self.hvec_h[0])/Qtotal
         self.hnorm_c = self.mdot_c*(np.array(self.hvec_c)-self.hvec_c[0])/Qtotal
@@ -381,6 +381,7 @@ class HeatExchanger():
         Solve the objective function using Brent's method and the maximum heat transfer 
         rate calculated from the pinching analysis
         """
+        print 'solve Q'
         self.Q = scipy.optimize.brentq(self.objective_function, 1e-5, self.Qmax-1e-10, rtol = 1e-14, xtol = 1e-10)
         return self.Q
         
@@ -438,6 +439,7 @@ class HeatExchanger():
         plt.tight_layout(pad = 0.2)
         if fName != '':
             plt.savefig(fName, dpi = dpi)
+        plt.show()
         
 def PropaneEvaporatorPinching():
     p_Water = 101325
@@ -535,9 +537,40 @@ def VICompEconRes():
     HX.plot_Ts_pair()
     #HX.plot_ph_pair()
 
-            
+def VICompEcon_new():
+    p_h = CP.PropsSI('P','T',315,'Q',1,'R407C')
+    h_h = CP.PropsSI('H','P',CP.PropsSI('P','T',315,'Q',1,'R407C'),'T',CP.PropsSI('T','P',CP.PropsSI('P','T',315,'Q',1,'R407C'),'Q',0,'R407C')-5,'R407C')
+    mdot_h = 0.059
+    
+    p_c = 816322.314008
+    h_c = CP.PropsSI('H','P',816322.314008,'Q',0.57,'R407C')
+    mdot_c = 0.016
+    
+    params = {
+        'Fluid_h':'R407C',
+        'mdot_h':mdot_h,
+        'h_hi': h_h,
+        'p_hi': p_h,
+        'Fluid_c': 'R407C',
+        'mdot_c':mdot_c,
+        'h_ci':h_c,
+        'p_ci':p_c,
+        'A_h':4,
+        'A_c':4,
+        }
+    
+    HX = HeatExchanger(**params) 
+        
+    #Actually run the HX code
+    HX.run(and_solve = False)
+    HX.plot_cells('VICompEcon_new.pdf')
+    #HX.plot_objective_function()
+    #HX.plot_Ts_pair()
+    #HX.plot_ph_pair()
+          
 if __name__=='__main__':
     # If the script is run directly, this code will be executed.
     #PropaneEvaporatorPinching()
     #VICompEcon()
-    VICompEconRes()
+    VICompEcon_new()
+    #VICompEconRes()

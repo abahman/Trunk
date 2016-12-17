@@ -67,15 +67,24 @@ df_dar = pd.read_excel('Dardenne.xlsx') #file name
 T_evap = np.array(df[0:]['T_evap [K]'], dtype=float)
 T_dis_exp = np.array(df[0:]['Actual Discharge Temperature (K)'], dtype=float)
 T_dis_corr = np.array(df[0:]['Predicted Discharge Temperature (K)'], dtype=float)
+T_dis_ARI = np.array(df[0:]['T_dis_ARI'], dtype=float)
+
 m_ratio_exp = np.array(df[0:]['Actual Injection Ratio'], dtype=float) * 100
 m_ratio_corr = np.array(df[0:]['Predicted Injection Ratio'], dtype=float) * 100
+m_ratio_ARI = np.array(df[0:]['m_ratio_ARI'], dtype=float) * 100
+
 eta_c_exp = np.array(df[0:]['Actual Isentropic Efficiency'], dtype=float) * 100
 eta_c_corr = np.array(df[0:]['Predicted Isentropic Efficiency'], dtype=float) * 100
+eta_c_ARI = np.array(df[0:]['eta_isen_ARI'], dtype=float) * 100
+
 eta_v_exp = np.array(df[0:]['Actual Volumetric Efficiency'], dtype=float) * 100
 eta_v_corr = np.array(df[0:]['Predicted Volumetric Efficiency'], dtype=float) * 100
+eta_v_ARI = np.array(df[0:]['eta_v_ARI'], dtype=float) * 100
+
 f_q_exp = np.array(df[0:]['actual heat loss'], dtype=float)
 f_q_corr1 = np.array(df[0:]['predicted heat loss (w/o T_amb)'], dtype=float)
 f_q_corr2 = np.array(df[0:]['predicted heat loss (w/ T_amb)'], dtype=float)
+f_q_ARI = np.array(df[0:]['f_loss_ARI'], dtype=float)
 
 #Dardenne data
 T_evap_dar = np.array(df_dar[0:]['T_evap [K]'], dtype=float)
@@ -127,6 +136,7 @@ f_q_corr_dar = np.array(df_dar[0:]['Predicted Heat Loss'], dtype=float)
 #assign axes
 y1 = m_ratio_corr
 y2 = m_ratio_corr_dar
+y11 = m_ratio_ARI
 #y3 = my_m_dot_inj_norm_B
 #y4 = dom_m_dot_inj_norm
 x1 = m_ratio_exp
@@ -136,8 +146,9 @@ c2 = T_evap_dar
 s = 20  # size of points
  
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, label='over spectrum'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+im = ax.scatter(x1, y11, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='ARI'+' (MAE = {:0.01f}\%'.format(mape(y11,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x1)))
+im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
 #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
 #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
 # Add a colorbar
@@ -164,9 +175,9 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
- 
 plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [\%]')
-plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')           
+plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')
+plt.tight_layout()       
 plt.savefig('parity_m_inj.pdf')
 #plt.show()
 plt.close()
@@ -178,6 +189,7 @@ plt.close()
 #assign axes
 y1 = T_dis_corr
 y2 = T_dis_corr_dar
+y11 = T_dis_ARI
 #y3 = my_t_dis_B
 #y4 = dom_t_dis
 x1 = T_dis_exp
@@ -187,8 +199,9 @@ c2 = T_evap_dar
 s = 20  # size of points
   
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, label='over spectrum'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+im = ax.scatter(x1, y11, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='ARI'+' (MAE = {:0.01f}\%'.format(mape(y11,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x1)))
+im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
 #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
 #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
 # Add a colorbar
@@ -214,9 +227,9 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-  
 plt.ylabel('$T_{dis}$ predicted [K]')
-plt.xlabel('$T_{dis}$ measured [K]')           
+plt.xlabel('$T_{dis}$ measured [K]')
+plt.tight_layout()         
 plt.savefig('parity_Tdis.pdf')
 #plt.show()
 plt.close()
@@ -229,6 +242,7 @@ plt.close()
 #assign axes
 y1 = eta_c_corr
 y2 = eta_c_corr_dar
+y11 = eta_c_ARI
 #y3 = my_p_B
 #y4 = dom_p
 x1 = eta_c_exp
@@ -238,8 +252,9 @@ c2 = T_evap_dar
 s = 20  # size of points
   
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, label='over spectrum'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+im = ax.scatter(x1, y11, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='ARI'+' (MAE = {:0.01f}\%'.format(mape(y11,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x1)))
+im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
 #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
 #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
 # Add a colorbar
@@ -265,9 +280,9 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-  
-plt.ylabel('$\\eta_{isen}$ predicted [kW]')
-plt.xlabel('$\\eta_{isen}$ measured [kW]')           
+plt.ylabel('$\\eta_{isen}$ predicted [\%]')
+plt.xlabel('$\\eta_{isen}$ measured [\%]')
+plt.tight_layout()          
 plt.savefig('parity_eta_isen.pdf')
 #plt.show()
 plt.close()
@@ -280,6 +295,7 @@ plt.close()
 #assign axes
 y1 = eta_v_corr
 y2 = eta_v_corr_dar
+y11 = eta_v_ARI
 #y3 = my_p_B
 #y4 = dom_p
 x1 = eta_v_exp
@@ -289,8 +305,9 @@ c2 = T_evap_dar
 s = 20  # size of points
   
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, label='over spectrum'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+im = ax.scatter(x1, y11, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='ARI'+' (MAE = {:0.01f}\%'.format(mape(y11,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x1)))
+im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
 #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
 #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
 # Add a colorbar
@@ -316,9 +333,9 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-  
-plt.ylabel('$\\eta_{v}$ predicted [kW]')
-plt.xlabel('$\\eta_{v}$ measured [kW]')           
+plt.ylabel('$\\eta_{v}$ predicted [\%]')
+plt.xlabel('$\\eta_{v}$ measured [\%]')
+plt.tight_layout()           
 plt.savefig('parity_eta_v.pdf')
 #plt.show()
 plt.close()
@@ -330,6 +347,7 @@ plt.close()
 #assign axes
 y1 = f_q_corr1
 y2 = f_q_corr_dar
+y11 = f_q_ARI
 #y3 = my_p_B
 #y4 = dom_p
 x1 = f_q_exp
@@ -339,8 +357,9 @@ c2 = T_evap_dar
 s = 20  # size of points
   
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, label='over spectrum'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+im = ax.scatter(x1, y11, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='ARI'+' (MAE = {:0.01f}\%'.format(mape(y11,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x1)))
+im = ax.scatter(x2, y2, c=c2, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
 #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
 #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
 # Add a colorbar
@@ -366,9 +385,9 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-  
-plt.ylabel('$f_{loss}$ predicted [kW]')
-plt.xlabel('$f_{loss}$ measured [kW]')           
+plt.ylabel('$f_{loss}$ predicted [\%]')
+plt.xlabel('$f_{loss}$ measured [\%]')
+plt.tight_layout()           
 plt.savefig('parity_floss.pdf')
 #plt.show()
 plt.close()

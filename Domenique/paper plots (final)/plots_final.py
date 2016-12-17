@@ -54,6 +54,171 @@ mpl.rcParams.update(pgf_with_latex)
 df = pd.read_excel("data_final.xlsx")
 
 ################################################################################
+# isen_effic / PR 
+################################################################################
+#assign axes
+y = np.array(df[0:11]['Actual Isentropic Efficiency'], dtype=float) * 100
+x = np.array(df[0:11]['PressureRatio'], dtype=float)
+y1 = np.array(df[11:]['Actual Isentropic Efficiency'], dtype=float) * 100
+x1 = np.array(df[11:]['PressureRatio'], dtype=float)
+#c = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 5.0/9.0
+#s = 2*c  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y,lw=0.2,label ='Wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
+# Add a colorbar
+#cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+#im.set_clim(0, 32)
+#cbar.ax.set_ylabel('Injection supeheat temperature [K]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+plt.ylim(50,80)
+#plt.xlim(0,24.875)
+plt.ylabel('Isentropic efficiency [\%]')
+plt.xlabel('Pressure ratio [-]')
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()
+plt.savefig('isentropic_PR.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# vol_effic / PR
+################################################################################
+#assign axes
+y = np.array(df[0:11]['Actual Volumetric Efficiency'], dtype=float) * 100
+x = np.array(df[0:11]['PressureRatio'], dtype=float)
+y1 = np.array(df[11:]['Actual Volumetric Efficiency'], dtype=float) * 100
+x1 = np.array(df[11:]['PressureRatio'], dtype=float)
+#c = np.array(df[0:]['DELTAT_sh_inj'], dtype=float) * 5.0/9.0
+#s = 2*c  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y,lw=0.2,label ='wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
+# Add a colorbar
+#cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+#im.set_clim(0, 32)
+#cbar.ax.set_ylabel('Injection supeheat temperature [K]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+plt.ylim(80,100)
+#plt.xlim(0,24.875)
+plt.ylabel('Volumetric efficiency [\%]')
+plt.xlabel('Pressure ratio [-]') 
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()           
+plt.savefig('volumetric_PR.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# T_dis / PR
+################################################################################
+#assign axes
+y = np.array(df[0:11]['Actual Discharge Temperature (K)'], dtype=float)
+x = np.array(df[0:11]['PressureRatio'], dtype=float)
+y1 = np.array(df[11:]['Actual Discharge Temperature (K)'], dtype=float)
+x1 = np.array(df[11:]['PressureRatio'], dtype=float)
+#c = np.array(df[0:]['DELTAT_sh_inj'], dtype=float) * 5.0/9.0
+#s = 2*c  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y,lw=0.2,label ='wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
+# Add a colorbar
+#cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+#im.set_clim(0, 32)
+#cbar.ax.set_ylabel('Injection supeheat temperature [K]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+#plt.ylim(80,100)
+#plt.xlim(0,24.875)
+plt.ylabel('Discharge tempearture [K]')
+plt.xlabel('Pressure ratio [-]')
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()  
+plt.savefig('Tdis_PR.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# m_inj_ratio / PR
+################################################################################
+#assign axes
+y = np.array(df[0:11]['Actual Injection Ratio'], dtype=float) * 100
+x = np.array(df[0:11]['PressureRatio'], dtype=float)
+y1 = np.array(df[11:]['Actual Injection Ratio'], dtype=float) * 100
+x1 = np.array(df[11:]['PressureRatio'], dtype=float)
+#c = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 5.0/9.0
+#s = 2*c  # size of points
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y,lw=0.2,label ='wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
+# Add a colorbar
+#cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+#im.set_clim(0, 32)
+#cbar.ax.set_ylabel('Injection supeheat temperature [K]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+plt.ylim(0,40)
+#plt.xlim(0,24.875)
+plt.ylabel('$\dot m_{inj}/\dot m_{suc}$ [\%]')
+plt.xlabel('Pressure ratio [-]')
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()        
+plt.savefig('minj_PR.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# f_loss / PR
+################################################################################
+#assign axes
+y = np.array(df[0:11]['actual heat loss'], dtype=float)
+x = np.array(df[0:11]['PressureRatio'], dtype=float)
+y1 = np.array(df[11:]['actual heat loss'], dtype=float)
+x1 = np.array(df[11:]['PressureRatio'], dtype=float)
+#c = np.array(df[1:]['DELTAT_sh_inj'], dtype=float) * 5.0/9.0
+#s = 2*c  # size of points
+  
+fig, ax = plt.subplots()
+im = ax.scatter(x, y,lw=0.2,label ='wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
+# Add a colorbar
+#cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+#im.set_clim(0, 32)
+#cbar.ax.set_ylabel('Injection supeheat temperature [K]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+plt.ylim(0,10)
+#plt.xlim(0,24.875)
+plt.ylabel('$f_{loss}$ [\%]')
+plt.xlabel('Pressure ratio [-]')   
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()      
+plt.savefig('floss_PR.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
 # isen_effic / T_inj_sh
 ################################################################################
 #assign axes
@@ -65,52 +230,28 @@ x1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
 #s = 2*c  # size of points
 
 fig, ax = plt.subplots()
-im = ax.scatter(x, y,label ='Wet injection')#, c=c, s=s, cmap=plt.cm.jet)
-im = ax.scatter(x1, y1, c='red', marker='s',label ='Vapor injection')
+im = ax.scatter(x, y,lw=0.2,label ='Wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
 # Add a colorbar
 #cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 #im.set_clim(0, 32)
 #cbar.ax.set_ylabel('Injection supeheat temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-plt.ylim(30,100)
+plt.ylim(50,80)
 #plt.xlim(0,24.875)
 plt.ylabel('Isentropic efficiency [\%]')
 plt.xlabel('Injection superheat temperature [K]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
 frame.set_linewidth(0.5)
+plt.tight_layout()
 plt.savefig('isentropic_Tinj.pdf')
 #plt.show()
 plt.close()
 
 
-# ################################################################################
-# # volumetric efficiency / Norm injection mass flow rate / discharge temp
-# ################################################################################
-# #assign axes
-# y = np.array(df[0:]['eta_vol'], dtype=float)
-# x = np.array(df[0:]['NormalizedInjectionMassFlow'], dtype=float) * 100
-# c = (np.array(df[0:]['TC3_T_comp_dis'], dtype=float) + 459.67) * 5.0/9.0
-# s = 20  # size of points
-# 
-# fig, ax = plt.subplots()
-# im = ax.scatter(x, y, c=c, s=s, cmap=plt.cm.jet)
-# # Add a colorbar
-# cbar = plt.colorbar(im, ax=ax)
-# # set the color limits
-# #im.set_clim(1000, 2600)
-# cbar.ax.set_ylabel('Discharge temperature [K]')
-# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-# plt.ylim(80,100)
-# plt.xlim(0,30)
-# plt.ylabel('$\eta_v$ [\%]')
-# plt.xlabel('Norm. inject. mass flow rate [\%]')           
-# plt.savefig('volumetric efficiency-norm injection mass flow rate-discharge temp.pdf')
-# plt.show()
-# plt.close()
-#
-#
+
 ################################################################################
 # vol_effic / T_inj_sh
 ################################################################################
@@ -123,8 +264,8 @@ x1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
 #s = 2*c  # size of points
 
 fig, ax = plt.subplots()
-im = ax.scatter(x, y,label ='wet injection')#, c=c, s=s, cmap=plt.cm.jet)
-im = ax.scatter(x1, y1, c='red', marker='s',label ='Vapor injection')
+im = ax.scatter(x, y,lw=0.2,label ='wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
 # Add a colorbar
 #cbar = plt.colorbar(im, ax=ax)
 # set the color limits
@@ -136,7 +277,8 @@ plt.ylim(80,100)
 plt.ylabel('Volumetric efficiency [\%]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)     
+frame.set_linewidth(0.5)
+plt.tight_layout()    
 plt.xlabel('Injection superheat temperature [K]')           
 plt.savefig('volumetric_Tinj.pdf')
 #plt.show()
@@ -155,8 +297,8 @@ x1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
 #s = 2*c  # size of points
 
 fig, ax = plt.subplots()
-im = ax.scatter(x, y,label ='wet injection')#, c=c, s=s, cmap=plt.cm.jet)
-im = ax.scatter(x1, y1, c='red', marker='s',label ='Vapor injection')
+im = ax.scatter(x, y,lw=0.2,label ='wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
 # Add a colorbar
 #cbar = plt.colorbar(im, ax=ax)
 # set the color limits
@@ -169,7 +311,8 @@ plt.ylabel('Discharge tempearture [K]')
 plt.xlabel('Injection superheat temperature [K]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)      
+frame.set_linewidth(0.5)
+plt.tight_layout()      
 plt.savefig('Tdis_Tinj.pdf')
 #plt.show()
 plt.close()
@@ -187,21 +330,22 @@ x1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
 #s = 2*c  # size of points
 
 fig, ax = plt.subplots()
-im = ax.scatter(x, y,label ='wet injection')#, c=c, s=s, cmap=plt.cm.jet)
-im = ax.scatter(x1, y1, c='red', marker='s',label ='Vapor injection')
+im = ax.scatter(x, y,lw=0.2,label ='wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
 # Add a colorbar
 #cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 #im.set_clim(0, 32)
 #cbar.ax.set_ylabel('Injection supeheat temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-#plt.ylim(80,100)
+plt.ylim(0,40)
 #plt.xlim(0,24.875)
 plt.ylabel('$\dot m_{inj}/\dot m_{suc}$ [\%]')
 plt.xlabel('Injection superheat temperature [K]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)         
+frame.set_linewidth(0.5)
+plt.tight_layout()         
 plt.savefig('minj_Tinj.pdf')
 #plt.show()
 plt.close()
@@ -219,21 +363,22 @@ x1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
 #s = 2*c  # size of points
   
 fig, ax = plt.subplots()
-im = ax.scatter(x, y,label ='wet injection')#, c=c, s=s, cmap=plt.cm.jet)
-im = ax.scatter(x1, y1, c='red', marker='s',label ='Vapor injection')
+im = ax.scatter(x, y,lw=0.2,label ='wet injection',alpha=0.9)#, c=c, s=s, cmap=plt.cm.jet)
+im = ax.scatter(x1, y1, c='red', marker='s',lw=0.2,label ='Vapor injection',alpha=0.9)
 # Add a colorbar
 #cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 #im.set_clim(0, 32)
 #cbar.ax.set_ylabel('Injection supeheat temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-#plt.ylim(80,100)
+plt.ylim(0,10)
 #plt.xlim(0,24.875)
 plt.ylabel('$f_{loss}$ [\%]')
 plt.xlabel('Injection superheat temperature [K]')   
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)        
+frame.set_linewidth(0.5)
+plt.tight_layout()      
 plt.savefig('floss_Tinj.pdf')
 #plt.show()
 plt.close()
@@ -251,23 +396,24 @@ y1 = np.array(df[11:]['T_cond [K]'], dtype=float)
 x1 = np.array(df[11:]['T_evap [K]'], dtype=float)
 c1 = np.array(df[11:]['Actual Isentropic Efficiency'], dtype=float) * 100
 s1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
-
+ 
 fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', label = 'Wet injection')
-im = ax.scatter(x1, y1, c=c1, s=s1, cmap=plt.cm.jet, marker = 's', label = 'Vapor injection')
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', lw=0.2,label = 'Wet injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, s=s1, cmap=plt.cm.jet, marker = 's', lw=0.2,label = 'Vapor injection',alpha=0.9)
 # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(60, 68)
 cbar.ax.set_ylabel('Isentropic efficiency [\%]')
-ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
 #plt.ylim(30,100)
 #plt.xlim(0,24.875)
 plt.ylabel('Condensation tempearture [K]')
 plt.xlabel('Evaporation temperature [K]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)     
+frame.set_linewidth(0.5)
+plt.tight_layout()     
 plt.savefig('isentropic_Tinj_Tcond_Tevap.pdf')
 #plt.show()
 plt.close()
@@ -285,28 +431,29 @@ y1 = np.array(df[11:]['T_cond [K]'], dtype=float)
 x1 = np.array(df[11:]['T_evap [K]'], dtype=float)
 c1 = np.array(df[11:]['Actual Volumetric Efficiency'], dtype=float) * 100
 s1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
- 
+  
 fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', label = 'Wet injection')
-im = ax.scatter(x1, y1, c=c1, s=s1, cmap=plt.cm.jet, marker = 's', label = 'Vapor injection')
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', lw=0.2,label = 'Wet injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, cmap=plt.cm.jet, marker = 's', lw=0.2,label = 'Vapor injection',alpha=0.9)
 # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(84, 92)
 cbar.ax.set_ylabel('Volumetric efficiency [\%]')
-ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
 #plt.ylim(30,100)
 #plt.xlim(0,24.875)
 plt.ylabel('Condensation tempearture [K]')
 plt.xlabel('Evaporation temperature [K]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)       
+frame.set_linewidth(0.5)
+plt.tight_layout()     
 plt.savefig('volumetric_Tinj_Tcond_Tevap.pdf')
 #plt.show()
 plt.close()
-
-
+ 
+ 
 ################################################################################
 # T_dis / T_inj_sh /T_cond / T_evap 
 ################################################################################
@@ -319,28 +466,29 @@ y1 = np.array(df[11:]['T_cond [K]'], dtype=float)
 x1 = np.array(df[11:]['T_evap [K]'], dtype=float)
 c1 = np.array(df[11:]['Actual Discharge Temperature (K)'], dtype=float)
 s1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
- 
+  
 fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', label = 'Wet injection')
-im = ax.scatter(x1, y1, c=c1, s=s1, cmap=plt.cm.jet, marker = 's', label = 'Vapor injection')
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', lw=0.2,label = 'Wet injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, cmap=plt.cm.jet, marker = 's', lw=0.2,label = 'Vapor injection',alpha=0.9)
 # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(340, 380)
 cbar.ax.set_ylabel('Discharge temperature [K]')
-ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
 #plt.ylim(30,100)
 #plt.xlim(0,24.875)
 plt.ylabel('Condensation tempearture [K]')
 plt.xlabel('Evaporation temperature [K]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)         
+frame.set_linewidth(0.5)
+plt.tight_layout()        
 plt.savefig('T_dis_Tinj_Tcond_Tevap.pdf')
 #plt.show()
 plt.close()
-
-
+ 
+ 
 ################################################################################
 # m_ratio / T_inj_sh /T_cond / T_evap 
 ################################################################################
@@ -353,28 +501,29 @@ y1 = np.array(df[11:]['T_cond [K]'], dtype=float)
 x1 = np.array(df[11:]['T_evap [K]'], dtype=float)
 c1 = np.array(df[11:]['Actual Injection Ratio'], dtype=float) * 100
 s1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
- 
+  
 fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', label = 'Wet injection')
-im = ax.scatter(x1, y1, c=c1, s=s1, cmap=plt.cm.jet, marker = 's', label = 'Vapor injection')
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', lw=0.2,label = 'Wet injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, cmap=plt.cm.jet, marker = 's', lw=0.2,label = 'Vapor injection',alpha=0.9)
 # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(0, 30)
 cbar.ax.set_ylabel('$\dot m_{inj}/\dot m_{suc}$ [\%]')
-ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
 #plt.ylim(30,100)
 #plt.xlim(0,24.875)
 plt.ylabel('Condensation tempearture [K]')
 plt.xlabel('Evaporation temperature [K]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)    
+frame.set_linewidth(0.5)
+plt.tight_layout()  
 plt.savefig('minj_Tinj_Tcond_Tevap.pdf')
 #plt.show()
 plt.close()
-
-
+ 
+ 
 ################################################################################
 # f_loss / T_inj_sh /T_cond / T_evap 
 ################################################################################
@@ -387,23 +536,199 @@ y1 = np.array(df[11:]['T_cond [K]'], dtype=float)
 x1 = np.array(df[11:]['T_evap [K]'], dtype=float)
 c1 = np.array(df[11:]['actual heat loss'], dtype=float)
 s1 = np.array(df[11:]['Injection Superheat (K)'], dtype=float)
-  
+   
 fig, ax = plt.subplots()
-im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', label = 'Wet injection')
-im = ax.scatter(x1, y1, c=c1, s=s1, cmap=plt.cm.jet, marker = 's', label = 'Vapor injection')
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = 'o', lw=0.2,label = 'Wet injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, cmap=plt.cm.jet, marker = 's', lw=0.2,label = 'Vapor injection',alpha=0.9)
 # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(2, 7)
 cbar.ax.set_ylabel('$f_{loss}$ [\%]')
-ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
 #plt.ylim(30,100)
 #plt.xlim(0,24.875)
 plt.ylabel('Condensation tempearture [K]')
 plt.xlabel('Evaporation temperature [K]')
 leg=plt.legend(loc='upper right',scatterpoints=1)
 frame=leg.get_frame()  
-frame.set_linewidth(0.5)        
+frame.set_linewidth(0.5)
+plt.tight_layout()       
 plt.savefig('floss_Tinj_Tcond_Tevap.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# isen_effic / T_inj_sh /T_cond / T_evap 
+################################################################################
+#assign axes
+y = np.array(df[0:22]['T_cond [K]'], dtype=float)
+x = np.array(df[0:22]['T_evap [K]'], dtype=float)
+c = np.array(df[0:22]['Actual Isentropic Efficiency'], dtype=float) * 100
+s = np.array(df[0:22]['Injection Superheat (K)'], dtype=float)
+y1 = np.array(df[22:]['T_cond [K]'], dtype=float)
+x1 = np.array(df[22:]['T_evap [K]'], dtype=float)
+c1 = np.array(df[22:]['Actual Isentropic Efficiency'], dtype=float) * 100
+s1 = np.array(df[22:]['Injection Superheat (K)'], dtype=float)
+
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = '^', lw=0.2,label = 'Fixed injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, s=s1, cmap=plt.cm.jet, marker = '*', lw=0.2,label = 'Variable injection',alpha=0.9)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(60, 68)
+cbar.ax.set_ylabel('Isentropic efficiency [\%]')
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#plt.ylim(30,100)
+#plt.xlim(0,24.875)
+plt.ylabel('Condensation tempearture [K]')
+plt.xlabel('Evaporation temperature [K]')
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()
+plt.savefig('isentropic_Tinj_Tcond_Tevap_FV.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# vol_effic / T_inj_sh /T_cond / T_evap 
+################################################################################
+#assign axes
+y = np.array(df[0:22]['T_cond [K]'], dtype=float)
+x = np.array(df[0:22]['T_evap [K]'], dtype=float)
+c = np.array(df[0:22]['Actual Volumetric Efficiency'], dtype=float) * 100
+s = np.array(df[0:22]['Injection Superheat (K)'], dtype=float)
+y1 = np.array(df[22:]['T_cond [K]'], dtype=float)
+x1 = np.array(df[22:]['T_evap [K]'], dtype=float)
+c1 = np.array(df[22:]['Actual Volumetric Efficiency'], dtype=float) * 100
+s1 = np.array(df[22:]['Injection Superheat (K)'], dtype=float)
+ 
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = '^', lw=0.2,label = 'Fixed injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, cmap=plt.cm.jet, marker = '*', lw=0.2,label = 'Variable injection',alpha=0.9)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(84, 92)
+cbar.ax.set_ylabel('Volumetric efficiency [\%]')
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#plt.ylim(30,100)
+#plt.xlim(0,24.875)
+plt.ylabel('Condensation tempearture [K]')
+plt.xlabel('Evaporation temperature [K]')
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)  
+plt.tight_layout()     
+plt.savefig('volumetric_Tinj_Tcond_Tevap_FV.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# T_dis / T_inj_sh /T_cond / T_evap 
+################################################################################
+#assign axes
+y = np.array(df[0:22]['T_cond [K]'], dtype=float)
+x = np.array(df[0:22]['T_evap [K]'], dtype=float)
+c = np.array(df[0:22]['Actual Discharge Temperature (K)'], dtype=float)
+s = np.array(df[0:22]['Injection Superheat (K)'], dtype=float)
+y1 = np.array(df[22:]['T_cond [K]'], dtype=float)
+x1 = np.array(df[22:]['T_evap [K]'], dtype=float)
+c1 = np.array(df[22:]['Actual Discharge Temperature (K)'], dtype=float)
+s1 = np.array(df[22:]['Injection Superheat (K)'], dtype=float)
+ 
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = '^', lw=0.2,label = 'Fixed injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, cmap=plt.cm.jet, marker = '*', lw=0.2,label = 'Variable injection',alpha=0.9)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(340, 380)
+cbar.ax.set_ylabel('Discharge temperature [K]')
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#plt.ylim(30,100)
+#plt.xlim(0,24.875)
+plt.ylabel('Condensation tempearture [K]')
+plt.xlabel('Evaporation temperature [K]')
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()     
+plt.savefig('T_dis_Tinj_Tcond_Tevap_FV.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# m_ratio / T_inj_sh /T_cond / T_evap 
+################################################################################
+#assign axes
+y = np.array(df[0:22]['T_cond [K]'], dtype=float)
+x = np.array(df[0:22]['T_evap [K]'], dtype=float)
+c = np.array(df[0:22]['Actual Injection Ratio'], dtype=float) * 100
+s = np.array(df[0:22]['Injection Superheat (K)'], dtype=float)
+y1 = np.array(df[22:]['T_cond [K]'], dtype=float)
+x1 = np.array(df[22:]['T_evap [K]'], dtype=float)
+c1 = np.array(df[22:]['Actual Injection Ratio'], dtype=float) * 100
+s1 = np.array(df[22:]['Injection Superheat (K)'], dtype=float)
+ 
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = '^', lw=0.2, label = 'Fixed injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, cmap=plt.cm.jet, marker = '*', lw=0.2, label = 'Variable injection',alpha=0.9)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(0, 30)
+cbar.ax.set_ylabel('$\dot m_{inj}/\dot m_{suc}$ [\%]')
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#plt.ylim(30,100)
+#plt.xlim(0,24.875)
+plt.ylabel('Condensation tempearture [K]')
+plt.xlabel('Evaporation temperature [K]')
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()
+plt.savefig('minj_Tinj_Tcond_Tevap_FV.pdf')
+#plt.show()
+plt.close()
+
+
+################################################################################
+# f_loss / T_inj_sh /T_cond / T_evap 
+################################################################################
+#assign axes
+y = np.array(df[0:22]['T_cond [K]'], dtype=float)
+x = np.array(df[0:22]['T_evap [K]'], dtype=float)
+c = np.array(df[0:22]['actual heat loss'], dtype=float)
+s = np.array(df[0:22]['Injection Superheat (K)'], dtype=float)
+y1 = np.array(df[22:]['T_cond [K]'], dtype=float)
+x1 = np.array(df[22:]['T_evap [K]'], dtype=float)
+c1 = np.array(df[22:]['actual heat loss'], dtype=float)
+s1 = np.array(df[22:]['Injection Superheat (K)'], dtype=float)
+  
+fig, ax = plt.subplots()
+im = ax.scatter(x, y, c=c, cmap=plt.cm.jet, marker = '^', lw=0.2, label = 'Fixed injection',alpha=0.9)
+im = ax.scatter(x1, y1, c=c1, cmap=plt.cm.jet, marker = '*', lw=0.2, label = 'Variable injection',alpha=0.9)
+# Add a colorbar
+cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+im.set_clim(2, 7)
+cbar.ax.set_ylabel('$f_{loss}$ [\%]')
+#ax.text(0.68,0.05,'Markersize (injection superheat) ${:0.0g}$'.format(min(s))+' to {:0.0f} K'.format(max(s1)),ha='center',va='center',transform = ax.transAxes,fontsize = 7)
+#plt.ylim(30,100)
+#plt.xlim(0,24.875)
+plt.ylabel('Condensation tempearture [K]')
+plt.xlabel('Evaporation temperature [K]')
+leg=plt.legend(loc='upper right',scatterpoints=1)
+frame=leg.get_frame()  
+frame.set_linewidth(0.5)
+plt.tight_layout()
+plt.savefig('floss_Tinj_Tcond_Tevap_FV.pdf')
 #plt.show()
 plt.close()
