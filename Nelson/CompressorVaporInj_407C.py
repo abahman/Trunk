@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 """
 Created on Thu Feb 06 19:05:48 2014
+Modifed on Tue Jan 17 10:00:00 2017
 
-RefProp returns [kJ/kg]
+RefProp returns [J/kg]
 
-Pressure in kPa
+Pressure in Pa
 Temperature in K
 
 Solver for Semi-Emperical Model
@@ -21,7 +22,8 @@ Change log..better late than never
 -motor inefficiencies is (1-eta)*W_comp not (1-eta)*(W_comp-W_loss_friction)
 -In Wbal, compressor work includes W_loss_fic and then motor efficiency applied
 
-
+1/18/17
+-Update code to work with CoolProp v6.1.0 (units: Pa, K, J/kg, kg/m^3 ..etc)
 
 
 """
@@ -30,7 +32,7 @@ Change log..better late than never
 
 
 "need to be locally imported....yeah I know right..."
-from CoolProp.CoolProp import Props
+from CoolProp.CoolProp import PropsSI
 import numpy as np
 import math
 #import DataIO
@@ -99,7 +101,7 @@ def c_l(T):
     c2 = 6.58646e-6
     
     c = c0 + c1*(T) + c2*(T)**2
-    return c
+    return c*1000 #[J/kg-K]
     
 def u_l(T):
     "internal energy [kJ/kg] of Duratherm LT given T in K"
@@ -111,7 +113,7 @@ def u_l(T):
     c2 = 6.58646e-6
     u = c0*(T) + c1/2 *(T**2 ) + c2/3 *(T**3)
 
-    return u
+    return u*1000 #[J/kg]
 
 def rho_l(T):
     "density [kg/m^3] of Duratherm LT given T in K"
@@ -129,10 +131,10 @@ def s_l(T):
     
     s = c0*np.log((T)/298) + c1*((T)-298) + c2/2*((T)**2 - 298**2)
     
-    return s
+    return s*1000 #[J/kg-K]
 
 def h_l(T,P):
-    "the specific enthalpy of Duratherm LT [kJ/kg-k]"
+    "the specific enthalpy of Duratherm LT [J/kg]"
     h = u_l(T) + P/rho_l(T)
     return h
 
@@ -159,8 +161,8 @@ def T_l(h,P):
     
 
 def P_hv(gas,h,v):
-    P = [1000,2000]
-    v_check = 1.0/Props('D','H',h,'P',P[0],gas)
+    P = [1000000,2000000]
+    v_check = 1.0/PropsSI('D','H',h,'P',P[0],gas)
     
     f = [v_check - v] #function to converge
     
@@ -169,12 +171,12 @@ def P_hv(gas,h,v):
         i=i+1 #update index
         
         "ride herd on Pressure"
-        if P[i]>10000:
-            P[i] = 100+ 500*random()
-        if P[i] < 100:
-            P[i] = 100+ 500*random()
+        if P[i]>10000000:
+            P[i] = 100000+ 500*random()
+        if P[i] < 100000:
+            P[i] = 100000+ 500*random()
         
-        v_check = 1.0/Props('D','H',h,'P',P[i],gas)
+        v_check = 1.0/PropsSI('D','H',h,'P',P[i],gas)
         f = np.append(f,v_check - v)
         P = np.append(P , P[i]-(f[i]*(P[i]-P[i-1]))/(f[i]-f[i-1])) #secant method
     
@@ -194,7 +196,7 @@ def vol_l(T):
 
 def vol_g(gas,T,P):
     "returns the specific volume so inverse of density doesn't need to be manually entered"
-    v = 1.0/(Props('D','T',T,'P',P,gas))
+    v = 1.0/(PropsSI('D','T',T,'P',P,gas))
     return v
         
 #==========================================================================    
@@ -208,9 +210,9 @@ def vol_g(gas,T,P):
 def T_mix_h(gas,h,P,y,Tguess):
     "find the mixture temperature given its specific enthalpy"
     T=[Tguess+5, Tguess-5]
-    hgas = [Props('H','T',T[0],'P',P,gas),Props('H','T',T[1],'P',P,gas)]
+    hgas = [PropsSI('H','T',T[0],'P',P,gas),PropsSI('H','T',T[1],'P',P,gas)]
     
-    Tgas = Props('T','H',hgas[0],'P',P,gas)
+    Tgas = PropsSI('T','H',hgas[0],'P',P,gas)
     
     h_check = (hgas[0]+ y*h_l(Tgas,P))/(1+y)
     f =[h_check - h]
@@ -221,7 +223,7 @@ def T_mix_h(gas,h,P,y,Tguess):
 #        if T[i]< Tguess/2: #ride herd
 #            T[i] = Tguess/2 + random()*(Tguess - Tguess/2)
 
-        Tgas = Props('T','H',hgas[i],'P',P,gas)
+        Tgas = PropsSI('T','H',hgas[i],'P',P,gas)
         h_check = (hgas[i]+ y*h_l(Tgas,P))/(1+y)
         
         f = np.append(f,h_check - h)
@@ -244,8 +246,8 @@ def T_mix_h_bisect(gas,h,P,y,Tguess):
     THigh = 450
     TLow = 100       
     
-    h_high = (Props('H','T',THigh,'P',P,gas)+ y*h_l(THigh,P))/(1+y)
-    h_low = (Props('H','T',TLow,'P',P,gas)+ y*h_l(TLow,P))/(1+y) 
+    h_high = (PropsSI('H','T',THigh,'P',P,gas)+ y*h_l(THigh,P))/(1+y)
+    h_low = (PropsSI('H','T',TLow,'P',P,gas)+ y*h_l(TLow,P))/(1+y) 
     
     FHigh = h_high - h
     FLow = h_low - h
@@ -268,7 +270,7 @@ def T_mix_h_bisect(gas,h,P,y,Tguess):
         
         NumSections = NumSections+1
         TMid = (THigh+TLow)/2.0
-        FMid = (Props('H','T',TMid,'P',P,gas)+ y*h_l(TMid,P))/(1+y) - h
+        FMid = (PropsSI('H','T',TMid,'P',P,gas)+ y*h_l(TMid,P))/(1+y) - h
         
         if FMid>0:
             THigh = TMid
@@ -293,9 +295,9 @@ def T_mix_h_bisect(gas,h,P,y,Tguess):
 def T_mix_s(gas,s,P,y,Tguess):
     "find the mixture temperature given its specific enthalpy"
     T=[Tguess+5, Tguess-5]
-    sgas = [Props('S','T',T[0],'P',P,gas),Props('S','T',T[1],'P',P,gas)]
+    sgas = [PropsSI('S','T',T[0],'P',P,gas),PropsSI('S','T',T[1],'P',P,gas)]
     
-    Tgas = Props('T','S',sgas[0],'P',P,gas)
+    Tgas = PropsSI('T','S',sgas[0],'P',P,gas)
     
     s_check = (sgas[0]+ y*s_l(Tgas))/(1+y)
     f =[s_check - s]
@@ -306,7 +308,7 @@ def T_mix_s(gas,s,P,y,Tguess):
 #        if T[i]< Tguess/2: #ride herd
 #            T[i] = Tguess/2 + random()*(Tguess - Tguess/2)
 
-        Tgas = Props('T','S',sgas[i],'P',P,gas)
+        Tgas = PropsSI('T','S',sgas[i],'P',P,gas)
         s_check = (sgas[i]+ y*s_l(Tgas))/(1+y)
         
         f = np.append(f,s_check - s)
@@ -322,8 +324,8 @@ def T_mix_s(gas,s,P,y,Tguess):
 
     
 def gamma_mix(gas,T,P,y):
-    Cp = (Props('C','T',T,'P',P,gas)+y*c_l(T))/(1+y)
-    Cv = (Props('O','T',T,'P',P,gas)+y*c_l(T))/(1+y)
+    Cp = (PropsSI('C','T',T,'P',P,gas)+y*c_l(T))/(1+y)
+    Cv = (PropsSI('O','T',T,'P',P,gas)+y*c_l(T))/(1+y)
     gamma = Cp/Cv
     return gamma
 
@@ -408,7 +410,7 @@ def Chisholm_leak(gas,Area,P1,P2,T1,y):
     "Two phase discharge coefficient from Morris"        
     beta = math.sqrt(sigma)
     ve_thr = ve2
-    G_thr = math.sqrt (2.0* I/( pow ( ve_thr ,2.0) -pow (beta ,4.0) * pow (ve1 ,2.0) ) *1000.0)
+    G_thr = math.sqrt (2.0* I/( pow ( ve_thr ,2.0) -pow (beta ,4.0) * pow (ve1 ,2.0) ) )
     
 #    "two phase choking"  
 #    G_max = math.sqrt ( -1000.0/( xg* dvdP_m(gas,T,P2 ,0) +(1 - xg)* dvdP_m (gas,T,P2,1) ))
@@ -431,11 +433,11 @@ def leakage(gas,T_preleak,P_preleak,P_postleak,A_leak):
     gamma_leak = gamma_mix(gas,T_preleak,P_preleak,y_star)
     P_leak_crit = P_preleak*pow((2.0/(gamma_leak+1)),gamma_leak/(gamma_leak-1))
     P_leak_thr = max(P_postleak,P_leak_crit) #choke flow in leakage
-    s_preleak = (Props('S','T',T_preleak,'P',P_preleak,gas)+y_star*s_l(T_preleak))/(1+y_star)
-    h_preleak = (Props('H','T',T_preleak,'P',P_preleak,gas)+y_star*h_l(T_preleak,P_preleak))/(1+y_star)
-    v_leak_thr = 1.0/Props('D','S',s_preleak,'P',P_leak_thr,gas)
-    h_leak_thr = Props('H','S',s_preleak,'P',P_leak_thr,gas)
-    vel_leak_thr = math.sqrt(2.0*(h_preleak - h_leak_thr)*1000) #kJ/kg --> J/kg
+    s_preleak = (PropsSI('S','T',T_preleak,'P',P_preleak,gas)+y_star*s_l(T_preleak))/(1+y_star)
+    h_preleak = (PropsSI('H','T',T_preleak,'P',P_preleak,gas)+y_star*h_l(T_preleak,P_preleak))/(1+y_star)
+    v_leak_thr = 1.0/PropsSI('D','S',s_preleak,'P',P_leak_thr,gas)
+    h_leak_thr = PropsSI('H','S',s_preleak,'P',P_leak_thr,gas)
+    vel_leak_thr = math.sqrt(2.0*(h_preleak - h_leak_thr)) #J/kg
     m_leak = 1.0/v_leak_thr*vel_leak_thr*A_leak
     
     return m_leak
@@ -456,8 +458,8 @@ def Chisholm_suc(gas,Area,mg,ml,P1,T1):
     dP = 2 #pressure step [kPa]
     
     "inlet conditions"
-    s1 = (Props('S','T',T1,'P',P1,gas)+y*s_l(T1))/(1+y)
-    h1 = (Props('H','T',T1,'P',P1,gas)+y*h_l(T1,P1))/(1+y)
+    s1 = (PropsSI('S','T',T1,'P',P1,gas)+y*s_l(T1))/(1+y)
+    h1 = (PropsSI('H','T',T1,'P',P1,gas)+y*h_l(T1,P1))/(1+y)
     
     I=0
     mChis = 0
@@ -491,7 +493,7 @@ def Chisholm_suc(gas,Area,mg,ml,P1,T1):
         
         beta = math.sqrt(sigma)
         ve_thr = ve2
-        G_thr = math.sqrt (2.0* I/( pow ( ve_thr ,2.0) -pow (beta ,4.0) * pow (ve1 ,2.0) ) *1000.0)
+        G_thr = math.sqrt (2.0* I/( pow ( ve_thr ,2.0) -pow (beta ,4.0) * pow (ve1 ,2.0) ) )
         mChis = Cd*G_thr *Area
         
         
@@ -518,8 +520,8 @@ def Chisholm_ex(gas,Area,mg,ml,P2,T2):
     dP = 2 #pressure step [kPa]
     
 #    "inlet conditions"
-#    s2 = (Props('S','T',T2,'P',P2,gas)+y*s_l(T2))/(1+y)
-#    h2 = (Props('H','T',T2,'P',P2,gas)+y*h_l(T2,P2))/(1+y)
+#    s2 = (PropsSI('S','T',T2,'P',P2,gas)+y*s_l(T2))/(1+y)
+#    h2 = (PropsSI('H','T',T2,'P',P2,gas)+y*h_l(T2,P2))/(1+y)
    
     
     I=0
@@ -554,7 +556,7 @@ def Chisholm_ex(gas,Area,mg,ml,P2,T2):
         
         beta = math.sqrt(sigma)
         ve_thr = ve2
-        G_thr = math.sqrt (2.0* I/( pow ( ve_thr ,2.0) -pow (beta ,4.0) * pow (ve1 ,2.0) ) *1000.0)
+        G_thr = math.sqrt (2.0* I/( pow ( ve_thr ,2.0) -pow (beta ,4.0) * pow (ve1 ,2.0) ))
         mChis = Cd*G_thr *Area
         
         
@@ -591,7 +593,7 @@ def SuctionNozzle(gas,Area,mg,P1,T1,h1,s1):
     if FLow>FHigh:
         signChange = -1.0
     else:
-        signChange=1.0
+        signChange = 1.0
     
     FHigh = FHigh*signChange
     FLow = FLow*signChange
@@ -624,7 +626,7 @@ def SuctionNozzle(gas,Area,mg,P1,T1,h1,s1):
     P2 = PMid    
     
     "recover static enthalpy in isobaric diffuser"
-    T2 = Props('T','H',h1,'P',P2,gas)#T_mix_h(gas,h1,P2,y,T1)
+    T2 = PropsSI('T','H',h1,'P',P2,gas)#T_mix_h(gas,h1,P2,y,T1)
 #    print "Pnoz numSecs: ",NumSections
     
     return [T2,P2]
@@ -632,11 +634,11 @@ def SuctionNozzle(gas,Area,mg,P1,T1,h1,s1):
     
 def Suction_helper(gas,h1,s1,T1,P2,Area,mg):
     
-    T2 = Props('T','S',s1,'P',P2,gas)#T_mix_s(gas,s1,P2,y,T1) #isentropic nozzle
-    h2 = Props('H','S',s1,'P',P2,gas)
-    v2 = 1.0/(Props('D','H',h2,'P',P2,gas))#(vol_g(gas,T2,P2) +y*vol_l(T2))/(1+y)
+    T2 = PropsSI('T','S',s1,'P',P2,gas)#T_mix_s(gas,s1,P2,y,T1) #isentropic nozzle
+    h2 = PropsSI('H','S',s1,'P',P2,gas)
+    v2 = 1.0/(PropsSI('D','H',h2,'P',P2,gas))#(vol_g(gas,T2,P2) +y*vol_l(T2))/(1+y)
     vel2 = (mg)/(Area/v2)
-    KE2 = 0.5*vel2**2.0/1000.0
+    KE2 = 0.5*vel2**2.0
     Ebal = h1 - (h2 + KE2)        
     
     return Ebal  
@@ -650,7 +652,7 @@ def IsentropicCompression(gas,s1,T1,P1,v2,v_ratio,P_ex):
     
     
     y=0
-#    s1 = (Props('S','T',T1,'P',P1,gas)+y*s_l(T1_oil))/(1+y)
+#    s1 = (PropsSI('S','T',T1,'P',P1,gas)+y*s_l(T1_oil))/(1+y)
     
     "guess outlet pressure"
     P= [P1*v_ratio,0.95*P1*v_ratio]
@@ -679,10 +681,10 @@ def IsentropicCompression(gas,s1,T1,P1,v2,v_ratio,P_ex):
         
         
         
-        T_s = Props('T','S',s1,'P',P[i],gas)    
+        T_s = PropsSI('T','S',s1,'P',P[i],gas)    
         
         "Mass (volume) Balance"
-        v_out = 1.0/Props('D','S',s1,'P',P[i],gas)
+        v_out = 1.0/PropsSI('D','S',s1,'P',P[i],gas)
         Mbal = v2 - v_out
         
         if i > 0:
@@ -709,15 +711,15 @@ def ExhaustNozzle(gas,Area,mg,P2,T2,P_suc):
 
     
     "Calculate Nozzle inlet pressure"
-    h2 = Props('H','T',T2,'P',P2,gas)
-    s2 = Props('S','T',T2,'P',P2,gas)
+    h2 = PropsSI('H','T',T2,'P',P2,gas)
+    s2 = PropsSI('S','T',T2,'P',P2,gas)
     v2 = vol_g(gas,T2,P2)
     vel2 = (mg)/(Area/v2)
-    KE = 0.5*vel2**2/1000
+    KE = 0.5*vel2**2
     h1 = h2 + KE
     s1=s2
     
-    P1 = [P2+10,P2+50]  #guess nozzle inlet pressure"
+    P1 = [P2+10000,P2+50000]  #guess nozzle inlet pressure"
     
     j=0
     g=[10.0000]
@@ -727,12 +729,12 @@ def ExhaustNozzle(gas,Area,mg,P2,T2,P_suc):
             j=j+1   
         
         "ride herd on Pressure"
-        if P1[j]>10000:
+        if P1[j]>10000000:
             P1[j] = P_suc + 100*random()
-        if P1[j] < 100:
+        if P1[j] < 100000:
             P1[j] = P_suc + 100*random()
             
-        h1_check = Props('H','S',s1,'P',P1[j],gas)
+        h1_check = PropsSI('H','S',s1,'P',P1[j],gas)
         Ebal = h1 - h1_check
         
         if j > 0:
@@ -745,7 +747,7 @@ def ExhaustNozzle(gas,Area,mg,P2,T2,P_suc):
 #            print "P: ",P1
             raise Exception("Exhaust Nozzle P not converging after 30x") 
     
-    T1 = Props('T','P',P1[j],'S',s1,gas) #isentropic nozzle
+    T1 = PropsSI('T','P',P1[j],'S',s1,gas) #isentropic nozzle
         
         
     return [T1,P1[j]]
@@ -769,7 +771,7 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
     N_comp = N_comp*1.0 #convert int to double
 
     "Friction Losses"
-    W_loss_fric =  2.0*math.pi*(N_comp/60)*T_loss/1000 #W --> kW 
+    W_loss_fric =  2.0*math.pi*(N_comp/60)*T_loss #W
     
     
     "generate a starting guess for massflow iterations"
@@ -802,12 +804,12 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
    
         
         "(1) Suction Inlet Conditions"
-        h_suc = Props('H','T',T_suc,'P',P_suc,gas)
-        s_suc = Props('S','T',T_suc,'P',P_suc,gas)
+        h_suc = PropsSI('H','T',T_suc,'P',P_suc,gas)
+        s_suc = PropsSI('S','T',T_suc,'P',P_suc,gas)
 
         "(1) Injection Inlet Conditions"
-        h_inj = Props('H','T',T_inj,'P',P_inj,gas)
-        s_inj = Props('S','T',T_inj,'P',P_inj,gas)
+        h_inj = PropsSI('H','T',T_inj,'P',P_inj,gas)
+        s_inj = PropsSI('S','T',T_inj,'P',P_inj,gas)
         
         
         
@@ -829,8 +831,8 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
             try:  
                 "Using Isentropic nozzle since no liquid at suction" 
                 [T_suc1,P_suc1] = SuctionNozzle(gas,A_suc,m_ref,P_suc,T_suc,h_suc,s_suc)
-                h_suc1 = Props('H','T',T_suc1,'P',P_suc1,gas)
-                s_suc1 = Props('S','T',T_suc1,'P',P_suc1,gas)
+                h_suc1 = PropsSI('H','T',T_suc1,'P',P_suc1,gas)
+                s_suc1 = PropsSI('S','T',T_suc1,'P',P_suc1,gas)
                 nozzlePass = True
                 
             except:
@@ -849,7 +851,7 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
         v_dis3 = (V_dot_suc_comp/(VR1*VR2))/(M_dot[i]+mLeak_guess)
         pseudo_s1 = s_suc1
         [T_dis3,P_dis3] = IsentropicCompression(gas,pseudo_s1,T_suc1,P_suc1,v_dis3,(VR1*VR2),P_dis)
-        h_dis3 = Props('H','T',T_dis3,'P',P_dis3,gas)
+        h_dis3 = PropsSI('H','T',T_dis3,'P',P_dis3,gas)
         pseudo_hsuc1 = h_suc1
         w_comp_int_s = h_dis3 - pseudo_hsuc1        
         
@@ -904,12 +906,12 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
 #                print  W_comp[k]/Wcomp_guess
                 
                 
-                T_dis = Props('T','H',h_dis,'P',P_dis,gas)
+                T_dis = PropsSI('T','H',h_dis,'P',P_dis,gas)
                 
                 
 #                print "inj ratio: ", m_inj_guess[j]/m_ref
                 [T_dis1,P_dis1] = ExhaustNozzle(gas,A_dis,(m_ref + m_inj_guess[j]),P_dis,T_dis,P_suc)
-                h_dis1 = Props('H','T',T_dis1,'P',P_dis1,gas)
+                h_dis1 = PropsSI('H','T',T_dis1,'P',P_dis1,gas)
 
 
                 
@@ -929,12 +931,12 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
                 
                 "1st Isentropic Compression Stage"
                 v_int1 = (V_dot_suc_comp/VR1)/(m_ref_postLeak)
-                s_suc2 = Props('S','H',h_suc2,'P',P_suc2,gas)
-                T_suc2 = Props('T','H',h_suc2,'P',P_suc2,gas)
-                v_suc2 = 1.0/Props('D','H',h_suc2,'P',P_suc2,gas)
+                s_suc2 = PropsSI('S','H',h_suc2,'P',P_suc2,gas)
+                T_suc2 = PropsSI('T','H',h_suc2,'P',P_suc2,gas)
+                v_suc2 = 1.0/PropsSI('D','H',h_suc2,'P',P_suc2,gas)
                 
                 [T_int1,P_int1] = IsentropicCompression(gas,s_suc2,T_suc2,P_suc2,v_int1,VR1,P_suc2*VR1)
-                h_int1 = Props('H','T',T_int1,'P',P_int1,gas)
+                h_int1 = PropsSI('H','T',T_int1,'P',P_int1,gas)
                 
                 
                 
@@ -964,11 +966,11 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
                         P_Crit_inj = P_inj*pow((2/(gamma+1)),(gamma/(gamma-1)))
                         P_thr = max(P_inj1_guess[s],P_Crit_inj)
                         
-                        rho_inj1 = Props('D','S',s_inj1,'P',P_thr,gas)
-                        h_inj1 = Props('H','S',s_inj1,'P',P_thr,gas)
+                        rho_inj1 = PropsSI('D','S',s_inj1,'P',P_thr,gas)
+                        h_inj1 = PropsSI('H','S',s_inj1,'P',P_thr,gas)
                         
                         KE = (h_inj - h_inj1)                
-                        vel_inj1 = np.sqrt( 1000*KE/(0.5) )
+                        vel_inj1 = np.sqrt( KE/(0.5) )
                         
                         m_inj = rho_inj1*vel_inj1*A_inj#*(1.0/(N_comp/3600.0))
                         
@@ -976,7 +978,7 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
                         h_int2 = (m_ref_postLeak*h_int1 + m_inj*h_inj)/(m_ref_postLeak + m_inj)
                         v_int2 = (V_dot_suc_comp/VR1) / (m_inj + m_ref_postLeak)
                         P_int2 = P_hv(gas,h_int2,v_int2)  #iteratively solves since refprop crashes otherwise
-                        s_int2 = Props('S','H',h_int2,'P',P_int2,gas)
+                        s_int2 = PropsSI('S','H',h_int2,'P',P_int2,gas)
                         
                         
                         "Average Inj Pressure"
@@ -1002,11 +1004,11 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
 
                 "2nd Isentropic Compression Stage"
                 v_int3 = (V_dot_suc_comp/(VR1*VR2))/(m_ref_postLeak + m_inj)
-                T_int2 = Props('T','H',h_int2,'P',P_int2,gas)
+                T_int2 = PropsSI('T','H',h_int2,'P',P_int2,gas)
                 
                 
                 [T_int3,P_int3] = IsentropicCompression(gas,s_int2,T_int2,P_int2,v_int3,VR2,P_int2*VR2)
-                h_int3 = Props('H','T',T_int3,'P',P_int3,gas)    
+                h_int3 = PropsSI('H','T',T_int3,'P',P_int3,gas)    
 
                 
                 
@@ -1073,7 +1075,7 @@ def Compressor(gas,T_suc,T_inj,P_suc,P_inj,P_dis,N_comp,VR1,VR2,A_suc,A_inj,A_le
     
     
     "model results"
-    W_comp = W_comp[k]*1000 #kW to W
+    W_comp = W_comp[k] #W
     
 #    print "Pint1: ",P_int1
     
@@ -1114,9 +1116,9 @@ x_Pinj = 0.9
 gas = 'REFPROP-R407C'
 T_amb = 293
 T_suc = -10 + 273
-P_suc = Props('P','T',T_suc - 5,'Q',0.5,gas)
+P_suc = PropsSI('P','T',T_suc - 5,'Q',0.5,gas)
 T_inj = 25 + 273
-P_inj = Props('P','T',T_inj - 5,'Q',0.5,gas)
+P_inj = PropsSI('P','T',T_inj - 5,'Q',0.5,gas)
 P_dis =  P_suc*6
 N_comp = 3600
 
