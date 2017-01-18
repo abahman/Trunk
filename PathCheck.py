@@ -25,7 +25,7 @@ import CoolProp.CoolProp as CP
 print 'Humidity ratio of 50% rel. hum. air at 300 K, 101.325 kPa:', CP.HAProps('W', 'T', 300, 'P', 101.325, 'R', 0.5), 'kg_w/kg_da'
 print ' '
 
-print 'Props', CP.Props('C','T',288.209928591,'P',101.325,'R410a')
+print 'PropsSI', CP.PropsSI('C','T',288.209928591,'P',101.325,'R410a')
 print 'PropsSI', CP.PropsSI('C','T',288.209928591,'P',101325,'R410a')
 print ' '
 import CoolProp.HumidAirProp as CPH
