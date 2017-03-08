@@ -62,7 +62,7 @@ mpl.rcParams.update(pgf_with_latex)
  
 
 #import the excel file
-df = pd.read_excel("superheat/superheat.xlsx")
+df = pd.read_excel("superheat.xlsx")
 B_test1 = np.array(df[:6]["Test1"])
 M_test1 = np.array(df[10:16]["Test1"])
 I_test1 = np.array(df[20:26]["Test1"])
