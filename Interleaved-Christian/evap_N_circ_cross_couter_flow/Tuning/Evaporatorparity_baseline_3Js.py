@@ -11,6 +11,7 @@ from scipy import polyval, polyfit
 import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+mpl.style.use('classic')
 
 def figsize(scale):
     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
@@ -146,9 +147,9 @@ print("mape_Q error is: " + str(mape_Q) + " %")
 #########################
 #####Combined plot#######
 #########################
-#f=pylab.figure(figsize=(3.5,3.5))
-#ax=f.add_axes((0.18,0.15,0.77,0.8))
-fig, ax = plt.subplots()
+f=pylab.figure(figsize=(4.5,4.5))
+ax=f.add_axes((0.15,0.15,0.77,0.77))
+#fig, ax = plt.subplots()
 
 w=0.1357 #Error
 ax_max = 2 #x and y-axes max scale tick
@@ -263,9 +264,9 @@ print("mape_Q error is: " + str(mape_Q) +" %")
 #########################
 #####Combined plot#######
 #########################
-# f=pylab.figure(figsize=(3.5,3.5))
-# ax=f.add_axes((0.18,0.15,0.77,0.8))
-fig, ax = plt.subplots()
+f=pylab.figure(figsize=(4.5,4.5))
+ax=f.add_axes((0.15,0.15,0.77,0.77))
+#fig, ax = plt.subplots()
 
 w=0.1241 #Error
 ax_max = 2 #x and y-axes max scale tick
