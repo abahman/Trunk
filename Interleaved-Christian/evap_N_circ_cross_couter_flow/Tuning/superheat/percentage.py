@@ -79,7 +79,7 @@ Q = np.array(df[:]["Q"])
 #     #plt.savefig('velocity_profile_v2/velocity_percent_test'+Test[i]+'.pdf')
 ##########plot superheat -- Baseline##########
 plt.bar(np.arange(1,9,1)-0.4,COP,label=r'COP$_{sys}$')
-plt.errorbar(np.arange(1,9,1),COP,yerr=0.0277*COP,fmt='',linestyle="None",color='k')
+plt.errorbar(np.arange(1,9,1),COP,yerr=0.0277*COP,fmt='',linestyle="None",color='k')#
 
 plt.plot(np.arange(1,9,1),Q,'g^',markersize=4,label=r'$\dot Q$')
 plt.errorbar(np.arange(1,9,1),Q,yerr=0.0091*Q,fmt='',linestyle="None",color='g')
@@ -93,6 +93,7 @@ plt.ylabel(r'Percentage [\%]')
 leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
+plt.tight_layout() 
 plt.savefig('COP_Q_SI.pdf')
 plt.show()
 
