@@ -147,8 +147,8 @@ print("mape_Q error is: " + str(mape_Q) + " %")
 #########################
 #####Combined plot#######
 #########################
-f=pylab.figure(figsize=(4.5,4.5))
-ax=f.add_axes((0.15,0.15,0.77,0.77))
+f,ax=plt.subplots(figsize=(4.5,4.5))
+#ax=f.add_axes((0.15,0.15,0.77,0.77))
 #fig, ax = plt.subplots()
 
 w=0.1357 #Error
@@ -169,9 +169,10 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((0,ax_max))
 ax.set_ylim((0,ax_max))
-pylab.savefig('images_baseline/Evap_parity_baseline_combined_3Js_wider.pdf')
-pylab.show()
-pylab.close()
+plt.tight_layout()
+plt.savefig('images_baseline/Evap_parity_baseline_combined_3Js_wider.pdf')
+plt.show()
+plt.close()
 
 
 ############################################################################
@@ -264,8 +265,8 @@ print("mape_Q error is: " + str(mape_Q) +" %")
 #########################
 #####Combined plot#######
 #########################
-f=pylab.figure(figsize=(4.5,4.5))
-ax=f.add_axes((0.15,0.15,0.77,0.77))
+f,ax=plt.subplots(figsize=(4.5,4.5))
+#ax=f.add_axes((0.15,0.15,0.77,0.77))
 #fig, ax = plt.subplots()
 
 w=0.1241 #Error
@@ -286,6 +287,7 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((0,ax_max))
 ax.set_ylim((0,ax_max))
-pylab.savefig('images_baseline/Evap_parity_baseline_combined_PredictInterleaved_3Js_wider.pdf')
-pylab.show()
-pylab.close()
+plt.tight_layout()
+plt.savefig('images_baseline/Evap_parity_baseline_combined_PredictInterleaved_3Js_wider.pdf')
+plt.show()
+plt.close()
