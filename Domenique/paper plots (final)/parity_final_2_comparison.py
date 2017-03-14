@@ -83,7 +83,7 @@ def mape(y_pred, y_true):  #maps==mean_absolute_percentage_error
 ##### m_inj/m_suc #######
 #########################
 #import data from excel file
-df = pd.read_excel('correlation_results.xlsx',sheetname='Total_injection_rate',header=0) #file name
+df = pd.read_excel('correlation_results.xlsx',sheetname='Total_injection_rate_update',header=0) #file name
 #assign axes
 y1 = df['InjectionRatio_pred[i]'][1:]*100
 y2 = df['InjectionRatio_AHRI[i]'][1:]*100
@@ -128,60 +128,60 @@ ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [\%]')
 plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')
 plt.tight_layout()       
-#plt.savefig('Total_parity_m_inj_comparison.pdf')
-#plt.show()
+plt.savefig('Total_parity_m_inj_comparison_updated.pdf')
+plt.show()
 plt.close()
 
-#########################
-##### work (power) ######
-#########################
-#import data from excel file
-df = pd.read_excel('correlation_results.xlsx',sheetname='Total_work',header=0) #file name
-#assign axes
-y1 = df['WT1_P_UUT_pred[i]'][1:] #Watts
-y2 = df['WT1_P_UUT_AHRI[i]'][1:] #watss
-y3 = df['WT1_P_UUT_Tello[i]'][1:] #watts
-x1 = df['WT1_P_UUT[i]'][1:] #watts
-#c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
-#c2 = df_dar['T_evap[i]'][1:]
-s = 20  # size of points
-  
-fig, ax = plt.subplots(figsize=(4.5,4.5))
-im = ax.scatter(x1, y1, c='b', s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x1, y2, c='r', s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-im = ax.scatter(x1, y3, c='k', s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
-# Add a colorbar
-#cbar = plt.colorbar(im, ax=ax)
-# set the color limits
-#im.set_clim(245, 290)
-#cbar.ax.set_ylabel('Evaporation temperature [K]')
-#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-  
-#error axes
-w=0.05 #Error
-ax_min = 2500
-ax_max = 6000 #x and y-axes max scale tick
-upp_txt = (ax_min+ax_max) / 1.9 #location of upper error text on plot -- adjust the number to adjust the location
-low_txt = (ax_min+ax_max) / 1.9 #location of lower error text on plot -- adjust the number to adjust the location
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',scatterpoints=1)
-frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
-ax.set_xlim((ax_min,ax_max))
-ax.set_ylim((ax_min,ax_max))
-plt.ylabel('$\dot W$ predicted [W]')
-plt.xlabel('$\dot W$ measured [W]')
-#plt.tight_layout()       
-#plt.savefig('Total_parity_work_comparison.pdf')
-plt.show()
-plt.close()  
+# #########################
+# ##### work (power) ######
+# #########################
+# #import data from excel file
+# df = pd.read_excel('correlation_results.xlsx',sheetname='Total_work',header=0) #file name
+# #assign axes
+# y1 = df['WT1_P_UUT_pred[i]'][1:] #Watts
+# y2 = df['WT1_P_UUT_AHRI[i]'][1:] #watss
+# y3 = df['WT1_P_UUT_Tello[i]'][1:] #watts
+# x1 = df['WT1_P_UUT[i]'][1:] #watts
+# #c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
+# #c2 = df_dar['T_evap[i]'][1:]
+# s = 20  # size of points
+#   
+# fig, ax = plt.subplots(figsize=(4.5,4.5))
+# im = ax.scatter(x1, y1, c='b', s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+# im = ax.scatter(x1, y2, c='r', s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
+# im = ax.scatter(x1, y3, c='k', s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
+# #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
+# #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
+# #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
+# # Add a colorbar
+# #cbar = plt.colorbar(im, ax=ax)
+# # set the color limits
+# #im.set_clim(245, 290)
+# #cbar.ax.set_ylabel('Evaporation temperature [K]')
+# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+#   
+# #error axes
+# w=0.05 #Error
+# ax_min = 2500
+# ax_max = 6000 #x and y-axes max scale tick
+# upp_txt = (ax_min+ax_max) / 1.9 #location of upper error text on plot -- adjust the number to adjust the location
+# low_txt = (ax_min+ax_max) / 1.9 #location of lower error text on plot -- adjust the number to adjust the location
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
+# ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
+# ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+# leg=ax.legend(loc='upper left',scatterpoints=1)
+# frame  = leg.get_frame()  
+# frame.set_linewidth(0.5)
+# ax.set_xlim((ax_min,ax_max))
+# ax.set_ylim((ax_min,ax_max))
+# plt.ylabel('$\dot W$ predicted [W]')
+# plt.xlabel('$\dot W$ measured [W]')
+# #plt.tight_layout()       
+# #plt.savefig('Total_parity_work_comparison.pdf')
+# plt.show()
+# plt.close()  
      
 
 ####Dardenne plots##### 
@@ -191,7 +191,7 @@ plt.close()
 ##### m_inj/m_suc #######
 #########################
 #import data from excel file
-df = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_injection_rate',header=0) #file name
+df = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_injection_rate_update',header=0) #file name
 #assign axes
 y1 = df['InjectionRatio_pred[i]'][1:]*100
 y2 = df['InjectionRatio_AHRI[i]'][1:]*100
@@ -236,71 +236,71 @@ ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [\%]')
 plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')
 plt.tight_layout()       
-#plt.savefig('Dardenne_parity_m_inj_comparison.pdf')
-#plt.show()
+plt.savefig('Dardenne_parity_m_inj_comparison_updated.pdf')
+plt.show()
 plt.close()
  
-#########################
-##### work (power) ######
-#########################
-#import data from excel file
-df = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_work',header=0) #file name
-#assign axes
-y1 = df['W_dot_pred[i]'][1:] #Watts
-y2 = df['W_dot_AHRI[i]'][1:] #watss
-y3 = df['W_dot_Tello[i]'][1:] #watts
-x1 = df['W_dot[i]'][1:] #watts
-#c1 = df['T_evap[i]'][1:] #K
-#c2 = df_dar['T_evap[i]'][1:]
-s = 20  # size of points
-  
-fig, ax = plt.subplots(figsize=(4.5,4.5))
-im = ax.scatter(x1, y1, c='b', s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x1, y2, c='r', s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-im = ax.scatter(x1, y3, c='k', s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
-# Add a colorbar
-#cbar = plt.colorbar(im, ax=ax)
-# set the color limits
-#im.set_clim(245, 290)
-#cbar.ax.set_ylabel('Evaporation temperature [K]')
-#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-  
-#error axes
-w=0.3 #Error
-ax_min = 0
-ax_max = 9000 #x and y-axes max scale tick
-upp_txt = (ax_min+ax_max) / 1.9 #location of upper error text on plot -- adjust the number to adjust the location
-low_txt = (ax_min+ax_max) / 1.45 #location of lower error text on plot -- adjust the number to adjust the location
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k--',lw=1)
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k--',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-
-w=0.05 #Error
-ax_min = 0
-ax_max = 9000 #x and y-axes max scale tick
-upp_txt = (ax_min+ax_max) / 1.3 #location of upper error text on plot -- adjust the number to adjust the location
-low_txt = (ax_min+ax_max) / 1.2 #location of lower error text on plot -- adjust the number to adjust the location
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
-ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-
-leg=ax.legend(loc='upper left',scatterpoints=1)
-frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
-ax.set_xlim((ax_min,ax_max))
-ax.set_ylim((ax_min,ax_max))
-plt.ylabel('$\dot W$ predicted [W]')
-plt.xlabel('$\dot W$ measured [W]')
-plt.tight_layout()       
-#plt.savefig('Dardenne_parity_work.pdf')
-#plt.show()
-plt.close()  
+# #########################
+# ##### work (power) ######
+# #########################
+# #import data from excel file
+# df = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_work',header=0) #file name
+# #assign axes
+# y1 = df['W_dot_pred[i]'][1:] #Watts
+# y2 = df['W_dot_AHRI[i]'][1:] #watss
+# y3 = df['W_dot_Tello[i]'][1:] #watts
+# x1 = df['W_dot[i]'][1:] #watts
+# #c1 = df['T_evap[i]'][1:] #K
+# #c2 = df_dar['T_evap[i]'][1:]
+# s = 20  # size of points
+#   
+# fig, ax = plt.subplots(figsize=(4.5,4.5))
+# im = ax.scatter(x1, y1, c='b', s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+# im = ax.scatter(x1, y2, c='r', s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
+# im = ax.scatter(x1, y3, c='k', s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
+# #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
+# #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
+# #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
+# # Add a colorbar
+# #cbar = plt.colorbar(im, ax=ax)
+# # set the color limits
+# #im.set_clim(245, 290)
+# #cbar.ax.set_ylabel('Evaporation temperature [K]')
+# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+#   
+# #error axes
+# w=0.3 #Error
+# ax_min = 0
+# ax_max = 9000 #x and y-axes max scale tick
+# upp_txt = (ax_min+ax_max) / 1.9 #location of upper error text on plot -- adjust the number to adjust the location
+# low_txt = (ax_min+ax_max) / 1.45 #location of lower error text on plot -- adjust the number to adjust the location
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k--',lw=1)
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k--',lw=1)
+# ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
+# ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+# 
+# w=0.05 #Error
+# ax_min = 0
+# ax_max = 9000 #x and y-axes max scale tick
+# upp_txt = (ax_min+ax_max) / 1.3 #location of upper error text on plot -- adjust the number to adjust the location
+# low_txt = (ax_min+ax_max) / 1.2 #location of lower error text on plot -- adjust the number to adjust the location
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
+# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
+# ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
+# ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+# 
+# leg=ax.legend(loc='upper left',scatterpoints=1)
+# frame  = leg.get_frame()  
+# frame.set_linewidth(0.5)
+# ax.set_xlim((ax_min,ax_max))
+# ax.set_ylim((ax_min,ax_max))
+# plt.ylabel('$\dot W$ predicted [W]')
+# plt.xlabel('$\dot W$ measured [W]')
+# plt.tight_layout()       
+# #plt.savefig('Dardenne_parity_work.pdf')
+# #plt.show()
+# plt.close()  
 
  
