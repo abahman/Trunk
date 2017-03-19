@@ -91,25 +91,31 @@ plt.close()
 #same plot but in bars
 #ax = plt.subplot()    
 plt.bar(np.arange(1,9,1)-0.2,Baseline,width=0.2,color='b',linewidth=0.9,align='center',alpha=0.9,label=r'Baseline')#hatch=5*'\\',
-#plt.errorbar(np.arange(1,9,1)-0.2,Baseline,yerr=0.1234*Baseline,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
+plt.errorbar(np.arange(1,9,1)-0.2,Baseline,yerr=0.1234*Baseline,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
 
 plt.bar(np.arange(1,9,1),Modified,width=0.2,color='g',linewidth=0.9,align='center',alpha=0.9,label=r'Modified')#hatch=4*'-'
-#plt.errorbar(np.arange(1,9,1),Modified,yerr=0.1234*Modified,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
+plt.errorbar(np.arange(1,9,1),Modified,yerr=0.1234*Modified,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
 
 plt.bar(np.arange(1,9,1)+0.2,Interleaved,width=0.2,color='r',linewidth=0.9,align='center',alpha=0.9,label=r'Interleaved')#hatch=4*'x',
-#plt.errorbar(np.arange(1,9,1)+0.2,Interleaved,yerr=0.1234*Interleaved,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
+plt.errorbar(np.arange(1,9,1)+0.2,Interleaved,yerr=0.1234*Interleaved,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
 
 plt.ylim(0,1)
 plt.xlim(0,9)
 plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
            [r'', r'C', r'B', r'6',r'5', r'4/A', r'3', r'2', r'1', r''])
+plt.tick_params(
+    axis='x',          # changes apply to the x-axis
+    which='both',      # both major and minor ticks are affected
+    bottom='off',      # ticks along the bottom edge are off
+    top='off',         # ticks along the top edge are off
+    labelbottom='on') # labels along the bottom edge are off
 plt.xlabel(r'Test condition')
 plt.ylabel(r'$\varepsilon$ [-]')
 leg = plt.legend(loc='best',fancybox=False)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout() 
-plt.savefig('effectivness_bar.pdf')
+plt.savefig('effectivness_bar_errorbar.pdf')
 plt.show()
 
  

@@ -88,6 +88,12 @@ plt.ylim(0,20)
 plt.xlim(0,9)
 plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
            [r'', r'C', r'B', r'6',r'5', r'4/A', r'3', r'2', r'1', r''])
+plt.tick_params(
+    axis='x',          # changes apply to the x-axis
+    which='both',      # both major and minor ticks are affected
+    bottom='off',      # ticks along the bottom edge are off
+    top='off',         # ticks along the top edge are off
+    labelbottom='on') # labels along the bottom edge are off
 plt.xlabel(r'Test condition')
 plt.ylabel(r'Percentage [\%]')
 leg = plt.legend(loc='best',fancybox=False,numpoints=1)
