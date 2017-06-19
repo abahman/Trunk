@@ -57,7 +57,7 @@ def rmse(predictions, targets):
     Root Mean Square Error
     '''
     n = len(predictions)
-    RMSE = np.linalg.norm(predictions - targets) / np.sqrt(n)
+    RMSE = np.linalg.norm(predictions - targets) / np.sqrt(n) / np.mean(targets) * 100
     return RMSE
 
 def mape(y_pred, y_true):  #maps==mean_absolute_percentage_error
@@ -138,67 +138,67 @@ plt.savefig('All_parity_m_inj_comparison_updated.pdf')
 plt.show()
 plt.close()
 
-# #########################
-# ##### work (power) ######
-# #########################
-# #import data from excel file
-# df_total = pd.read_excel('correlation_results.xlsx',sheetname='Total_work',header=0) #file name
-# df_vapor = pd.read_excel('correlation_results.xlsx',sheetname='Vapor_work',header=0) #file name
-# df_two_phase = pd.read_excel('correlation_results.xlsx',sheetname='Two_phase_work',header=0) #file name
-# df_dardenne = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_work',header=0) #file name#assign axes
-# 
-# #assign axes
-# y1 = df_total['WT1_P_UUT_pred[i]'][1:] #Watts
-# y2 = df_vapor['WT1_P_UUT_pred[i]'][1:] #Watts
-# y3 = df_two_phase['WT1_P_UUT_pred[i]'][1:] #Watts
-# y4 = df_dardenne['W_dot_pred[i]'][1:] #Watts
-# 
-# x1 = df_total['WT1_P_UUT[i]'][1:] #watts
-# x2 = df_vapor['WT1_P_UUT[i]'][1:] #watts
-# x3 = df_two_phase['WT1_P_UUT[i]'][1:] #watts
-# x4 = df_dardenne['W_dot[i]'][1:] #watts
-# 
-# #c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
-# #c2 = df_dar['T_evap[i]'][1:]
-# s = 20  # size of points
-#   
-# fig, ax = plt.subplots(figsize=(4.5,4.5))
-# im = ax.scatter(x1, y1, c='b', s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Combined data'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-# im = ax.scatter(x2, y2, c='r', s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='Vapor only'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
-# im = ax.scatter(x3, y3, c='k', s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Two-phase only'+' (MAE = {:0.01f}\%'.format(mape(y3,x3))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x3)))
-# im = ax.scatter(x4, y4, c='g', s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne data'+' (MAE = {:0.01f}\%'.format(mape(y4,x4))+', RMSE = {:0.01f}\%)'.format(rmse(y4,x4)))
-# #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-# #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-# #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
-# # Add a colorbar
-# #cbar = plt.colorbar(im, ax=ax)
-# # set the color limits
-# #im.set_clim(245, 290)
-# #cbar.ax.set_ylabel('Evaporation temperature [K]')
-# #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-#   
-# #error axes
-# w=0.05 #Error
-# ax_min = 0
-# ax_max = 9000 #x and y-axes max scale tick
-# upp_txt = (ax_min+ax_max) / 1.9 #location of upper error text on plot -- adjust the number to adjust the location
-# low_txt = (ax_min+ax_max) / 1.9 #location of lower error text on plot -- adjust the number to adjust the location
-# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
-# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
-# ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-# ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-# ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
-# leg=ax.legend(loc='upper left',scatterpoints=1)
-# frame  = leg.get_frame()  
-# frame.set_linewidth(0.5)
-# ax.set_xlim((ax_min,ax_max))
-# ax.set_ylim((ax_min,ax_max))
-# plt.ylabel('$\dot W$ predicted [W]')
-# plt.xlabel('$\dot W$ measured [W]')
-# plt.tight_layout()       
-# #plt.savefig('All_parity_work_comparison.pdf')
-# #plt.show()
-# plt.close()  
+#########################
+##### work (power) ######
+#########################
+#import data from excel file
+df_total = pd.read_excel('correlation_results.xlsx',sheetname='Total_work',header=0) #file name
+df_vapor = pd.read_excel('correlation_results.xlsx',sheetname='Vapor_work',header=0) #file name
+df_two_phase = pd.read_excel('correlation_results.xlsx',sheetname='Two_phase_work',header=0) #file name
+df_dardenne = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_work',header=0) #file name#assign axes
+ 
+#assign axes
+y1 = df_total['WT1_P_UUT_pred[i]'][1:] #Watts
+y2 = df_vapor['WT1_P_UUT_pred[i]'][1:] #Watts
+y3 = df_two_phase['WT1_P_UUT_pred[i]'][1:] #Watts
+y4 = df_dardenne['W_dot_pred[i]'][1:] #Watts
+ 
+x1 = df_total['WT1_P_UUT[i]'][1:] #watts
+x2 = df_vapor['WT1_P_UUT[i]'][1:] #watts
+x3 = df_two_phase['WT1_P_UUT[i]'][1:] #watts
+x4 = df_dardenne['W_dot[i]'][1:] #watts
+ 
+#c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
+#c2 = df_dar['T_evap[i]'][1:]
+s = 20  # size of points
+   
+fig, ax = plt.subplots(figsize=(4.5,4.5))
+im = ax.scatter(x1, y1, c='b', s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Combined data'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
+im = ax.scatter(x2, y2, c='r', s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='Vapor only'+' (MAE = {:0.01f}\%'.format(mape(y2,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x2)))
+im = ax.scatter(x3, y3, c='k', s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Two-phase only'+' (MAE = {:0.01f}\%'.format(mape(y3,x3))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x3)))
+im = ax.scatter(x4, y4, c='g', s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne data'+' (MAE = {:0.01f}\%'.format(mape(y4,x4))+', RMSE = {:0.01f}\%)'.format(rmse(y4,x4)))
+#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
+#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
+#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
+# Add a colorbar
+#cbar = plt.colorbar(im, ax=ax)
+# set the color limits
+#im.set_clim(245, 290)
+#cbar.ax.set_ylabel('Evaporation temperature [K]')
+#ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
+   
+#error axes
+w=0.05 #Error
+ax_min = 0
+ax_max = 9000 #x and y-axes max scale tick
+upp_txt = (ax_min+ax_max) / 1.9 #location of upper error text on plot -- adjust the number to adjust the location
+low_txt = (ax_min+ax_max) / 1.9 #location of lower error text on plot -- adjust the number to adjust the location
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
+ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
+ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+leg=ax.legend(loc='upper left',scatterpoints=1)
+frame  = leg.get_frame()  
+frame.set_linewidth(0.5)
+ax.set_xlim((ax_min,ax_max))
+ax.set_ylim((ax_min,ax_max))
+plt.ylabel('$\dot W$ predicted [W]')
+plt.xlabel('$\dot W$ measured [W]')
+plt.tight_layout()       
+plt.savefig('All_parity_work_comparison.pdf')
+plt.show()
+plt.close()  
        
 
  
