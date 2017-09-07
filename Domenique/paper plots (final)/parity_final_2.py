@@ -21,15 +21,15 @@ mpl.style.use('classic')
 def figsize(scale):
     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
     inches_per_pt = 1.0/72.27                       # Convert pt to inch
-    golden_mean = (np.sqrt(5.0)-1.0)/2.0            # Aesthetic ratio (you could change this)
+    golden_mean = (np.sqrt(7)-1.0)/2.0            # Aesthetic ratio (you could change this)
     fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
     fig_height = fig_width*golden_mean              # height in inches
     fig_size = [fig_width,fig_height]
     return fig_size
-
+   
 pgf_with_latex = {                      # setup matplotlib to use latex for output
 "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
-"text.usetex": True,                # use LaTeX to write all text
+"text.usetex": False,                # use LaTeX to write all text
 "font.family": "serif",
 "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
 "font.sans-serif": [],
@@ -96,12 +96,12 @@ for i in range(len(condition)):
     s = 20  # size of points
        
     fig, ax = plt.subplots()
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-    im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-    im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+    im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))
     # Add a colorbar
     cbar = plt.colorbar(im, ax=ax)
     # set the color limits
@@ -115,19 +115,19 @@ for i in range(len(condition)):
     ax_min = 0
     ax_max = 40 #x and y-axes max scale tick
     upp_txt = (ax_min+ax_max) / 1.8 #location of upper error text on plot -- adjust the number to adjust the location
-    low_txt = (ax_min+ax_max) / 1.25 #location of lower error text on plot -- adjust the number to adjust the location
+    low_txt = (ax_min+ax_max) / 1.6 #location of lower error text on plot -- adjust the number to adjust the location
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
     leg=ax.legend(loc='upper left',scatterpoints=1)
     frame  = leg.get_frame()  
     frame.set_linewidth(0.5)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
-    plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [\%]')
-    plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')
+    plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [%]')
+    plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [%]')
     plt.tight_layout()       
     plt.savefig(condition[i]+'_parity_m_inj_updated.pdf')
     plt.show()
@@ -148,12 +148,12 @@ for i in range(len(condition)):
     s = 20  # size of points
          
     fig, ax = plt.subplots()
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-    im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-    im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+    im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))
     # Add a colorbar
     cbar = plt.colorbar(im, ax=ax)
     # set the color limits
@@ -171,8 +171,8 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
     leg=ax.legend(loc='upper left',scatterpoints=1)
     frame  = leg.get_frame()  
     frame.set_linewidth(0.5)
@@ -203,12 +203,12 @@ for i in range(len(condition)):
     s = 20  # size of points
           
     fig, ax = plt.subplots()
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-    #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-    #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))    # Add a colorbar
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+    #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))    # Add a colorbar
     cbar = plt.colorbar(im, ax=ax)
     # set the color limits
     im.set_clim(245, 290)
@@ -225,8 +225,8 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
     leg=ax.legend(loc='upper left',scatterpoints=1)
     frame  = leg.get_frame()  
     frame.set_linewidth(0.5)
@@ -254,12 +254,12 @@ for i in range(len(condition)):
     s = 20  # size of points
           
     fig, ax = plt.subplots()
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-    #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-    #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))    # Add a colorbar
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+    #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))    # Add a colorbar
     cbar = plt.colorbar(im, ax=ax)
     # set the color limits
     im.set_clim(245, 290)
@@ -276,15 +276,15 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
     leg=ax.legend(loc='upper left',scatterpoints=1)
     frame  = leg.get_frame()  
     frame.set_linewidth(0.5)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
-    plt.ylabel('$\\eta_{isen}$ predicted [\%]')
-    plt.xlabel('$\\eta_{isen}$ measured [\%]')
+    plt.ylabel('$\\eta_{isen}$ predicted [%]')
+    plt.xlabel('$\\eta_{isen}$ measured [%]')
     plt.tight_layout()          
     plt.savefig(condition[i]+'_parity_eta_isen.pdf')
     plt.show()
@@ -306,12 +306,12 @@ for i in range(len(condition)):
     s = 20  # size of points
             
     fig, ax = plt.subplots()
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-    #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-    #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))    # Add a colorbar
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+    #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))    # Add a colorbar
     cbar = plt.colorbar(im, ax=ax)
     # set the color limits
     im.set_clim(245, 290)
@@ -328,15 +328,15 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
     leg=ax.legend(loc='upper left',scatterpoints=1)
     frame  = leg.get_frame()  
     frame.set_linewidth(0.5)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
-    plt.ylabel('$\\eta_{v}$ predicted [\%]')
-    plt.xlabel('$\\eta_{v}$ measured [\%]')
+    plt.ylabel('$\\eta_{v}$ predicted [%]')
+    plt.xlabel('$\\eta_{v}$ measured [%]')
     plt.tight_layout()           
     plt.savefig(condition[i]+'_parity_eta_v.pdf')
     plt.show()
@@ -357,12 +357,12 @@ for i in range(len(condition)):
     s = 20  # size of points
           
     fig, ax = plt.subplots()
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-    #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-    #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))    # Add a colorbar
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+    #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+    #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+    #im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+    #im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))    # Add a colorbar
     cbar = plt.colorbar(im, ax=ax)
     # set the color limits
     im.set_clim(245, 290)
@@ -374,20 +374,20 @@ for i in range(len(condition)):
     w=error[i] #Error
     ax_min = 0
     ax_max = 10 #x and y-axes max scale tick
-    upp_txt = (ax_min+ax_max) / 1.90 #location of upper error text on plot -- adjust the number to adjust the location
+    upp_txt = (ax_min+ax_max) / 1.85 #location of upper error text on plot -- adjust the number to adjust the location
     low_txt = (ax_min+ax_max) / 1.70 #location of lower error text on plot -- adjust the number to adjust the location
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+    ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+    ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
     leg=ax.legend(loc='upper left',scatterpoints=1)
     frame  = leg.get_frame()  
     frame.set_linewidth(0.5)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
-    plt.ylabel('$f_{q}$ predicted [\%]')
-    plt.xlabel('$f_{q}$ measured [\%]')
+    plt.ylabel('$f_{q}$ predicted [%]')
+    plt.xlabel('$f_{q}$ measured [%]')
     plt.tight_layout()           
     plt.savefig(condition[i]+'_parity_f_q.pdf')
     plt.show()
@@ -417,12 +417,12 @@ c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
 s = 20  # size of points
    
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))
 # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
@@ -439,15 +439,15 @@ low_txt = (ax_min+ax_max) / 1.25 #location of lower error text on plot -- adjust
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
 leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [\%]')
-plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [\%]')
+plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [%]')
+plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [%]')
 plt.tight_layout()       
 plt.savefig('Dardenne_parity_m_inj_updated.pdf')
 plt.show()
@@ -468,12 +468,12 @@ c1 = df['T_evap[i]'][1:] #K
 s = 20  # size of points
      
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))
 # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
@@ -490,8 +490,8 @@ low_txt = (ax_min+ax_max) / 1.3 #location of lower error text on plot -- adjust 
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
 leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
@@ -519,12 +519,12 @@ c1 = df['T_evap[i]'][1:] #K
 s = 20  # size of points
       
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-#im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-#im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))    # Add a colorbar
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+#im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+#im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))    # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(245, 290)
@@ -540,8 +540,8 @@ low_txt = (ax_min+ax_max) / 1.975 #location of lower error text on plot -- adjus
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
 leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
@@ -569,12 +569,12 @@ c1 = df['T_evap[i]'][1:]
 s = 20  # size of points
       
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-#im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-#im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))    # Add a colorbar
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+#im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+#im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))    # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(245, 290)
@@ -590,15 +590,15 @@ low_txt = (ax_min+ax_max) / 1.80 #location of lower error text on plot -- adjust
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
 leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-plt.ylabel('$\\eta_{isen}$ predicted [\%]')
-plt.xlabel('$\\eta_{isen}$ measured [\%]')
+plt.ylabel('$\\eta_{isen}$ predicted [%]')
+plt.xlabel('$\\eta_{isen}$ measured [%]')
 plt.tight_layout()          
 plt.savefig('Dardenne_parity_eta_isen.pdf')
 plt.show()
@@ -620,12 +620,12 @@ c1 = df['T_evap[i]'][1:]
 s = 20  # size of points
         
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-#im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-#im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))    # Add a colorbar
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+#im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+#im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))    # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(245, 290)
@@ -641,15 +641,15 @@ low_txt = (ax_min+ax_max) / 1.9 #location of lower error text on plot -- adjust 
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
 leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-plt.ylabel('$\\eta_{v}$ predicted [\%]')
-plt.xlabel('$\\eta_{v}$ measured [\%]')
+plt.ylabel('$\\eta_{v}$ predicted [%]')
+plt.xlabel('$\\eta_{v}$ measured [%]')
 plt.tight_layout()           
 plt.savefig('Dardenne_parity_eta_v.pdf')
 plt.show()
@@ -670,12 +670,12 @@ c1 = df['T_evap[i]'][1:]
 s = 20  # size of points
       
 fig, ax = plt.subplots()
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}\%'.format(mape(y1,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y1,x1)))
-#im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}\%'.format(mape(y2,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y2,x1)))
-#im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}\%'.format(mape(y3,x1))+', RMSE = {:0.01f}\%)'.format(rmse(y3,x1)))
-#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}\%'.format(mape(y11,x2))+', RMSE = {:0.01f}\%)'.format(rmse(y11,x2)))
-#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y3,x)))
-#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}\%'.format(mape(y4,x)))    # Add a colorbar
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+#im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
+#im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
+#im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
+#im = ax.scatter(x, y3, c=c, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, label='$\\pi = f \\left( \\frac{p_{dis}}{p_{suc}},  \\frac{p_{inj}}{p_{suc}}, \\frac{\\Delta h_{inj}}{\\Delta h_{fg,inj}},\\frac{\\Delta h_{suc}}{\\Delta h_{fg,suc}} \\right)$'+' MAE = {:0.1f}%'.format(mape(y3,x)))
+#im = ax.scatter(x, y4, c=c, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, label='$\\pi = f \\left( T_{evap}, T_{cond}, T_{dew,inj} \\right)$'+' MAE = {:0.1f}%'.format(mape(y4,x)))    # Add a colorbar
 cbar = plt.colorbar(im, ax=ax)
 # set the color limits
 im.set_clim(245, 290)
@@ -691,15 +691,15 @@ low_txt = (ax_min+ax_max) / 1.70 #location of lower error text on plot -- adjust
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}\%'.format(w*100),ha='left',va='top')
-ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
+ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
+ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
 leg=ax.legend(loc='upper left',scatterpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-plt.ylabel('$f_{q}$ predicted [\%]')
-plt.xlabel('$f_{q}$ measured [\%]')
+plt.ylabel('$f_{q}$ predicted [%]')
+plt.xlabel('$f_{q}$ measured [%]')
 plt.tight_layout()           
 plt.savefig('Dardenne_parity_f_q.pdf')
 plt.show()
