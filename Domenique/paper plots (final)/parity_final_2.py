@@ -34,13 +34,13 @@ pgf_with_latex = {                      # setup matplotlib to use latex for outp
 "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
 "font.sans-serif": [],
 "font.monospace": [],
-"axes.labelsize": 10,               # LaTeX default is 10pt font.
-"font.size": 10,
-"legend.fontsize": 8,               # Make the legend/label fonts a little smaller
+"axes.labelsize": 12,               # LaTeX default is 10pt font.
+"font.size": 12,
+"legend.fontsize": 10,               # Make the legend/label fonts a little smaller
 "legend.labelspacing":0.2,
-"xtick.labelsize": 8,
-"ytick.labelsize": 8,
-"figure.figsize": figsize(0.9),     # default fig size of 0.9 textwidth
+"xtick.labelsize": 10,
+"ytick.labelsize": 10,
+"figure.figsize": figsize(1.0),     # default fig size of 0.9 textwidth
 "pgf.preamble": [
 r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
 r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
@@ -95,7 +95,7 @@ for i in range(len(condition)):
     #c2 = df_dar['T_evap[i]'][1:]
     s = 20  # size of points
        
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(6.5,5.5))
     im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -115,7 +115,7 @@ for i in range(len(condition)):
     ax_min = 0
     ax_max = 40 #x and y-axes max scale tick
     upp_txt = (ax_min+ax_max) / 1.8 #location of upper error text on plot -- adjust the number to adjust the location
-    low_txt = (ax_min+ax_max) / 1.6 #location of lower error text on plot -- adjust the number to adjust the location
+    low_txt = (ax_min+ax_max) / 1.625 #location of lower error text on plot -- adjust the number to adjust the location
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
@@ -146,8 +146,8 @@ for i in range(len(condition)):
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
     #c2 = df_dar['T_evap[i]'][1:]
     s = 20  # size of points
-         
-    fig, ax = plt.subplots()
+          
+    fig, ax = plt.subplots(figsize=(6.5,5.5))
     im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -160,7 +160,7 @@ for i in range(len(condition)):
     im.set_clim(245, 290)
     cbar.ax.set_ylabel('Evaporation temperature [K]')
     #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-         
+          
     #error axes
     error = [0.05,0.01,0.03] #error of ['Total','Two_phase','Vapor']
     w=error[i] #Error
@@ -184,14 +184,14 @@ for i in range(len(condition)):
     plt.savefig(condition[i]+'_parity_work.pdf')
     plt.show()
     plt.close()  
-       
-       
+        
+        
     #########################
     ##### T_dis  #######
     #########################
     #import data from excel file
     df = pd.read_excel('correlation_results.xlsx',sheetname=condition[i]+'_T_dis',header=0) #file name
-       
+        
     #assign axes
     y1 = df['T_dis_pred[i]'][1:] #K
     #y2 = df['T_dis_AHRI[i]'][1:] #K
@@ -201,8 +201,8 @@ for i in range(len(condition)):
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
     #c2 = df_dar['T_evap[i]'][1:]
     s = 20  # size of points
-          
-    fig, ax = plt.subplots()
+           
+    fig, ax = plt.subplots(figsize=(6.5,5.5))
     im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -214,7 +214,7 @@ for i in range(len(condition)):
     im.set_clim(245, 290)
     cbar.ax.set_ylabel('Evaporation temperature [K]')
     #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-          
+           
     #error axes
     error = [0.01,0.01,0.02] #error of ['Total','Two_phase','Vapor']
     w=error[i] #Error
@@ -238,22 +238,22 @@ for i in range(len(condition)):
     plt.savefig(condition[i]+'_parity_Tdis.pdf')
     #plt.show()
     plt.close()
-   
-     
+    
+      
     #########################
     ##### eta_isen #######
     #########################
     #import data from excel file
     df = pd.read_excel('correlation_results.xlsx',sheetname=condition[i]+'_isen_eff',header=0) #file name
-   
+    
     #assign axes
     y1 = df['eta_isen_pred[i]'][1:]*100
     #y2 = df['eta_isen_AHRI[i]'][1:]*100
     x1 = df['eta_isen_groll[i]'][1:]
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
     s = 20  # size of points
-          
-    fig, ax = plt.subplots()
+           
+    fig, ax = plt.subplots(figsize=(6.5,5.5))
     im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -265,7 +265,7 @@ for i in range(len(condition)):
     im.set_clim(245, 290)
     cbar.ax.set_ylabel('Evaporation temperature [K]')
     #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-          
+           
     #error axes
     error = [0.02,0.01,0.02] #error of ['Total','Two_phase','Vapor']
     w=error[i] #Error
@@ -289,23 +289,23 @@ for i in range(len(condition)):
     plt.savefig(condition[i]+'_parity_eta_isen.pdf')
     plt.show()
     plt.close()
-        
-        
-        
+         
+         
+         
     #########################
     ##### eta_v #######
     #########################
     #import data from excel file
     df = pd.read_excel('correlation_results.xlsx',sheetname=condition[i]+'_vol_eff',header=0) #file name
-   
+    
     #assign axes
     y1 = df['eta_vol_pred[i]'][1:]*100
     #y2 = df['eta_vol_AHRI[i]'][1:]*100
     x1 = df['eta_vol[i]'][1:]*100
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
     s = 20  # size of points
-            
-    fig, ax = plt.subplots()
+             
+    fig, ax = plt.subplots(figsize=(6.5,5.5))
     im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -317,7 +317,7 @@ for i in range(len(condition)):
     im.set_clim(245, 290)
     cbar.ax.set_ylabel('Evaporation temperature [K]')
     #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-            
+             
     #error axes
     error = [0.01,0.01,0.01] #error of ['Total','Two_phase','Vapor']
     w=error[i] #Error
@@ -341,22 +341,22 @@ for i in range(len(condition)):
     plt.savefig(condition[i]+'_parity_eta_v.pdf')
     plt.show()
     plt.close()
-        
-        
+         
+         
     #########################
     ##### f_q #######
     #########################
     #import data from excel file
     df = pd.read_excel('correlation_results.xlsx',sheetname=condition[i]+'_heat_loss',header=0) #file name
-   
+    
     #assign axes
     y1 = df['f_q_pred[i]'][1:]
     #y2 = df['f_q_AHRI[i]'][1:]
     x1 = df['f_q[i]'][1:]
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
     s = 20  # size of points
-          
-    fig, ax = plt.subplots()
+           
+    fig, ax = plt.subplots(figsize=(6.5,5.5))
     im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -368,7 +368,7 @@ for i in range(len(condition)):
     im.set_clim(245, 290)
     cbar.ax.set_ylabel('Evaporation temperature [K]')
     #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-          
+           
     #error axes
     error = [0.12,0.10,0.05] #error of ['Total','Two_phase','Vapor']
     w=error[i] #Error
@@ -415,8 +415,8 @@ x1 = df['InjectionRatio[i]'][1:]*100
 c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
 #c2 = df_dar['T_evap[i]'][1:]
 s = 20  # size of points
-   
-fig, ax = plt.subplots()
+     
+fig, ax = plt.subplots(figsize=(6.5,5.5))
 im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -429,7 +429,7 @@ cbar = plt.colorbar(im, ax=ax)
 im.set_clim(245, 290)
 cbar.ax.set_ylabel('Evaporation temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-   
+     
 #error axes
 w=0.12 #Error
 ax_min = 0
@@ -452,7 +452,7 @@ plt.tight_layout()
 plt.savefig('Dardenne_parity_m_inj_updated.pdf')
 plt.show()
 plt.close()
-  
+    
 #########################
 ##### work (power) ######
 #########################
@@ -466,8 +466,8 @@ x1 = df['W_dot[i]'][1:] #watts
 c1 = df['T_evap[i]'][1:] #K
 #c2 = df_dar['T_evap[i]'][1:]
 s = 20  # size of points
-     
-fig, ax = plt.subplots()
+       
+fig, ax = plt.subplots(figsize=(6.5,5.5))
 im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -480,7 +480,7 @@ cbar = plt.colorbar(im, ax=ax)
 im.set_clim(245, 290)
 cbar.ax.set_ylabel('Evaporation temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-     
+       
 #error axes
 w=0.3 #Error
 ax_min = 0
@@ -503,22 +503,22 @@ plt.tight_layout()
 plt.savefig('Dardenne_parity_work.pdf')
 plt.show()
 plt.close()  
-   
-   
+     
+     
 #########################
 ##### T_dis  #######
 #########################
 #import data from excel file
 df = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_T_dis',header=0) #file name
-   
+     
 #assign axes
 y1 = df['T_dis_pred[i]'][1:] #K
 #y2 = df['T_dis_AHRI[i]'][1:] #K
 x1 = df['T_dis[i]'][1:] #K
 c1 = df['T_evap[i]'][1:] #K
 s = 20  # size of points
-      
-fig, ax = plt.subplots()
+        
+fig, ax = plt.subplots(figsize=(6.5,5.5))
 im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -530,7 +530,7 @@ cbar = plt.colorbar(im, ax=ax)
 im.set_clim(245, 290)
 cbar.ax.set_ylabel('Evaporation temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-      
+        
 #error axes
 w = 0.01 #error
 ax_min = 320
@@ -553,22 +553,22 @@ plt.tight_layout()
 plt.savefig('Dardenne_parity_Tdis.pdf')
 plt.show()
 plt.close()
-   
-   
+     
+     
 #########################
 ##### eta_isen #######
 #########################
 #import data from excel file
 df = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_isen_eff',header=0) #file name
-   
+     
 #assign axes
 y1 = df['eta_isen_pred[i]'][1:]*100
 #y2 = df['eta_isen_AHRI[i]'][1:]*100
 x1 = df['eta_isen_groll[i]'][1:]*100
 c1 = df['T_evap[i]'][1:]
 s = 20  # size of points
-      
-fig, ax = plt.subplots()
+        
+fig, ax = plt.subplots(figsize=(6.5,5.5))
 im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -580,7 +580,7 @@ cbar = plt.colorbar(im, ax=ax)
 im.set_clim(245, 290)
 cbar.ax.set_ylabel('Evaporation temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-      
+        
 #error axes
 w=0.05 #Error
 ax_min = 50
@@ -603,23 +603,23 @@ plt.tight_layout()
 plt.savefig('Dardenne_parity_eta_isen.pdf')
 plt.show()
 plt.close()
-    
-    
-    
+      
+      
+      
 #########################
 ##### eta_v #######
 #########################
 #import data from excel file
 df = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_vol_eff',header=0) #file name
-   
+     
 #assign axes
 y1 = df['eta_vol_pred[i]'][1:]*100
 #y2 = df['eta_vol_AHRI[i]'][1:]*100
 x1 = df['eta_vol[i]'][1:]*100
 c1 = df['T_evap[i]'][1:]
 s = 20  # size of points
-        
-fig, ax = plt.subplots()
+          
+fig, ax = plt.subplots(figsize=(6.5,5.5))
 im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -631,7 +631,7 @@ cbar = plt.colorbar(im, ax=ax)
 im.set_clim(245, 290)
 cbar.ax.set_ylabel('Evaporation temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-        
+          
 #error axes
 w=0.03 #Error
 ax_min = 80
@@ -654,22 +654,22 @@ plt.tight_layout()
 plt.savefig('Dardenne_parity_eta_v.pdf')
 plt.show()
 plt.close()
-    
-    
+      
+      
 #########################
 ##### f_q #######
 #########################
 #import data from excel file
 df = pd.read_excel('correlation_results.xlsx',sheetname='Dardenne_heat_loss',header=0) #file name
-   
+     
 #assign axes
 y1 = df['f_q_pred[i]'][1:]
 #y2 = df['f_q_AHRI[i]'][1:]
 x1 = df['f_q[i]'][1:]
 c1 = df['T_evap[i]'][1:]
 s = 20  # size of points
-      
-fig, ax = plt.subplots()
+        
+fig, ax = plt.subplots(figsize=(6.5,5.5))
 im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
@@ -681,7 +681,7 @@ cbar = plt.colorbar(im, ax=ax)
 im.set_clim(245, 290)
 cbar.ax.set_ylabel('Evaporation temperature [K]')
 #ax.text(0.8,0.95,'Markersize (speed) {:0.0f} Hz'.format(s),ha='center',va='center',transform = ax.transAxes,fontsize = 8)
-      
+        
 #error axes
 w=0.1 #Error
 ax_min = 0
