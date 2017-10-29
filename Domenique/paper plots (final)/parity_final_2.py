@@ -12,41 +12,44 @@ import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
 mpl.style.use('classic')
+mpl.style.use('Elsevier.mplstyle')
+mpl.rcParams['mathtext.fontset'] = 'custom'
 
 #===============================================================================
 # Latex render
 #===============================================================================
-#mpl.use('pgf')
-
-def figsize(scale):
-    fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
-    inches_per_pt = 1.0/72.27                       # Convert pt to inch
-    golden_mean = (np.sqrt(7)-1.0)/2.0            # Aesthetic ratio (you could change this)
-    fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
-    fig_height = fig_width*golden_mean              # height in inches
-    fig_size = [fig_width,fig_height]
-    return fig_size
-   
-pgf_with_latex = {                      # setup matplotlib to use latex for output
-"pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
-"text.usetex": False,                # use LaTeX to write all text
-"font.family": "serif",
-"font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
-"font.sans-serif": [],
-"font.monospace": [],
-"axes.labelsize": 12,               # LaTeX default is 10pt font.
-"font.size": 12,
-"legend.fontsize": 10,               # Make the legend/label fonts a little smaller
-"legend.labelspacing":0.2,
-"xtick.labelsize": 10,
-"ytick.labelsize": 10,
-"figure.figsize": figsize(0.9),     # default fig size of 0.9 textwidth
-"pgf.preamble": [
-r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
-r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
-        ]
-    }
-mpl.rcParams.update(pgf_with_latex)
+# #mpl.use('pgf')
+# 
+# def figsize(scale):
+#     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
+#     inches_per_pt = 1.0/72.27                       # Convert pt to inch
+#     golden_mean = (np.sqrt(7)-1.0)/2.0            # Aesthetic ratio (you could change this)
+#     fig_width = fig_width_pt*inches_per_pt*scale    # width in inches
+#     fig_height = fig_width*golden_mean              # height in inches
+#     fig_size = [fig_width,fig_height]
+#     return fig_size
+#      
+# pgf_with_latex = {                      # setup matplotlib to use latex for output
+# "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
+# "text.usetex": True,                # use LaTeX to write all text
+# "font.family": "serif",
+# "mathtext.fontset" : "custom",
+# "font.serif": [],                   # blank entries should cause plots to inherit fonts from the document
+# "font.sans-serif": [],
+# "font.monospace": [],
+# "axes.labelsize": 10,               # LaTeX default is 10pt font.
+# "font.size": 10,
+# "legend.fontsize": 8,               # Make the legend/label fonts a little smaller
+# "legend.labelspacing":0.2,
+# "xtick.labelsize": 8,
+# "ytick.labelsize": 8,
+# "figure.figsize": figsize(0.9),     # default fig size of 0.9 textwidth
+# "pgf.preamble": [
+# r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
+# r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
+#         ]
+#     }
+# mpl.rcParams.update(pgf_with_latex)
 #===============================================================================
 # END of Latex render
 #===============================================================================
@@ -130,7 +133,7 @@ for i in range(len(condition)):
     plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [%]')
     plt.tight_layout()       
     plt.savefig(condition[i]+'_parity_m_inj_updated.pdf')
-    plt.show()
+    #plt.show()
     plt.close()
     
     #########################
@@ -182,7 +185,7 @@ for i in range(len(condition)):
     plt.xlabel('$\dot W$ measured [W]')
     plt.tight_layout()       
     plt.savefig(condition[i]+'_parity_work.pdf')
-    plt.show()
+    #plt.show()
     plt.close()  
         
         
@@ -287,7 +290,7 @@ for i in range(len(condition)):
     plt.xlabel('$\\eta_{isen}$ measured [%]')
     plt.tight_layout()          
     plt.savefig(condition[i]+'_parity_eta_isen.pdf')
-    plt.show()
+    #plt.show()
     plt.close()
          
          
@@ -339,7 +342,7 @@ for i in range(len(condition)):
     plt.xlabel('$\\eta_{v}$ measured [%]')
     plt.tight_layout()           
     plt.savefig(condition[i]+'_parity_eta_v.pdf')
-    plt.show()
+    #plt.show()
     plt.close()
          
          
@@ -390,7 +393,7 @@ for i in range(len(condition)):
     plt.xlabel('$f_{q}$ measured [%]')
     plt.tight_layout()           
     plt.savefig(condition[i]+'_parity_f_q.pdf')
-    plt.show()
+    #plt.show()
     plt.close()
 
 
@@ -450,7 +453,7 @@ plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [%]')
 plt.xlabel('$\dot m_{inj}$/$\dot m_{suc}$ measured [%]')
 plt.tight_layout()       
 plt.savefig('Dardenne_parity_m_inj_updated.pdf')
-plt.show()
+#plt.show()
 plt.close()
     
 #########################
@@ -501,7 +504,7 @@ plt.ylabel('$\dot W$ predicted [W]')
 plt.xlabel('$\dot W$ measured [W]')
 plt.tight_layout()       
 plt.savefig('Dardenne_parity_work.pdf')
-plt.show()
+#plt.show()
 plt.close()  
      
      
@@ -551,7 +554,7 @@ plt.ylabel('$T_{dis}$ predicted [K]')
 plt.xlabel('$T_{dis}$ measured [K]')
 plt.tight_layout()         
 plt.savefig('Dardenne_parity_Tdis.pdf')
-plt.show()
+#plt.show()
 plt.close()
      
      
@@ -601,7 +604,7 @@ plt.ylabel('$\\eta_{isen}$ predicted [%]')
 plt.xlabel('$\\eta_{isen}$ measured [%]')
 plt.tight_layout()          
 plt.savefig('Dardenne_parity_eta_isen.pdf')
-plt.show()
+#plt.show()
 plt.close()
       
       
@@ -652,7 +655,7 @@ plt.ylabel('$\\eta_{v}$ predicted [%]')
 plt.xlabel('$\\eta_{v}$ measured [%]')
 plt.tight_layout()           
 plt.savefig('Dardenne_parity_eta_v.pdf')
-plt.show()
+#plt.show()
 plt.close()
       
       
@@ -702,5 +705,5 @@ plt.ylabel('$f_{q}$ predicted [%]')
 plt.xlabel('$f_{q}$ measured [%]')
 plt.tight_layout()           
 plt.savefig('Dardenne_parity_f_q.pdf')
-plt.show()
+#plt.show()
 plt.close()
