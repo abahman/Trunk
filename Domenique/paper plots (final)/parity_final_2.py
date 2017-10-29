@@ -96,10 +96,10 @@ for i in range(len(condition)):
     #x2 = df_dar['injectionrate[i]'][1:]*100
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
     #c2 = df_dar['T_evap[i]'][1:]
-    s = 20  # size of points
+    s = 40  # size of points
        
-    fig, ax = plt.subplots(figsize=(6.5,5.5))
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    fig, ax = plt.subplots(figsize=(5.5,4.5))
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
     #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -124,9 +124,9 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
     ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
     ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-    leg=ax.legend(loc='upper left',scatterpoints=1)
+    leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
     frame  = leg.get_frame()  
-    frame.set_linewidth(0.5)
+    frame.set_linewidth(1.0)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
     plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [%]')
@@ -148,10 +148,10 @@ for i in range(len(condition)):
     x1 = df['WT1_P_UUT[i]'][1:] #watts
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
     #c2 = df_dar['T_evap[i]'][1:]
-    s = 20  # size of points
+    s = 40  # size of points
           
-    fig, ax = plt.subplots(figsize=(6.5,5.5))
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    fig, ax = plt.subplots(figsize=(5.5,4.5))
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
     #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -176,9 +176,9 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
     ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
     ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-    leg=ax.legend(loc='upper left',scatterpoints=1)
+    leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
     frame  = leg.get_frame()  
-    frame.set_linewidth(0.5)
+    frame.set_linewidth(1.0)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
     plt.ylabel('$\dot W$ predicted [W]')
@@ -203,10 +203,10 @@ for i in range(len(condition)):
     #x2 = df_dar['injectionrate[i]'][1:]*100
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
     #c2 = df_dar['T_evap[i]'][1:]
-    s = 20  # size of points
+    s = 40  # size of points
            
-    fig, ax = plt.subplots(figsize=(6.5,5.5))
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    fig, ax = plt.subplots(figsize=(5.5,4.5))
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
     #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -230,9 +230,9 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
     ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
     ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-    leg=ax.legend(loc='upper left',scatterpoints=1)
+    leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5],fontsize=8)
     frame  = leg.get_frame()  
-    frame.set_linewidth(0.5)
+    frame.set_linewidth(1.0)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
     plt.ylabel('$T_{dis}$ predicted [K]')
@@ -254,10 +254,10 @@ for i in range(len(condition)):
     #y2 = df['eta_isen_AHRI[i]'][1:]*100
     x1 = df['eta_isen_groll[i]'][1:]
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
-    s = 20  # size of points
+    s = 40  # size of points
            
-    fig, ax = plt.subplots(figsize=(6.5,5.5))
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    fig, ax = plt.subplots(figsize=(5.5,4.5))
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
     #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -281,9 +281,9 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
     ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
     ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-    leg=ax.legend(loc='upper left',scatterpoints=1)
+    leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
     frame  = leg.get_frame()  
-    frame.set_linewidth(0.5)
+    frame.set_linewidth(1.0)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
     plt.ylabel('$\\eta_{isen}$ predicted [%]')
@@ -306,10 +306,10 @@ for i in range(len(condition)):
     #y2 = df['eta_vol_AHRI[i]'][1:]*100
     x1 = df['eta_vol[i]'][1:]*100
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
-    s = 20  # size of points
+    s = 40  # size of points
              
-    fig, ax = plt.subplots(figsize=(6.5,5.5))
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    fig, ax = plt.subplots(figsize=(5.5,4.5))
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
     #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -333,9 +333,9 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
     ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
     ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-    leg=ax.legend(loc='upper left',scatterpoints=1)
+    leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
     frame  = leg.get_frame()  
-    frame.set_linewidth(0.5)
+    frame.set_linewidth(1.0)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
     plt.ylabel('$\\eta_{v}$ predicted [%]')
@@ -357,10 +357,10 @@ for i in range(len(condition)):
     #y2 = df['f_q_AHRI[i]'][1:]
     x1 = df['f_q[i]'][1:]
     c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
-    s = 20  # size of points
+    s = 40  # size of points
            
-    fig, ax = plt.subplots(figsize=(6.5,5.5))
-    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+    fig, ax = plt.subplots(figsize=(5.5,4.5))
+    im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
     #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
     #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
     #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -384,9 +384,9 @@ for i in range(len(condition)):
     ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
     ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
     ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-    leg=ax.legend(loc='upper left',scatterpoints=1)
+    leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
     frame  = leg.get_frame()  
-    frame.set_linewidth(0.5)
+    frame.set_linewidth(1.0)
     ax.set_xlim((ax_min,ax_max))
     ax.set_ylim((ax_min,ax_max))
     plt.ylabel('$f_{q}$ predicted [%]')
@@ -417,10 +417,10 @@ x1 = df['InjectionRatio[i]'][1:]*100
 #x2 = df_dar['injectionrate[i]'][1:]*100
 c1 = (df['T_evap_stpt_ENG[i]'][1:] - 32.0) * 5.0/9.0 + 273.15
 #c2 = df_dar['T_evap[i]'][1:]
-s = 20  # size of points
+s = 40  # size of points
      
-fig, ax = plt.subplots(figsize=(6.5,5.5))
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+fig, ax = plt.subplots(figsize=(5.5,4.5))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
 #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -444,9 +444,9 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',scatterpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
 frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
+frame.set_linewidth(1.0)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\dot m_{inj}$/$\dot m_{suc}$ predicted [%]')
@@ -468,10 +468,10 @@ y3 = df['W_dot_Tello[i]'][1:] #watts
 x1 = df['W_dot[i]'][1:] #watts
 c1 = df['T_evap[i]'][1:] #K
 #c2 = df_dar['T_evap[i]'][1:]
-s = 20  # size of points
+s = 40  # size of points
        
-fig, ax = plt.subplots(figsize=(6.5,5.5))
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+fig, ax = plt.subplots(figsize=(5.5,4.5))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
 #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -495,9 +495,9 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',scatterpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
 frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
+frame.set_linewidth(1.0)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\dot W$ predicted [W]')
@@ -519,10 +519,10 @@ y1 = df['T_dis_pred[i]'][1:] #K
 #y2 = df['T_dis_AHRI[i]'][1:] #K
 x1 = df['T_dis[i]'][1:] #K
 c1 = df['T_evap[i]'][1:] #K
-s = 20  # size of points
+s = 40  # size of points
         
-fig, ax = plt.subplots(figsize=(6.5,5.5))
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+fig, ax = plt.subplots(figsize=(5.5,4.5))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
 #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -545,9 +545,9 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',scatterpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
 frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
+frame.set_linewidth(1.0)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$T_{dis}$ predicted [K]')
@@ -569,10 +569,10 @@ y1 = df['eta_isen_pred[i]'][1:]*100
 #y2 = df['eta_isen_AHRI[i]'][1:]*100
 x1 = df['eta_isen_groll[i]'][1:]*100
 c1 = df['T_evap[i]'][1:]
-s = 20  # size of points
+s = 40  # size of points
         
-fig, ax = plt.subplots(figsize=(6.5,5.5))
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+fig, ax = plt.subplots(figsize=(5.5,4.5))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
 #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -595,9 +595,9 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',scatterpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
 frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
+frame.set_linewidth(1.0)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\\eta_{isen}$ predicted [%]')
@@ -620,10 +620,10 @@ y1 = df['eta_vol_pred[i]'][1:]*100
 #y2 = df['eta_vol_AHRI[i]'][1:]*100
 x1 = df['eta_vol[i]'][1:]*100
 c1 = df['T_evap[i]'][1:]
-s = 20  # size of points
+s = 40  # size of points
           
-fig, ax = plt.subplots(figsize=(6.5,5.5))
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+fig, ax = plt.subplots(figsize=(5.5,4.5))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
 #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -646,9 +646,9 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',scatterpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
 frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
+frame.set_linewidth(1.0)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$\\eta_{v}$ predicted [%]')
@@ -670,10 +670,10 @@ y1 = df['f_q_pred[i]'][1:]
 #y2 = df['f_q_AHRI[i]'][1:]
 x1 = df['f_q[i]'][1:]
 c1 = df['T_evap[i]'][1:]
-s = 20  # size of points
+s = 40  # size of points
         
-fig, ax = plt.subplots(figsize=(6.5,5.5))
-im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless $\Pi$'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
+fig, ax = plt.subplots(figsize=(5.5,4.5))
+im = ax.scatter(x1, y1, c=c1, s=s, cmap=plt.cm.jet, marker='^',lw=0.2, alpha =0.9,label='Dimensionless-PI'+' (MAE = {:0.01f}%'.format(mape(y1,x1))+', RMSE = {:0.01f}%)'.format(rmse(y1,x1)))
 #im = ax.scatter(x1, y2, c=c1, s=s, cmap=plt.cm.jet, marker='o',lw=0.2, alpha =0.9,label='AHRI'+' (MAE = {:0.01f}%'.format(mape(y2,x1))+', RMSE = {:0.01f}%)'.format(rmse(y2,x1)))
 #im = ax.scatter(x1, y3, c=c1, s=s, cmap=plt.cm.jet, marker='s',lw=0.2, alpha =0.9,label='Tello'+' (MAE = {:0.01f}%'.format(mape(y3,x1))+', RMSE = {:0.01f}%)'.format(rmse(y3,x1)))
 #im = ax.scatter(x2, y11, c=c2, s=s, cmap=plt.cm.jet, marker='d',lw=0.2, alpha =0.9,label='Dardenne'+' (MAE = {:0.01f}%'.format(mape(y11,x2))+', RMSE = {:0.01f}%)'.format(rmse(y11,x2)))
@@ -696,9 +696,9 @@ ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
 ax.text(low_txt-0.002,low_txt*(1-w),'$-${:0.0f}%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}%'.format(w*100),ha='right',va='bottom')
-leg=ax.legend(loc='upper left',scatterpoints=1)
+leg=ax.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
 frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
+frame.set_linewidth(1.0)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
 plt.ylabel('$f_{q}$ predicted [%]')
