@@ -40,7 +40,7 @@ pgf_with_latex = {                      # setup matplotlib to use latex for outp
 "legend.labelspacing":0.2,
 "xtick.labelsize": 10,
 "ytick.labelsize": 10,
-"figure.figsize": figsize(1.0),     # default fig size of 0.9 textwidth
+"figure.figsize": figsize(0.9),     # default fig size of 0.9 textwidth
 "pgf.preamble": [
 r"\usepackage[utf8x]{inputenc}",    # use utf8 fonts becasue your computer can handle it :)
 r"\usepackage[T1]{fontenc}",        # plots will be generated using this preamble
