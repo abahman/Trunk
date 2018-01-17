@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
 mpl.style.use('classic')
 mpl.style.use('Elsevier.mplstyle')
-#mpl.rcParams['mathtext.fontset'] = 'custom'
+mpl.rcParams['mathtext.fontset'] = 'custom'
 
 # #===============================================================================
 # # Latex render

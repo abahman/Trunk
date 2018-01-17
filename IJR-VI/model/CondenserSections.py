@@ -1,10 +1,9 @@
 import pylab, numpy as np
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-#import matplotlib.transforms as mtransforms
 mpl.style.use('classic')
 mpl.style.use('Elsevier.mplstyle')
-#mpl.rcParams['mathtext.fontset'] = 'custom'
+mpl.rcParams['mathtext.fontset'] = 'custom'
 
 # #===============================================================================
 # # Latex render
