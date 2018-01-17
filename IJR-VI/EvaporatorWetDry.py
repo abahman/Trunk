@@ -1,5 +1,6 @@
-import pylab,numpy as np
+import numpy as np
 import matplotlib as mpl
+import matplotlib.pyplot as plt
 from matplotlib.patches import FancyArrowPatch
 mpl.style.use('classic')
 mpl.style.use('Elsevier.mplstyle')
@@ -8,9 +9,6 @@ mpl.style.use('Elsevier.mplstyle')
 # #===============================================================================
 # # Latex render
 # #===============================================================================
-# import matplotlib as mpl
-# from numpy import integer
-# from numba.targets.randomimpl import f_impl
 # #mpl.use('pgf')
 # 
 # def figsize(scale):
@@ -46,54 +44,54 @@ mpl.style.use('Elsevier.mplstyle')
 # # END of Latex render
 # #===============================================================================
 
-fig = pylab.figure()
+fig = plt.figure()
 ax = fig.add_subplot(111)
 
 #draw upper/lower lines + blue fill
-pylab.fill(np.r_[0,5,5,0,0],np.r_[-1,-1,0,0,-1],'b',alpha=0.1)
-pylab.plot(np.r_[0,5],np.r_[1,1],'k')
-pylab.plot(np.r_[0,5],np.r_[0,0],'k')
-pylab.plot(np.r_[0,5],np.r_[-1,-1],'k')
+plt.fill(np.r_[0,5,5,0,0],np.r_[-1,-1,0,0,-1],'b',alpha=0.1)
+plt.plot(np.r_[0,5],np.r_[1,1],'k')
+plt.plot(np.r_[0,5],np.r_[0,0],'k')
+plt.plot(np.r_[0,5],np.r_[-1,-1],'k')
 
 #text
-pylab.text(4,-1.1,'Wet section',ha='center',va='top')
-pylab.text(1.5,-1.1,'Dry section',ha='center',va='top')
+plt.text(4,-1.1,'Wet section',ha='center',va='top')
+plt.text(1.5,-1.1,'Dry section',ha='center',va='top')
 
 #Wet line
-# pylab.plot(np.r_[3,5],np.r_[0.01,0.01],'b',lw=4)
+# plt.plot(np.r_[3,5],np.r_[0.01,0.01],'b',lw=4)
 
 #seperation line
-pylab.plot(np.r_[3,3],np.r_[-1.325,1.325],'k--')
+plt.plot(np.r_[3,3],np.r_[-1.325,1.325],'k--')
 
 #draw dots and Temperature symbol
-pylab.plot(3,0,'ko')
-#pylab.plot(3,-0.5,'ko')
-# pylab.text(3.05,0.5,'$T_{a,x}$',ha='left',va='center')
-# pylab.text(3.05,-0.5,'$T_{g,x}$',ha='left',va='center')
+plt.plot(3,0,'ko')
+#plt.plot(3,-0.5,'ko')
+# plt.text(3.05,0.5,'$T_{a,x}$',ha='left',va='center')
+# plt.text(3.05,-0.5,'$T_{g,x}$',ha='left',va='center')
 
-# pylab.plot(0,0.5,'ko')
-# pylab.plot(0,-0.5,'ko')
-# pylab.text(0.05,0.5,'$T_{a,i}$',ha='left',va='center')
-# pylab.text(0.05,-0.5,'$T_{g,o}$',ha='left',va='center')
+# plt.plot(0,0.5,'ko')
+# plt.plot(0,-0.5,'ko')
+# plt.text(0.05,0.5,'$T_{a,i}$',ha='left',va='center')
+# plt.text(0.05,-0.5,'$T_{g,o}$',ha='left',va='center')
 #
-# pylab.plot(5,0.5,'ko')
-# pylab.plot(5,-0.5,'ko')
-# pylab.text(5.05,0.5,'$T_{a,o}$',ha='left',va='center')
-# pylab.text(5.05,-0.5,'$T_{g,i}$',ha='left',va='center')
+# plt.plot(5,0.5,'ko')
+# plt.plot(5,-0.5,'ko')
+# plt.text(5.05,0.5,'$T_{a,o}$',ha='left',va='center')
+# plt.text(5.05,-0.5,'$T_{g,i}$',ha='left',va='center')
 
-# pylab.plot(5,0.5,'ko')
-# pylab.plot(5,-0.5,'ko')
-# pylab.text(5.05,0.5,'$T_{a,o}$',ha='left',va='center')
-# pylab.text(5.05,-0.5,'$T_{g,i}$',ha='left',va='center')
-pylab.text(1.5,1.5,'Wall temperature at\n dew-point of air',ha='center',va='bottom')
-pylab.gca().add_patch(FancyArrowPatch((3,0),(1.5,1.5),arrowstyle='<|-',fc='k',ec='k',mutation_scale=20,lw=0.8))
-#pylab.gca().add_patch(FancyArrowPatch((4,-0.5),(4.5,-0.5),arrowstyle='<|-',fc='k',ec='k',mutation_scale=20,lw=0.8))
+# plt.plot(5,0.5,'ko')
+# plt.plot(5,-0.5,'ko')
+# plt.text(5.05,0.5,'$T_{a,o}$',ha='left',va='center')
+# plt.text(5.05,-0.5,'$T_{g,i}$',ha='left',va='center')
+plt.text(1.5,1.5,'Wall temperature at\n dew-point of air',ha='center',va='bottom')
+plt.gca().add_patch(FancyArrowPatch((3,0),(1.5,1.5),arrowstyle='<|-',fc='k',ec='k',mutation_scale=20,lw=0.8))
+#plt.gca().add_patch(FancyArrowPatch((4,-0.5),(4.5,-0.5),arrowstyle='<|-',fc='k',ec='k',mutation_scale=20,lw=0.8))
 
-# pylab.plot(0,0,'ro')
-# pylab.text(-0.05,0,'$T_{i,s}$',ha='right',va='center')
+# plt.plot(0,0,'ro')
+# plt.text(-0.05,0,'$T_{i,s}$',ha='right',va='center')
 # 
-# pylab.plot(5,0,'ro')
-# pylab.text(5.05,0,'$T_{o,s}$',ha='left',va='center')
+# plt.plot(5,0,'ro')
+# plt.text(5.05,0,'$T_{o,s}$',ha='left',va='center')
 
 #plot arrows
 bbox_props = dict(boxstyle="rarrow", fc="w", ec="k", lw=1)
@@ -110,8 +108,8 @@ bb = t1.get_bbox_patch()
 bb.set_boxstyle("larrow", pad=0.5)
 
 
-pylab.gca().set_xlim(-0.1,5.1)
-pylab.gca().axis('equal')
-pylab.gca().axis('off')
-pylab.savefig('evaporator_wet_dry.pdf')
-pylab.show()
+plt.gca().set_xlim(-0.1,5.1)
+plt.gca().axis('equal')
+plt.gca().axis('off')
+plt.savefig('evaporator_wet_dry.pdf')
+plt.show()

@@ -9,11 +9,8 @@ mpl.style.use('Elsevier.mplstyle')
 # #===============================================================================
 # # Latex render
 # #===============================================================================
-# import matplotlib as mpl
-# from numpy import integer
-# from numba.targets.randomimpl import f_impl
 # #mpl.use('pgf')
-# 
+#   
 # def figsize(scale):
 #     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
 #     inches_per_pt = 1.0/72.27                       # Convert pt to inch
@@ -22,7 +19,7 @@ mpl.style.use('Elsevier.mplstyle')
 #     fig_height = fig_width*golden_mean              # height in inches
 #     fig_size = [fig_width,fig_height]
 #     return fig_size
-# 
+#   
 # pgf_with_latex = {                      # setup matplotlib to use latex for output
 # "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
 # "text.usetex": True,                # use LaTeX to write all text
@@ -59,8 +56,8 @@ pylab.plot(np.r_[1.25,1.25],np.r_[-y0,-y0+1],'k-.')
 pylab.gca().text(0.625,-y0+0.5,'Subcooled',ha='center',va='center')
 pylab.gca().text(2.0,-y0+0.5,'Two-Phase',ha='center',va='center')
 pylab.gca().text(3.375,-y0+0.5,'Superheated',ha='center',va='center')
-pylab.gca().text(2.0,0.1,'Ambient Air',ha='center',va='center')
-pylab.gca().text(2.0,-2.5,'Discharged Air',ha='center',va='center')
+pylab.gca().text(2.0,0.2,'Ambient Air',ha='center',va='center')
+pylab.gca().text(2.0,-2.6,'Discharged Air',ha='center',va='center')
 pylab.gca().text(-1.25,-1.7,'Refrigerant\nto liquid line',ha='left',va='center')
 pylab.gca().text(4.5,-.7,'Refrigerant\nfrom discharge\nline',ha='left',va='center')
 # pylab.gca().text(2,-y0+1.1,'Superheated and Two-Phase Sections',ha='center',va='bottom')
