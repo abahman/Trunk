@@ -72,10 +72,10 @@ Q_0K = np.flip(Q_0K,0)
 Tdis_0K = np.flip(Tdis_0K,0)
 
 #ploting COP
-plt.bar(np.arange(1,9,1)-0.1,COP_7K,width=0.2,color='r',linewidth=0.9,align='center',alpha=0.9,label=r'$T_{sup}$ = 7 K',hatch=5*'\\')    
+plt.bar(np.arange(1,9,1)-0.1,COP_7K,width=0.2,color='r',linewidth=0.9,align='center',alpha=0.9,label=r'Superheated',hatch=5*'\\')    
 plt.errorbar(np.arange(1,9,1)-0.1,COP_7K,yerr=0.0277*COP_7K,fmt='',linestyle="None",color='k')
 
-plt.bar(np.arange(1,9,1)+0.1,COP_0K,width=0.2,color='b',linewidth=0.9,align='center',alpha=0.9,label=r'$T_{sup}$ = 0 K',hatch=2*'//')
+plt.bar(np.arange(1,9,1)+0.1,COP_0K,width=0.2,color='b',linewidth=0.9,align='center',alpha=0.9,label=r'Saturated',hatch=2*'//')
 plt.errorbar(np.arange(1,9,1)+0.1,COP_0K,yerr=0.0277*COP_0K,fmt='',linestyle="None",color='k')
 
 plt.axhline(y=0, color='k') #draw a black at y=0
@@ -101,10 +101,10 @@ plt.show()
 
 
 #ploting Capacity
-plt.bar(np.arange(1,9,1)-0.1,Q_7K,width=0.2,color='yellow',linewidth=0.9,align='center',alpha=0.9,label=r'$T_{sup}$ = 7 K',hatch=5*'\\')    
+plt.bar(np.arange(1,9,1)-0.1,Q_7K,width=0.2,color='yellow',linewidth=0.9,align='center',alpha=0.9,label=r'Superheated',hatch=5*'\\')    
 plt.errorbar(np.arange(1,9,1)-0.1,Q_7K,yerr=0.0091*Q_7K,fmt='',linestyle="None",color='k')
 
-plt.bar(np.arange(1,9,1)+0.1,Q_0K,width=0.2,color='brown',linewidth=0.9,align='center',alpha=0.9,label=r'$T_{sup}$ = 0 K',hatch=2*'//')
+plt.bar(np.arange(1,9,1)+0.1,Q_0K,width=0.2,color='brown',linewidth=0.9,align='center',alpha=0.9,label=r'Saturated',hatch=2*'//')
 plt.errorbar(np.arange(1,9,1)+0.1,Q_0K,yerr=0.0091*Q_0K,fmt='',linestyle="None",color='k')
 
 #plt.axhline(y=0, color='k') #draw a black at y=0
@@ -130,12 +130,12 @@ plt.show()
 
 
 #ploting Discharge temperature
-#plt.bar(np.arange(1,9,1)-0.1,Tdis_7K,width=0.2,color='orange',linewidth=0.9,align='center',alpha=0.9,label=r'$T_{sup}$ = 7 K',hatch=5*'\\')
-plt.plot(np.arange(1,9,1),Tdis_7K,'^-',color='orange',linewidth=0.9,label=r'$T_{sup}$ = 7 K')    
+#plt.bar(np.arange(1,9,1)-0.1,Tdis_7K,width=0.2,color='orange',linewidth=0.9,align='center',alpha=0.9,label=r'Superheated',hatch=5*'\\')
+plt.plot(np.arange(1,9,1),Tdis_7K,'^-',color='orange',linewidth=0.9,label=r'Superheated')    
 plt.errorbar(np.arange(1,9,1),Tdis_7K,yerr=1.1,fmt='',linestyle="None",color='k')
 
-#plt.bar(np.arange(1,9,1)+0.1,Tdis_0K,width=0.2,color='green',linewidth=0.9,align='center',alpha=0.9,label=r'$T_{sup}$ = 0 K',hatch=2*'//')
-plt.plot(np.arange(1,9,1),Tdis_0K,'s-',color='green',linewidth=0.9,label=r'$T_{sup}$ = 0 K')
+#plt.bar(np.arange(1,9,1)+0.1,Tdis_0K,width=0.2,color='green',linewidth=0.9,align='center',alpha=0.9,label=r'Saturated',hatch=2*'//')
+plt.plot(np.arange(1,9,1),Tdis_0K,'s-',color='green',linewidth=0.9,label=r'Saturated')
 plt.errorbar(np.arange(1,9,1),Tdis_0K,yerr=1.1,fmt='',linestyle="None",color='k')
 
 #plt.axhline(y=0, color='k') #draw a black at y=0
@@ -151,7 +151,7 @@ plt.tick_params(
     top='off',         # ticks along the top edge are off
     labelbottom='on') # labels along the bottom edge are off
 plt.xlabel(r'Test condition')
-plt.ylabel(r'$T_{dis}$ Improvement [K]')
+plt.ylabel(r'$T_{dis}$ Improvement [$\degree$C]') #{\textdegree}C
 leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
