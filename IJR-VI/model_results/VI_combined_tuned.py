@@ -144,12 +144,16 @@ ax.set_xlabel('Normalized experiment value')
 ax.set_ylabel('Normalized model value')
 
 ax.plot(T_dis_exp/T_dis_mean,T_dis/T_dis_mean,'o',ms=4,markerfacecolor='None',label='$T_{{dis}}$ (MAE = {:0.1f}%'.format(mape(T_dis/T_dis_mean,T_dis_exp/T_dis_mean))+', RMSD = {:0.1f}%)'.format(rmse(T_dis/T_dis_mean,T_dis_exp/T_dis_mean)),mec='blue',mew=1)
+#ax.errorbar(T_dis_exp/T_dis_mean,T_dis/T_dis_mean, xerr=1.1/T_dis_mean,fmt='',linestyle="None",color='k')
 ax.plot(m_dot_exp/m_dot_mean,m_dot/m_dot_mean,'s',ms=4,markerfacecolor='None',label='$\dot m_{{suc}}$ (MAE = {:0.1f}%'.format(mape(m_dot/m_dot_mean,m_dot_exp/m_dot_mean))+', RMSD = {:0.1f}%)'.format(rmse(m_dot/m_dot_mean,m_dot_exp/m_dot_mean)),mec='red',mew=1)
+#ax.errorbar(m_dot_exp/m_dot_mean,m_dot/m_dot_mean, xerr=0.001878/m_dot_mean,fmt='',linestyle="None",color='k')
 ax.plot(m_dot_inj_exp/m_dot_inj_mean,m_dot_inj/m_dot_inj_mean,'^',ms=4,markerfacecolor='None',label='$\dot m_{{inj}}$ (MAE = {:0.1f}%'.format(mape(m_dot_inj/m_dot_inj_mean,m_dot_inj_exp/m_dot_inj_mean))+', RMSD = {:0.1f}%)'.format(rmse(m_dot_inj/m_dot_inj_mean,m_dot_inj_exp/m_dot_inj_mean)),mec='green',mew=1)
-#ax.plot(cooling_capacity_exp/cooling_capacity_mean,cooling_capacity/cooling_capacity_mean,'H',ms=4,markerfacecolor='None',label='$\dot Q_{{evap}}$ (MAE = {:0.1f}%'.format(mape(cooling_capacity/cooling_capacity_mean,cooling_capacity_exp/cooling_capacity_mean))+', RMSD = {:0.1f}%)'.format(rmse(cooling_capacity/cooling_capacity_mean,cooling_capacity_exp/cooling_capacity_mean)),mec='c',mew=1)
+#ax.errorbar(m_dot_inj_exp/m_dot_inj_mean,m_dot_inj/m_dot_inj_mean, xerr=0.002902/m_dot_inj_mean,fmt='',linestyle="None",color='k')
 ax.plot(compressor_power_exp/compressor_power_mean,compressor_power/compressor_power_mean,'*',ms=5,markerfacecolor='None',label='$\dot W_{{comp}}$ (MAE = {:0.1f}%'.format(mape(compressor_power/compressor_power_mean,compressor_power_exp/compressor_power_mean))+', RMSD = {:0.1f}%)'.format(rmse(compressor_power/compressor_power_mean,compressor_power_exp/compressor_power_mean)),mec='brown',mew=1)
+#ax.errorbar(compressor_power_exp/compressor_power_mean,compressor_power/compressor_power_mean, xerr=0.1125/compressor_power_mean,fmt='',linestyle="None",color='k')
 ax.plot(COPS_exp/COPS_mean,COPS/COPS_mean,'D',ms=4,markerfacecolor='None',label='COP$_{{sys}}$ (MAE = {:0.1f}%'.format(mape(COPS/COPS_mean,COPS_exp/COPS_mean))+', RMSD = {:0.1f}%)'.format(rmse(COPS/COPS_mean,COPS_exp/COPS_mean)),mec='orange',mew=1)
-
+#ax.errorbar(COPS_exp/COPS_mean,COPS/COPS_mean, xerr=0.1704*COPS_exp/COPS_mean,fmt='',linestyle="None",color='k')
+#ax.plot(cooling_capacity_exp/cooling_capacity_mean,cooling_capacity/cooling_capacity_mean,'H',ms=4,markerfacecolor='None',label='$\dot Q_{{evap}}$ (MAE = {:0.1f}%'.format(mape(cooling_capacity/cooling_capacity_mean,cooling_capacity_exp/cooling_capacity_mean))+', RMSD = {:0.1f}%)'.format(rmse(cooling_capacity/cooling_capacity_mean,cooling_capacity_exp/cooling_capacity_mean)),mec='c',mew=1)
 
 leg=ax.legend(loc='upper left',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
