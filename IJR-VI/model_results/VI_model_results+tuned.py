@@ -18,7 +18,7 @@ mpl.rcParams['figure.figsize'] = [6,4]
 # # Latex render
 # #===============================================================================
 # #mpl.use('pgf')
-# 
+#  
 # def figsize(scale):
 #     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
 #     inches_per_pt = 1.0/72.27                       # Convert pt to inch
@@ -27,7 +27,7 @@ mpl.rcParams['figure.figsize'] = [6,4]
 #     fig_height = fig_width*golden_mean              # height in inches
 #     fig_size = [fig_width,fig_height]
 #     return fig_size
-# 
+#  
 # pgf_with_latex = {                      # setup matplotlib to use latex for output
 # "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
 # "text.usetex": True,                # use LaTeX to write all text
@@ -97,6 +97,22 @@ charge_corrected = np.array([data[2][4],data[3][4],data[4][4],data[5][4],data[6]
 charge_corrected_one = np.array([data[2][5],data[3][5],data[4][5],data[5][5],data[6][5],data[7][5],data[8][5],data[9][5]])
 T_dis = np.array([data[2][57],data[3][57],data[4][57],data[5][57],data[6][57],data[7][57],data[8][57],data[9][57]])
 
+#Import TUNED data from CSV file
+data = csv2rec('Cycle_60K_superheat_sub_new.csv',delimiter=',')
+#Arrange data in Numpy array for the 8 different tests
+m_dot_tuned = np.array([data[2][21],data[3][21],data[4][21],data[5][21],data[6][21],data[7][21],data[8][21],data[9][21]])
+m_dot_inj_tuned = np.array([data[2][22],data[3][22],data[4][22],data[5][22],data[6][22],data[7][22],data[8][22],data[9][22]])
+cooling_capacity_tuned = np.array([data[2][17],data[3][17],data[4][17],data[5][17],data[6][17],data[7][17],data[8][17],data[9][17]])
+total_power_tuned = np.array([data[2][19],data[3][19],data[4][19],data[5][19],data[6][19],data[7][19],data[8][19],data[9][19]])
+compressor_power_tuned = np.array([data[2][20],data[3][20],data[4][20],data[5][20],data[6][20],data[7][20],data[8][20],data[9][20]])
+COPS_tuned = np.array([data[2][15],data[3][15],data[4][15],data[5][15],data[6][15],data[7][15],data[8][15],data[9][15]])
+heating_capacity_tuned = np.array([data[2][16],data[3][16],data[4][16],data[5][16],data[6][16],data[7][16],data[8][16],data[9][16]])
+PHX_capacity_tuned = np.array([data[2][18],data[3][18],data[4][18],data[5][18],data[6][18],data[7][18],data[8][18],data[9][18]])
+charge_tuned = np.array([data[2][3],data[3][3],data[4][3],data[5][3],data[6][3],data[7][3],data[8][3],data[9][3]])
+charge_corrected_tuned = np.array([data[2][4],data[3][4],data[4][4],data[5][4],data[6][4],data[7][4],data[8][4],data[9][4]])
+charge_corrected_one_tuned = np.array([data[2][5],data[3][5],data[4][5],data[5][5],data[6][5],data[7][5],data[8][5],data[9][5]])
+T_dis_tuned = np.array([data[2][57],data[3][57],data[4][57],data[5][57],data[6][57],data[7][57],data[8][57],data[9][57]])
+
 #to convert string array to integer array
 m_dot = m_dot.astype(np.float)
 m_dot_inj = m_dot_inj.astype(np.float)
@@ -111,13 +127,27 @@ charge_corrected = charge_corrected.astype(np.float)
 charge_corrected_one = charge_corrected_one.astype(np.float)
 T_dis = T_dis.astype(np.float) - 273.15 #convert from K to C
 
+m_dot_tuned = m_dot_tuned.astype(np.float)
+m_dot_inj_tuned = m_dot_inj_tuned.astype(np.float)
+cooling_capacity_tuned = cooling_capacity_tuned.astype(np.float)
+total_power_tuned = total_power_tuned.astype(np.float)
+compressor_power_tuned = compressor_power_tuned.astype(np.float)
+COPS_tuned = COPS_tuned.astype(np.float)
+heating_capacity_tuned = abs(heating_capacity_tuned.astype(np.float))
+PHX_capacity_tuned = PHX_capacity_tuned.astype(np.float)
+charge_tuned = charge_tuned.astype(np.float)
+charge_corrected_tuned = charge_corrected_tuned.astype(np.float)
+charge_corrected_one_tuned = charge_corrected_one_tuned.astype(np.float)
+T_dis_tuned = T_dis_tuned.astype(np.float) - 273.15 #convert from K to C
+
 #plots
 #Plot mass flow rate comparison
 plt.plot(TestNo,m_dot_exp,'-ob',label='Experimental')
 plt.errorbar(TestNo,m_dot_exp, yerr=0.001878,fmt='',linestyle="None",color='k')
-plt.plot(TestNo,m_dot,'--sr',label='Model')
-plt.text(4,0.04,'MAE = {:0.01f}%'.format(mape(m_dot,m_dot_exp))+', RMSE = {:0.01f}%'.format(rmse(m_dot,m_dot_exp)),ha='left',va='center',fontsize = 10)
-plt.ylim(0.0,0.16)
+plt.plot(TestNo,m_dot,'--sr',label='Model (MAE = {:0.1f}%'.format(mape(m_dot,m_dot_exp))+', RMSD = {:0.1f}%)'.format(rmse(m_dot,m_dot_exp)))
+plt.plot(TestNo,m_dot_tuned,':^g',label='Tuned (MAE = {:0.1f}%'.format(mape(m_dot_tuned,m_dot_exp))+', RMSD = {:0.1f}%)'.format(rmse(m_dot_tuned,m_dot_exp)))
+#plt.text(4,0.04,'MAE = {:0.01f}%'.format(mape(m_dot,m_dot_exp))+', RMSE = {:0.01f}%'.format(rmse(m_dot,m_dot_exp)),ha='left',va='center',fontsize = 10)
+plt.ylim(0.0,0.18)
 plt.xlim(0,9)
 plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
            [r'', r'1', r'2', r'3',r'4/A', r'5', r'6', r'B', r'C', r''])
@@ -132,9 +162,10 @@ plt.show()
 #Plot injection mass flow rate comparison
 plt.plot(TestNo,m_dot_inj_exp,'-ob',label='Experimental')
 plt.errorbar(TestNo,m_dot_inj_exp, yerr=0.002902,fmt='',linestyle="None",color='k')
-plt.plot(TestNo,m_dot_inj,'--sr',label='Model')
-plt.text(4,0.03,'MAE = {:0.01f}%'.format(mape(m_dot_inj,m_dot_inj_exp))+', RMSE = {:0.01f}%'.format(rmse(m_dot_inj,m_dot_inj_exp)),ha='left',va='center',fontsize = 10)
-plt.ylim(0.0,0.05)
+plt.plot(TestNo,m_dot_inj,'--sr',label='Model (MAE = {:0.1f}%'.format(mape(m_dot_inj,m_dot_inj_exp))+', RMSD = {:0.1f}%)'.format(rmse(m_dot_inj,m_dot_inj_exp)))
+plt.plot(TestNo,m_dot_inj_tuned,':^g',label='Tuned (MAE = {:0.1f}%'.format(mape(m_dot_inj_tuned,m_dot_inj_exp))+', RMSD = {:0.1f}%)'.format(rmse(m_dot_inj_tuned,m_dot_inj_exp)))
+#plt.text(4,0.03,'MAE = {:0.01f}%'.format(mape(m_dot_inj,m_dot_inj_exp))+', RMSE = {:0.01f}%'.format(rmse(m_dot_inj,m_dot_inj_exp)),ha='left',va='center',fontsize = 10)
+plt.ylim(0.0,0.04)
 plt.xlim(0,9)
 plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
            [r'', r'1', r'2', r'3',r'4/A', r'5', r'6', r'B', r'C', r''])
@@ -183,8 +214,9 @@ plt.show()
 #Plot compressor power comparison
 plt.plot(TestNo,compressor_power_exp,'-ob',label='Experimental')
 plt.errorbar(TestNo,compressor_power_exp, yerr=0.1125,fmt='',linestyle="None",color='k')
-plt.plot(TestNo,compressor_power/1000,'--sr',label='Model')
-plt.text(4,2,'MAE = {:0.01f}%'.format(mape(compressor_power/1000,compressor_power_exp))+', RMSE = {:0.01f}%'.format(rmse(compressor_power/1000,compressor_power_exp)),ha='left',va='center',fontsize = 10)
+plt.plot(TestNo,compressor_power/1000,'--sr',label='Model (MAE = {:0.1f}%'.format(mape(compressor_power/1000,compressor_power_exp))+', RMSD = {:0.1f}%)'.format(rmse(compressor_power/1000,compressor_power_exp)))
+plt.plot(TestNo,compressor_power_tuned/1000,':^g',label='Tuned (MAE = {:0.1f}%'.format(mape(compressor_power_tuned/1000,compressor_power_exp))+', RMSD = {:0.1f}%)'.format(rmse(compressor_power_tuned/1000,compressor_power_exp)))
+#plt.text(4,2,'MAE = {:0.01f}%'.format(mape(compressor_power/1000,compressor_power_exp))+', RMSE = {:0.01f}%'.format(rmse(compressor_power/1000,compressor_power_exp)),ha='left',va='center',fontsize = 10)
 plt.ylim(0,10)
 plt.xlim(0,9)
 plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -200,8 +232,9 @@ plt.show()
 #Plot COPS comparison
 plt.plot(TestNo,COPS_exp,'-ob',label='Experimental')
 plt.errorbar(TestNo,COPS_exp, yerr=0.1704*COPS_exp,fmt='',linestyle="None",color='k')
-plt.plot(TestNo,COPS,'--sr',label='Model')
-plt.text(4,1,'MAE = {:0.01f}%'.format(mape(COPS,COPS_exp))+', RMSE = {:0.01f}%'.format(rmse(COPS,COPS_exp)),ha='left',va='center',fontsize = 10)
+plt.plot(TestNo,COPS,'--sr',label='Model (MAE = {:0.1f}%'.format(mape(COPS,COPS_exp))+', RMSD = {:0.1f}%)'.format(rmse(COPS,COPS_exp)))
+plt.plot(TestNo,COPS_tuned,':^g',label='Tuned (MAE = {:0.1f}%'.format(mape(COPS_tuned,COPS_exp))+', RMSD = {:0.1f}%)'.format(rmse(COPS_tuned,COPS_exp)))
+#plt.text(4,1,'MAE = {:0.01f}%'.format(mape(COPS,COPS_exp))+', RMSE = {:0.01f}%'.format(rmse(COPS,COPS_exp)),ha='left',va='center',fontsize = 10)
 plt.ylim(0,5)
 plt.xlim(0,9)
 plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
