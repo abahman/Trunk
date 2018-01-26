@@ -359,9 +359,11 @@ plt.savefig('Capacity_bar.pdf')
 plt.show()
 
 #Discharge temperature
-plt.bar(np.arange(1,9,1)-0.1,T_dis_exp,width=0.2,color='orange',linewidth=0.9,align='center',alpha=0.9,label=r'Experimental',hatch=5*'\\')
+plt.plot(np.arange(1,9,1),T_dis_exp,'^-',color='orange',linewidth=0.9,label=r'Experimental')   
+#plt.bar(np.arange(1,9,1)-0.1,T_dis_exp,width=0.2,color='orange',linewidth=0.9,align='center',alpha=0.9,label=r'Experimental',hatch=5*'\\')
 #plt.errorbar(np.arange(1,9,1)-0.2,Baseline,yerr=0.1234*Baseline,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
-plt.bar(np.arange(1,9,1)+0.1,T_dis2,width=0.2,color='green',linewidth=0.9,align='center',alpha=0.9,label=r'Optimized',hatch=2*'//')
+plt.plot(np.arange(1,9,1),T_dis2,'s-',color='green',linewidth=0.9,label=r'Optimized')
+#plt.bar(np.arange(1,9,1)+0.1,T_dis2,width=0.2,color='green',linewidth=0.9,align='center',alpha=0.9,label=r'Optimized',hatch=2*'//')
 #plt.errorbar(np.arange(1,9,1),Modified,yerr=0.1234*Modified,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
 #plt.bar(np.arange(1,9,1)+0.2,Interleaved,width=0.2,color='r',linewidth=0.9,align='center',alpha=0.9,label=r'Interleaved')#hatch=4*'x',
 #plt.errorbar(np.arange(1,9,1)+0.2,Interleaved,yerr=0.1234*Interleaved,capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
@@ -374,7 +376,7 @@ plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 plt.tick_params(
     axis='x',          # changes apply to the x-axis
     which='both',      # both major and minor ticks are affected
-    bottom='off',      # ticks along the bottom edge are off
+    bottom='on',      # ticks along the bottom edge are off
     top='off',         # ticks along the top edge are off
     labelbottom='on') # labels along the bottom edge are off
 plt.xlabel(r'Test condition')
