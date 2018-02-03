@@ -56,11 +56,11 @@ plt.plot(np.r_[0.0,5],np.r_[-1,-1],'k')
 gradient2 = np.linspace(0, 1, 2)
 gradient2 = np.vstack((gradient2, gradient2))
 imgplot = pylab.imshow(gradient2, extent=[0,5,-1,0], alpha=0.9,aspect=4, cmap=plt.get_cmap('brg'))
-imgplot.set_clim(0.1,2.0)
+imgplot.set_clim(0.2,2.0)
 
 #gradient top
-imgplot = pylab.imshow(gradient2, extent=[5,0,1,0], alpha=0.9,aspect=4, cmap=plt.get_cmap('brg'))
-imgplot.set_clim(0.1,2.0)
+imgplot = pylab.imshow(gradient2, extent=[0,5,0,1], alpha=0.9,aspect=4, cmap=plt.get_cmap('brg'))
+imgplot.set_clim(-0.1,2.0)
 
 #seperation line
 plt.plot(np.r_[1,1],np.r_[-1,0],'k--')
@@ -77,30 +77,30 @@ plt.plot(np.r_[4,4],np.r_[0,1],'k--')
 
 #plot arrows
 bbox_props = dict(boxstyle="rarrow", fc="w", ec="k", lw=1)
-t1 = ax.text(-0.29, 0.5, "Cold stream", color="k", ha="center", va="center", rotation=0,
+t1 = ax.text(-0.29,-0.5, "Cold stream", color="k", ha="center", va="center", rotation=0,
             size=10,
             bbox=bbox_props)
 bb = t1.get_bbox_patch()
 bb.set_boxstyle("rarrow", pad=0.5)
 
-t1 = ax.text(5.26, -0.5, "Hot stream", color="k", ha="center", va="center", rotation=0,
+t1 = ax.text(5.26, 0.5, "Hot stream", color="k", ha="center", va="center", rotation=0,
             size=10,
             bbox=bbox_props)
 bb = t1.get_bbox_patch()
 bb.set_boxstyle("larrow", pad=0.5)
 
 #text
-ax.text(0.56,0.5,'Superheated',ha='center',va='center',color="k",size=10)
+ax.text(0.5,0.5,'Subcooled',ha='center',va='center',color="k",size=10)
 ax.text(1.5,0.5,'Two-phase',ha='center',va='center',color="k",size=10)
 ax.text(2.5,0.5,'Two-phase',ha='center',va='center',color="k",size=10)
-ax.text(3.5,0.5,'Subcooled',ha='center',va='center',color="k",size=10)
-ax.text(4.5,0.5,'Subcooled',ha='center',va='center',color="k",size=10)
+ax.text(3.5,0.5,'Superheated',ha='center',va='center',color="k",size=10)
+ax.text(4.425,0.5,'Superheated',ha='center',va='center',color="k",size=10)
 
-ax.text(0.5,-0.5,'Subcooled',ha='center',va='center',color="k",size=10)
+ax.text(0.55,-0.5,'Subcooled',ha='center',va='center',color="k",size=10)
 ax.text(1.5,-0.5,'Subcooled',ha='center',va='center',color="k",size=10)
 ax.text(2.5,-0.5,'Two-phase',ha='center',va='center',color="k",size=10)
 ax.text(3.5,-0.5,'Two-phase',ha='center',va='center',color="k",size=10)
-ax.text(4.425,-0.5,'Superheated',ha='center',va='center',color="k",size=10)
+ax.text(4.5,-0.5,'Superheated',ha='center',va='center',color="k",size=10)
 
 plt.gca().set_xlim(-0.1,5.1)
 plt.gca().axis('equal')
