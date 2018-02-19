@@ -146,7 +146,7 @@ plt.plot(hx4,Px4,color="grey",linewidth=0.25)
 plt.text(279, 600, '$x$=0.4',color="grey",fontsize=5,rotation=68)
 plt.plot(hx2,Px2,color="grey",linewidth=0.25)
 plt.text(236, 600, '$x$=0.2',color="grey",fontsize=5,rotation=67)
-
+ 
 plt.plot(B_h,B_P,'-*',linewidth=1.5,alpha=0.9,label='Baseline')
 plt.plot(VI_7K_h,VI_7K_P,'r--X',linewidth=1.5,alpha=0.9, label='Superheated')
 plt.plot(VI_7K_h1,VI_7K_P1,'r--X',linewidth=1.5,alpha=0.9)
@@ -154,7 +154,17 @@ plt.plot(VI_7K_h2,VI_7K_P2,'r--X',linewidth=1.5,alpha=0.9)
 plt.plot(VI_0K_h,VI_0K_P,'g:P',linewidth=1.5,alpha=0.9,label='Saturated')
 plt.plot(VI_0K_h1,VI_0K_P1,'g:P',linewidth=1.5,alpha=0.9)
 plt.plot(VI_0K_h2,VI_0K_P2,'g:P',linewidth=1.5,alpha=0.9)
-
+ 
+#states numbers
+plt.text(428, 750, '1',fontsize=8)
+plt.text(482, 3400, '2',fontsize=8)
+plt.text(290, 3400, '3',fontsize=8)
+plt.text(245, 3000, '4',fontsize=8)
+plt.text(245, 1500, '5',fontsize=8)
+plt.text(245, 750, '6',fontsize=8)
+plt.text(430, 1500, '7',fontsize=8)
+ 
+ 
 plt.ylim(500,5000)
 plt.xlim(200,500)
 plt.title('')
@@ -172,8 +182,8 @@ plt.close()
 #Plot T-s diagram  
 ts_plot_R407C = PropertyPlot(ref_fluid, 'Ts',unit_system='KSI')
 ts_plot_R407C.calc_isolines(CoolProp.iQ, num=2)
-ph_plot_R407C.draw() #actually draw isoline
-ph_plot_R407C.isolines.clear() #stop isoline, to avoid ploting the isoline at the end 
+ts_plot_R407C.draw() #actually draw isoline
+ts_plot_R407C.isolines.clear() #stop isoline, to avoid ploting the isoline at the end 
 ts_plot_R407C.title('T-s R407C')
 ts_plot_R407C.xlabel(r'$s$ [kJ kg$^{-1}$ K$^{-1}$]')#r'$s$ [{kJ} {kg$^{-1}$ K$^{-1}$}]'
 ts_plot_R407C.ylabel(r'$T$ [$\degree$C]')#{\textdegree}C
@@ -188,7 +198,7 @@ plt.plot(sx4,Tx4,color="grey",linewidth=0.25)
 plt.text(1.262, -5, '$x$=0.4',color="grey",fontsize=5,rotation=58)
 plt.plot(sx2,Tx2,color="grey",linewidth=0.25)
 plt.text(1.095, -5, '$x$=0.2',color="grey",fontsize=5,rotation=48)
-
+ 
 plt.plot(B_s,B_T,'-*',linewidth=1.5,alpha=0.9,label='Baseline')
 plt.plot(VI_7K_s,VI_7K_T,'r--X',linewidth=1.5,alpha=0.9, label='Superheated')
 plt.plot(VI_7K_s1,VI_7K_T1,'r--X',linewidth=1.5,alpha=0.9)
@@ -196,6 +206,15 @@ plt.plot(VI_7K_s2,VI_7K_T2,'r--X',linewidth=1.5,alpha=0.9)
 plt.plot(VI_0K_s,VI_0K_T,'g:P',linewidth=1.5,alpha=0.9,label='Saturated')
 plt.plot(VI_0K_s1,VI_0K_T1,'g:P',linewidth=1.5,alpha=0.9)
 plt.plot(VI_0K_s2,VI_0K_T2,'g:P',linewidth=1.5,alpha=0.9)
+
+#states numbers
+plt.text(1.8, 20, '1',fontsize=8)
+plt.text(1.85, 106, '2',fontsize=8)
+plt.text(1.28, 60, '3',fontsize=8)
+plt.text(1.15, 38, '4',fontsize=8)
+plt.text(1.15, 25, '5',fontsize=8)
+plt.text(1.16, 7, '6',fontsize=8)
+plt.text(1.75, 48, '7',fontsize=8)
 
 plt.ylim([-20,120])
 plt.xlim([1.0,2.0])
