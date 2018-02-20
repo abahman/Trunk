@@ -23,8 +23,6 @@ mpl.style.use('classic')
 # Latex render
 #===============================================================================
 import matplotlib as mpl
-from numpy import integer
-from numba.targets.randomimpl import f_impl
 #mpl.use('pgf')
 
 def figsize(scale):
@@ -65,35 +63,35 @@ mpl.rcParams.update(pgf_with_latex)
 df = pd.read_excel("superheat.xlsx")
 B_test1 = np.array(df[:6]["Test1"])
 M_test1 = np.array(df[10:16]["Test1"])
-I_test1 = np.array(df[20:26]["Test1"])
+I_test1 = np.array(df[20:26]["Test1"])+3
 
 B_test2 = np.array(df[:6]["Test2"])
 M_test2 = np.array(df[10:16]["Test2"])
-I_test2 = np.array(df[20:26]["Test2"])
+I_test2 = np.array(df[20:26]["Test2"])+3
 
 B_test3 = np.array(df[:6]["Test3"])
 M_test3 = np.array(df[10:16]["Test3"])
-I_test3 = np.array(df[20:26]["Test3"])
+I_test3 = np.array(df[20:26]["Test3"])+3
 
 B_test4 = np.array(df[:6]["Test4"])
 M_test4 = np.array(df[10:16]["Test4"])
-I_test4 = np.array(df[20:26]["Test4"])
+I_test4 = np.array(df[20:26]["Test4"])+3
 
 B_test5 = np.array(df[:6]["Test5"])
 M_test5 = np.array(df[10:16]["Test5"])
-I_test5 = np.array(df[20:26]["Test5"])
+I_test5 = np.array(df[20:26]["Test5"])+3
 
 B_test6 = np.array(df[:6]["Test6"])
 M_test6 = np.array(df[10:16]["Test6"])
-I_test6 = np.array(df[20:26]["Test6"])
+I_test6 = np.array(df[20:26]["Test6"])+3
 
 B_testB = np.array(df[:6]["TestB"])
 M_testB = np.array(df[10:16]["TestB"])
-I_testB = np.array(df[20:26]["TestB"])
+I_testB = np.array(df[20:26]["TestB"])+3
 
 B_testC = np.array(df[:6]["TestC"])
 M_testC = np.array(df[10:16]["TestC"])
-I_testC = np.array(df[20:26]["TestC"])
+I_testC = np.array(df[20:26]["TestC"])+3
 
     
     
