@@ -147,18 +147,18 @@ print("mape_Q error is: " + str(mape_Q) + " %")
 #########################
 #####Combined plot#######
 #########################
-f,ax=plt.subplots(figsize=(4.5,4.5))
+f,ax=plt.subplots(figsize=(4,4))
 #ax=f.add_axes((0.15,0.15,0.77,0.77))
 #fig, ax = plt.subplots()
 
 w=0.1357 #Error
 ax_max = 2 #x and y-axes max scale tick
 upp_txt = ax_max / 1.8 #location of upper error text on plot -- adjust the number to adjust the location
-low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the number to adjust the location
+low_txt = ax_max / 1.6 #location of lower error text on plot -- adjust the number to adjust the location
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'-{:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(low_txt-0.002,low_txt*(1-w),'$-{:0.0f}$\%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
 ax.set_xlabel('Normalized experiment value')
 ax.set_ylabel('Normalized model value')
@@ -265,18 +265,18 @@ print("mape_Q error is: " + str(mape_Q) +" %")
 #########################
 #####Combined plot#######
 #########################
-f,ax=plt.subplots(figsize=(4.5,4.5))
+f,ax=plt.subplots(figsize=(4,4))
 #ax=f.add_axes((0.15,0.15,0.77,0.77))
 #fig, ax = plt.subplots()
 
 w=0.1241 #Error
 ax_max = 2 #x and y-axes max scale tick
 upp_txt = ax_max / 1.8 #location of upper error text on plot -- adjust the number to adjust the location
-low_txt = ax_max / 1.3 #location of lower error text on plot -- adjust the number to adjust the location
+low_txt = ax_max / 1.5 #location of lower error text on plot -- adjust the number to adjust the location
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max],'k-',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1-w)],'k-.',lw=1)
 ax.plot(np.r_[0,ax_max],np.r_[0,ax_max*(1+w)],'k-.',lw=1)
-ax.text(low_txt-0.002,low_txt*(1-w),'-{:0.0f}\%'.format(w*100),ha='left',va='top')
+ax.text(low_txt-0.002,low_txt*(1-w),'$-{:0.0f}$\%'.format(w*100),ha='left',va='top')
 ax.text(upp_txt-0.002,upp_txt*(1+w),'+{:0.0f}\%'.format(w*100),ha='right',va='bottom')
 ax.set_xlabel('Normalized experiment value')
 ax.set_ylabel('Normalized model value')
