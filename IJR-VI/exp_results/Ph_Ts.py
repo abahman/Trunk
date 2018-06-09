@@ -165,7 +165,7 @@ plt.text(245, 750, '6',fontsize=8)
 plt.text(430, 1500, '7',fontsize=8)
  
  
-plt.ylim(500,5000)
+plt.ylim(500,6500)
 plt.xlim(200,500)
 plt.title('')
 plt.yticks([500, 1000, 2000, 5000],
