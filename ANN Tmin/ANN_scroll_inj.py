@@ -21,6 +21,7 @@ import DataIO
 from CoolProp.CoolProp import PropsSI
 
 plt.style.use('Elsevier.mplstyle')
+mpl.style.use('classic')
 mpl.rcParams['legend.numpoints'] = 1
 
 #--------------------------------------------------------------------------

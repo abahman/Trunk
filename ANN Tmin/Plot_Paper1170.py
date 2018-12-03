@@ -8,10 +8,12 @@ import numpy as np
 import pandas as pd
 from openpyxl import load_workbook
 import pylab
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.mlab as ml
 import os, sys
 plt.style.use('Elsevier.mplstyle')
+mpl.style.use('classic')
 
 #Imports from CoolProp (fluid property database)
 from CoolProp import State,AbstractState
@@ -20,11 +22,10 @@ from CoolProp import CoolProp as CP
   
     
 def savefigs(name):
-    plt.show()
     #plt.savefig(name+'.eps')
-    #plt.savefig(name+'.pdf')
+    plt.savefig(name+'.pdf')
     #plt.savefig(name+'.png',dpi=600)
-    plt.close()
+    plt.show()
 
 
 def MAPE(y_true,y_pred):
