@@ -40,7 +40,7 @@ def Import(start,end,filename):
     Psat = float(data[i][2]) #Pev = float(data[i][2])
     Mat = str(data[i][3]) #Tex = float(data[i][3])
     LD = float(data[i][4]) #Pcd = float(data[i][4])
-    #Tinj = float(data[i][5])
+    MatNum = float(data[i][5])
     i=i+1
     
     while i < (end - start+1):
@@ -49,9 +49,9 @@ def Import(start,end,filename):
         Psat = np.append(Psat,float(data[i][2])) #Pev = np.append(Pev,float(data[i][2]))
         Mat = np.append(Mat,str(data[i][3])) #Tex = np.append(Tex,float(data[i][3]))
         LD = np.append(LD,float(data[i][4])) #Pcd = np.append(Pcd,float(data[i][4]))
-        #Tinj = np.append(Tinj,float(data[i][5]))
+        MatNum = np.append(MatNum,float(data[i][5]))
         i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD]
+        Data = [Tmin,Tsub,Psat,Mat,LD,MatNum]
     
     return Data
     
@@ -108,7 +108,7 @@ def Calculate():
     filename = 'Data_Collection.csv'
     
     #Define inputs
-    [Tmin_exp,Tsub,Psat,Mat,LD] = Import(start,end,filename)
+    [Tmin_exp,Tsub,Psat,Mat,LD,MatNum] = Import(start,end,filename)
     
     mode = 'training'
     
@@ -126,21 +126,24 @@ def Calculate():
     Tsub_norm = Normalize(Tsub, 0, 39.84150546) #T_suc_norm = Normalize(T_suc,263.15,300)
     Psat_norm = Normalize(Psat, 0.001185867, 3.003378378) #P_cd_norm = Normalize(P_cd,1000, 3500)
     LD_norm = Normalize(LD, 2.67, 63.5) #T_inj_norm = Normalize(T_inj,273.15,330.15)
-
+    MatNum_norm = Normalize(MatNum, 1, 8)
+    
     Tmin_exp_norm = np.array(Tmin_exp_norm)
     Tsub_norm = np.array(Tsub_norm)
     Psat_norm = np.array(Psat_norm)
     LD_norm = np.array(LD_norm)
+    MatNum_norm = np.array(MatNum_norm)
     
     # split into input (X) and output (Y) variables
     X = np.column_stack((Tsub_norm, Psat_norm))
     X = np.column_stack((X, LD_norm))
+    X = np.column_stack((X, MatNum_norm))
     Y = Tmin_exp_norm
     
     if mode == 'training':
         # create model
         model = Sequential()
-        model.add(Dense(12, input_dim=3, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
+        model.add(Dense(12, input_dim=4, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
         #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
         model.add(Dense(12, activation='tanh'))
         model.add(Dense(1, activation='linear'))

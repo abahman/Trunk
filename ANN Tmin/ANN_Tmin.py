@@ -40,14 +40,8 @@ def Import(start,end,filename):
     Psat = float(data[i][2]) #Pev = float(data[i][2])
     Mat = str(data[i][3]) #Tex = float(data[i][3])
     LD = float(data[i][4]) #Pcd = float(data[i][4])
-    #Tinj = float(data[i][5])
-    #Pinj = float(data[i][6])    
-    #mgas = float(data[i][7])
-    #minj = float(data[i][8])
-    #ratio_minj = float(data[i][9])
-    #Q = float(data[i][10]) #Q
-    #W = float(data[i][11])
-    #eta_s = float(data[i][12])
+    MatNum = float(data[i][5])
+
     i=i+1
     
     while i < (end - start+1):
@@ -56,17 +50,10 @@ def Import(start,end,filename):
         Psat = np.append(Psat,float(data[i][2])) #Pev = np.append(Pev,float(data[i][2]))
         Mat = np.append(Mat,str(data[i][3])) #Tex = np.append(Tex,float(data[i][3]))
         LD = np.append(LD,float(data[i][4])) #Pcd = np.append(Pcd,float(data[i][4]))
-        #Tinj = np.append(Tinj,float(data[i][5]))
-        #Pinj = np.append(Pinj,float(data[i][6]))        
-        #mgas = np.append(mgas,float(data[i][7]))
-        #minj = np.append(minj,float(data[i][8]))
-        #ratio_minj = np.append(ratio_minj,float(data[i][9]))
-        #Q = np.append(Q,float(data[i][10]))
-        #W = np.append(W,float(data[i][11]))
-        #eta_s = np.append(eta_s,float(data[i][12]))
+        MatNum = np.append(MatNum,float(data[i][5]))
 #        print "i: ",i
         i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD] #[Tamb,Tsuc,Pev,Tex,Pcd,Tinj,Pinj,mgas,minj,ratio_minj,Q,W,eta_s]
+        Data = [Tmin,Tsub,Psat,Mat,LD,MatNum]
     
     return Data
     
@@ -122,7 +109,7 @@ def Calculate():
     end=376
     filename = 'Data_Collection.csv' #'scroll_inj_R407C.csv'
     #[T_amb,T_suc,P_ev,T_ex_meas,P_cd,T_inj,P_inj,m_gas_meas,m_inj_meas,ratio_minj,Q_meas,W_meas,eta_s_meas] = Import(start,end,filename)
-    [Tmin_exp,Tsub,Psat,Mat,LD] = Import(start,end,filename)
+    [Tmin_exp,Tsub,Psat,Mat,LD,MatNum] = Import(start,end,filename)
     
 
     mode = 'training'
@@ -140,7 +127,7 @@ def Calculate():
     Tsub = Tsub.reshape(-1,1,1) #P_ev = P_ev.reshape(-1,1,1)
     Psat = Psat.reshape(-1,1,1) #T_suc = T_suc.reshape(-1,1,1)
     LD = LD.reshape(-1,1,1) #P_cd = P_cd.reshape(-1,1,1)
-    #T_inj = T_inj.reshape(-1,1,1)
+    MatNum = MatNum.reshape(-1,1,1)
     #P_inj = P_inj.reshape(-1,1,1)
     #T_amb = T_amb.reshape(-1,1,1)
     
@@ -150,20 +137,13 @@ def Calculate():
     Tsub_norm = Normalize(Tsub, 0, 39.84150546) #T_suc_norm = Normalize(T_suc,263.15,300)
     Psat_norm = Normalize(Psat, 0.001185867, 3.003378378) #P_cd_norm = Normalize(P_cd,1000, 3500)
     LD_norm = Normalize(LD, 2.67, 63.5) #T_inj_norm = Normalize(T_inj,273.15,330.15)
-    #P_inj_norm = Normalize(P_inj,300, 1700)
-    #T_amb_norm = Normalize(T_amb, 290.15, 330.15)
-    #m_gas_meas_norm = Normalize(m_gas_meas,0.01,0.2)
-    #m_inj_meas_norm = Normalize(m_inj_meas,0.001,0.05)
-    #W_meas_norm = Normalize(W_meas, 1000,8000)
-    #T_ex_meas_norm = Normalize(T_ex_meas,310,390)
-    #eta_s_meas_norm = Normalize(eta_s_meas,0.3,0.8)
-    #Q_meas_norm = Normalize(Q_meas,-30,500)
+    MatNum_norm = Normalize(MatNum,1, 8)
     
     if mode == 'training':
         visible1 = Input(shape=(1,1), name='Tsub') #visible1 = Input(shape=(1,1), name='P_ev')
         visible2 = Input(shape=(1,1), name='Psat') #visible2 = Input(shape=(1,1), name='T_suc')
         visible3 = Input(shape=(1,1), name='LD') #visible3 = Input(shape=(1,1), name='P_cd')
-        #visible4 = Input(shape=(1,1), name='T_inj')
+        visible4 = Input(shape=(1,1), name='MatNum')
         #visible5 = Input(shape=(1,1), name='P_inj')
         #visible6 = Input(shape=(1,1), name='T_amb')
     
@@ -172,13 +152,12 @@ def Calculate():
         encoded_a = shared_lstm(visible1) #encoded_a = shared_lstm(visible1)
         encoded_b = shared_lstm(visible2) #encoded_b = shared_lstm(visible2)
         encoded_c = shared_lstm(visible3) #encoded_c = shared_lstm(visible3)
-        #encoded_d = shared_lstm(visible4)
-        #encoded_e = shared_lstm(visible5)
-        #encoded_f = shared_lstm(visible6)
+        encoded_d = shared_lstm(visible4)
+
     
         #Merge inputs
         #merged = merge([encoded_a,encoded_b,encoded_c,encoded_d,encoded_e,encoded_f],mode='concat',concat_axis=-1) #deprecated
-        merged = concatenate([encoded_a,encoded_b,encoded_c],axis=-1) #merged = concatenate([encoded_a,encoded_b,encoded_c,encoded_d,encoded_e,encoded_f],axis=-1)
+        merged = concatenate([encoded_a,encoded_b,encoded_c,encoded_d],axis=-1) #merged = concatenate([encoded_a,encoded_b,encoded_c,encoded_d,encoded_e,encoded_f],axis=-1)
         
         #interpretation model
         hidden1 = Dense(12,activation='tanh')(merged) #hidden1 = Dense(256, activation='tanh')(merged) ###'relu' shows good results
@@ -190,14 +169,14 @@ def Calculate():
         output1 = Dense(1, activation = 'linear',name='Tmin')(hidden2) #output1 = Dense(1, activation = 'linear',name='m_gas')(hidden3)
 
        
-        model = Model(input=[visible1,visible2,visible3],
+        model = Model(input=[visible1,visible2,visible3,visible4],
                         output = [output1])
         
         plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
         
         model.compile(optimizer='adamax',loss='mse',metrics=['mae']) #model.compile(optimizer='adamax',loss=['mse','mse','mse','mse','mse','mse']) #metrics are not included in the training
         
-        history = model.fit([Tsub_norm,Psat_norm,LD_norm],
+        history = model.fit([Tsub_norm,Psat_norm,LD_norm,MatNum_norm],
                             [Tmin_exp_norm],
                             epochs=8000 ,
                             batch_size=30, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
@@ -205,7 +184,7 @@ def Calculate():
                             )
         
         # evaluate the model
-        scores = model.evaluate([Tsub_norm,Psat_norm,LD_norm],[Tmin_exp_norm])
+        scores = model.evaluate([Tsub_norm,Psat_norm,LD_norm,MatNum_norm],[Tmin_exp_norm])
         print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
         
     #   #History plot
@@ -230,7 +209,7 @@ def Calculate():
         model = load_model('ANN_model_Tmin.h5')
     
     # Run the model
-    Tmin_ANN = model.predict([Tsub_norm,Psat_norm,LD_norm]) #[Mref,Minj,W,T,eta_s,Q] = model.predict([P_ev_norm,T_suc_norm,P_cd_norm,T_inj_norm,P_inj_norm,T_amb_norm])
+    Tmin_ANN = model.predict([Tsub_norm,Psat_norm,LD_norm,MatNum_norm]) #[Mref,Minj,W,T,eta_s,Q] = model.predict([P_ev_norm,T_suc_norm,P_cd_norm,T_inj_norm,P_inj_norm,T_amb_norm])
     Tmin_ANN = DeNormalize(Tmin_ANN.reshape(-1), 206.8841, 727.8873239) #W = DeNormalize(W.reshape(-1),1000,8000)
 
 
