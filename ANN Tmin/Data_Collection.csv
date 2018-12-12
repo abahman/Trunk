@@ -161,7 +161,7 @@ Tmin (C ),Subcooling  (C),System pressure (Mpa),Material ,L/D
 300.3003,0,1.870593,Platnium ,16.67
 300.7838,0,1.963394,Platnium ,16.67
 264,0,0.1,brass ,4.67
-595,70,0.1,brass ,4.67
+595,30,0.1,brass ,4.67
 348.5817774,0,0.105597785,Zirconium,6.35
 360.0601979,0,0.109019175,Zirconium,6.35
 362.6109581,0,0.115861956,Zirconium,6.35

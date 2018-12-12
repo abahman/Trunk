@@ -147,7 +147,7 @@ def Calculate():
     
     #Normalize all parameters
     Tmin_exp_norm = Normalize(Tmin_exp, 206.8841, 727.8873239) #P_ev_norm = Normalize(P_ev,100, 900)
-    Tsub_norm = Normalize(Tsub, 0, 70) #T_suc_norm = Normalize(T_suc,263.15,300)
+    Tsub_norm = Normalize(Tsub, 0, 39.84150546) #T_suc_norm = Normalize(T_suc,263.15,300)
     Psat_norm = Normalize(Psat, 0.001185867, 3.003378378) #P_cd_norm = Normalize(P_cd,1000, 3500)
     LD_norm = Normalize(LD, 2.67, 63.5) #T_inj_norm = Normalize(T_inj,273.15,330.15)
     #P_inj_norm = Normalize(P_inj,300, 1700)

@@ -105,7 +105,7 @@ def Calculate():
     "Import Experimental Data"
     start=1
     end=376
-    filename = 'Data_Collection.csv' #'scroll_inj_R407C.csv'
+    filename = 'Data_Collection.csv'
     
     #Define inputs
     [Tmin_exp,Tsub,Psat,Mat,LD] = Import(start,end,filename)
@@ -123,7 +123,7 @@ def Calculate():
     
     #Normalize all parameters
     Tmin_exp_norm = Normalize(Tmin_exp, 206.8841, 727.8873239) #P_ev_norm = Normalize(P_ev,100, 900)
-    Tsub_norm = Normalize(Tsub, 0, 70) #T_suc_norm = Normalize(T_suc,263.15,300)
+    Tsub_norm = Normalize(Tsub, 0, 39.84150546) #T_suc_norm = Normalize(T_suc,263.15,300)
     Psat_norm = Normalize(Psat, 0.001185867, 3.003378378) #P_cd_norm = Normalize(P_cd,1000, 3500)
     LD_norm = Normalize(LD, 2.67, 63.5) #T_inj_norm = Normalize(T_inj,273.15,330.15)
 
@@ -131,18 +131,17 @@ def Calculate():
     Tsub_norm = np.array(Tsub_norm)
     Psat_norm = np.array(Psat_norm)
     LD_norm = np.array(LD_norm)
-        
+    
+    # split into input (X) and output (Y) variables
+    X = np.column_stack((Tsub_norm, Psat_norm))
+    X = np.column_stack((X, LD_norm))
+    Y = Tmin_exp_norm
+    
     if mode == 'training':
-
-        # split into input (X) and output (Y) variables
-        X = np.column_stack((Tsub_norm, Psat_norm))
-        X = np.column_stack((X, LD_norm))
-        Y = Tmin_exp_norm
-
-
         # create model
         model = Sequential()
-        model.add(Dense(12, input_dim=3, activation='tanh')) #init='uniform'
+        model.add(Dense(12, input_dim=3, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
+        #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
         model.add(Dense(12, activation='tanh'))
         model.add(Dense(1, activation='linear'))
           
@@ -154,14 +153,12 @@ def Calculate():
         # fit the model
         history = model.fit(X,
                             Y,
-                            epochs=4000 ,
+                            epochs=4000 , #Cut the epochs in half when using sequential 
                             batch_size=30, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
                             validation_split=0.2,
                             )    
           
-        # evaluate the model
-        scores = model.evaluate(X,Y)
-        print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+        
             
     #   #History plot
         fig=pylab.figure(figsize=(6,4))
@@ -185,10 +182,19 @@ def Calculate():
         model = load_model('ANN_model_Tmin.h5')
     
     # Run the model
-    Tmin_ANN = model.predict(X) #[Mref,Minj,W,T,eta_s,Q] = model.predict([P_ev_norm,T_suc_norm,P_cd_norm,T_inj_norm,P_inj_norm,T_amb_norm])
+    Tmin_ANN = model.predict(X)
     Tmin_ANN = DeNormalize(Tmin_ANN.reshape(-1), 206.8841, 727.8873239) #W = DeNormalize(W.reshape(-1),1000,8000)
-
-
+    
+    # evaluate the model
+    scores = model.evaluate(X,Y)
+    print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+        
+    # extract the weight and bias
+    weights = model.layers[0].get_weights()[0]
+    biases = model.layers[0].get_weights()[1]
+    
+    print 'weights = ', weights
+    print 'biases = ', biases
     # Save the architecture of a model, and not its weights or its training configuration
     # save as JSON
     # json_string = model.to_json()
@@ -233,9 +239,9 @@ def Calculate():
     # Validation Tmin
     fig=pylab.figure(figsize=(4,4))
 
-    plt.plot(Tmin_ANN[:n_training],Tmin_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
-    plt.plot(Tmin_ANN[-n_split:],Tmin_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
-    plt.text(550,200,'R$^2$ = {:0.01f}%\n'.format(Rsquared(Tmin_exp,Tmin_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(Tmin_ANN,Tmin_exp))+'RMSE = {:0.01f}%'.format(rmse(Tmin_ANN,Tmin_exp)),ha='left',va='center',fontsize = 8)
+    plt.plot(Tmin_ANN[:n_training],Tmin_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points ')
+    plt.plot(Tmin_ANN[-n_split:],Tmin_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points ')
+    plt.text(550,200,'R$^2$ = {:0.01f}%\n'.format(Rsquared(Tmin_exp,Tmin_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(Tmin_ANN,Tmin_exp))+'RMSE = {:0.01f}%\n'.format(rmse(Tmin_ANN,Tmin_exp)),ha='left',va='center',fontsize = 8)
 
     plt.xlabel('$T_{min,pred}$ [$\degree$C]')
     plt.ylabel('$T_{min,exp}$ [$\degree$C]')
