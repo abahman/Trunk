@@ -35,23 +35,27 @@ def Import(start,end,filename):
     
     i = 0  
     "initialize arrays"
-    Tmin = float(data[i][0]) #Tamb = float(data[i][0])
-    Tsub = float(data[i][1]) #Tsuc = float(data[i][1])
-    Psat = float(data[i][2]) #Pev = float(data[i][2])
-    Mat = str(data[i][3]) #Tex = float(data[i][3])
-    LD = float(data[i][4]) #Pcd = float(data[i][4])
-    MatNum = float(data[i][5])
+    Tmin = float(data[i][0])
+    Tsub = float(data[i][1])
+    Psat = float(data[i][2])
+    Mat = str(data[i][3])
+    LD = float(data[i][4])
+    Bf = float(data[i][5])
+    Bw = float(data[i][6])
+    BfBw = float(data[i][7])
     i=i+1
     
     while i < (end - start+1):
-        Tmin = np.append(Tmin,float(data[i][0])) #Tamb = np.append(Tamb,float(data[i][0]))
-        Tsub = np.append(Tsub,float(data[i][1])) #Tsuc = np.append(Tsuc,float(data[i][1]))
-        Psat = np.append(Psat,float(data[i][2])) #Pev = np.append(Pev,float(data[i][2]))
-        Mat = np.append(Mat,str(data[i][3])) #Tex = np.append(Tex,float(data[i][3]))
-        LD = np.append(LD,float(data[i][4])) #Pcd = np.append(Pcd,float(data[i][4]))
-        MatNum = np.append(MatNum,float(data[i][5]))
+        Tmin = np.append(Tmin,float(data[i][0]))
+        Tsub = np.append(Tsub,float(data[i][1]))
+        Psat = np.append(Psat,float(data[i][2])) 
+        Mat = np.append(Mat,str(data[i][3]))
+        LD = np.append(LD,float(data[i][4]))
+        Bf = np.append(Bf,float(data[i][5]))
+        Bw = np.append(Bw,float(data[i][6]))
+        BfBw = np.append(BfBw,float(data[i][7]))
         i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD,MatNum]
+        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw]
     
     return Data
     
@@ -104,11 +108,11 @@ def Calculate():
 
     "Import Experimental Data"
     start=1
-    end=376
+    end=379
     filename = 'Data_Collection.csv'
     
     #Define inputs
-    [Tmin_exp,Tsub,Psat,Mat,LD,MatNum] = Import(start,end,filename)
+    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw] = Import(start,end,filename)
     
     mode = 'training'
     
@@ -122,22 +126,27 @@ def Calculate():
     
     
     #Normalize all parameters
-    Tmin_exp_norm = Normalize(Tmin_exp, 206.8841, 727.8873239) #P_ev_norm = Normalize(P_ev,100, 900)
-    Tsub_norm = Normalize(Tsub, 0, 39.84150546) #T_suc_norm = Normalize(T_suc,263.15,300)
-    Psat_norm = Normalize(Psat, 0.001185867, 3.003378378) #P_cd_norm = Normalize(P_cd,1000, 3500)
-    LD_norm = Normalize(LD, 2.67, 63.5) #T_inj_norm = Normalize(T_inj,273.15,330.15)
-    MatNum_norm = Normalize(MatNum, 1, 8)
+    Tmin_exp_norm = Normalize(Tmin_exp, 206.8841, 727.8873239)
+    Tsub_norm = Normalize(Tsub, 0, 39.84150546)
+    Psat_norm = Normalize(Psat, 0.001185867, 3.003378378)
+    LD_norm = Normalize(LD, 2.67, 63.5)
+    Bf_norm = Normalize(Bf, 2428162.849, 2744290.164)
+    Bw_norm = Normalize(Bw, 5168800, 1379121205)
+    BfBw_norm = Normalize(BfBw, 0.001989845, 0.530923555)
     
+    #convert to numpy array
     Tmin_exp_norm = np.array(Tmin_exp_norm)
     Tsub_norm = np.array(Tsub_norm)
     Psat_norm = np.array(Psat_norm)
     LD_norm = np.array(LD_norm)
-    MatNum_norm = np.array(MatNum_norm)
+    Bf_norm = np.array(Bf_norm)
+    Bw_norm = np.array(Bw_norm)
+    BfBw_norm = np.array(BfBw_norm)
     
     # split into input (X) and output (Y) variables
     X = np.column_stack((Tsub_norm, Psat_norm))
     X = np.column_stack((X, LD_norm))
-    X = np.column_stack((X, MatNum_norm))
+    X = np.column_stack((X, BfBw_norm))
     Y = Tmin_exp_norm
     
     if mode == 'training':
@@ -145,6 +154,7 @@ def Calculate():
         model = Sequential()
         model.add(Dense(12, input_dim=4, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
         #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
+        model.add(Dense(12, activation='tanh'))
         model.add(Dense(12, activation='tanh'))
         model.add(Dense(1, activation='linear'))
           
@@ -156,7 +166,7 @@ def Calculate():
         # fit the model
         history = model.fit(X,
                             Y,
-                            epochs=4000 , #Cut the epochs in half when using sequential 
+                            epochs=8000 , #Cut the epochs in half when using sequential 
                             batch_size=30, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
                             validation_split=0.2,
                             )    
