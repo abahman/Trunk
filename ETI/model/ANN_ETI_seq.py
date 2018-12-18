@@ -151,6 +151,7 @@ def Calculate():
     m_suc_norm = Normalize(m_suc, 0.0466, 0.1045)
     m_inj_norm = Normalize(m_inj, 0.00496, 0.04302)
     m_tot_norm = Normalize(m_tot, 0.05507, 0.14702)
+    #Q_loss_norm = Normalize(Q_loss, -0.04526, 0.3732792)
     W_comp_norm = Normalize(W_comp, 3.154, 7.806)
     f_loss_norm = Normalize(f_loss, -0.8931, 6.691)
     
@@ -166,6 +167,7 @@ def Calculate():
     m_suc_norm = np.array(m_suc_norm)
     m_inj_norm = np.array(m_inj_norm)
     m_tot_norm = np.array(m_tot_norm)
+    #Q_loss_norm = np.array(Q_loss_norm)
     W_comp_norm = np.array(W_comp_norm)
     f_loss_norm = np.array(f_loss_norm)
     
