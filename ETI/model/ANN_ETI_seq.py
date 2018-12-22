@@ -128,7 +128,7 @@ def Calculate():
     #Define inputs
     [T_env,T_suc,P_suc,T_dis,P_dis,T_inj,P_inj,x_inj,h_inj,m_suc,m_inj,m_tot,Q_loss,W_comp,f_loss] = Import(start,end,filename)
     
-    mode = 'run'
+    mode = 'training'
     
     from keras.models import Model,Sequential,load_model
     from keras.layers import Input,Flatten,Dense,LSTM,merge,Dropout,concatenate
@@ -140,7 +140,7 @@ def Calculate():
     
     
     #Normalize all parameters
-    T_env_norm = Normalize(T_env, 297, 324.8)
+    #T_env_norm = Normalize(T_env, 297, 324.8)
     T_suc_norm = Normalize(T_suc, 274.1, 294.53)
     P_suc_norm = Normalize(P_suc, 327, 749.6)
     T_dis_norm = Normalize(T_dis, 342.5, 380.5)
@@ -153,10 +153,10 @@ def Calculate():
     m_tot_norm = Normalize(m_tot, 0.05507, 0.14702)
     #Q_loss_norm = Normalize(Q_loss, -0.04526, 0.3732792)
     W_comp_norm = Normalize(W_comp, 3.154, 7.806)
-    f_loss_norm = Normalize(f_loss, -0.8931, 6.691)
+    #f_loss_norm = Normalize(f_loss, -0.8931, 6.691)
     
     #convert to numpy array
-    T_env_norm = np.array(T_env_norm)
+    #T_env_norm = np.array(T_env_norm)
     T_suc_norm = np.array(T_suc_norm)
     P_suc_norm = np.array(P_suc_norm)
     T_dis_norm = np.array(T_dis_norm)
@@ -169,11 +169,11 @@ def Calculate():
     m_tot_norm = np.array(m_tot_norm)
     #Q_loss_norm = np.array(Q_loss_norm)
     W_comp_norm = np.array(W_comp_norm)
-    f_loss_norm = np.array(f_loss_norm)
+    #f_loss_norm = np.array(f_loss_norm)
     
     # split into input (X) and output (Y) variables
-    X = np.column_stack((T_env_norm, T_suc_norm))
-    X = np.column_stack((X, P_suc_norm))
+    #X = np.column_stack((T_env_norm, T_suc_norm))
+    X = np.column_stack((T_suc_norm, P_suc_norm))
     X = np.column_stack((X, P_dis_norm))
     X = np.column_stack((X, P_inj_norm))
     X = np.column_stack((X, h_inj_norm))
@@ -182,16 +182,16 @@ def Calculate():
     Y = np.column_stack((Y, m_inj_norm))
     Y = np.column_stack((Y, m_tot_norm))
     Y = np.column_stack((Y, W_comp_norm))
-    Y = np.column_stack((Y, f_loss_norm))
+    #Y = np.column_stack((Y, f_loss_norm))
     
     if mode == 'training':
         # create model
         model = Sequential()
-        model.add(Dense(18, input_dim=6, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
+        model.add(Dense(12, input_dim=5, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
         #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
+        #model.add(Dense(18, activation='tanh'))
         #model.add(Dense(12, activation='tanh'))
-        #model.add(Dense(12, activation='tanh'))
-        model.add(Dense(6, activation='linear'))
+        model.add(Dense(5, activation='linear'))
           
         plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
   
@@ -202,7 +202,7 @@ def Calculate():
         history = model.fit(X,
                             Y,
                             epochs=8000 , #Cut the epochs in half when using sequential 
-                            batch_size=30, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
+                            batch_size=15, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
                             validation_split=0.2,
                             )    
           
@@ -236,7 +236,7 @@ def Calculate():
     m_inj_ANN = DeNormalize(predictions[:,2].reshape(-1), 0.00496, 0.04302)
     m_tot_ANN = DeNormalize(predictions[:,3].reshape(-1), 0.05507, 0.14702)
     W_comp_ANN = DeNormalize(predictions[:,4].reshape(-1), 3.154, 7.806)
-    f_loss_ANN = DeNormalize(predictions[:,5].reshape(-1), -0.8931, 6.691)
+    #f_loss_ANN = DeNormalize(predictions[:,5].reshape(-1), -0.8931, 6.691)
 
     # evaluate the model
     scores = model.evaluate(X,Y)
@@ -259,7 +259,7 @@ def Calculate():
     for i in range(0,(end-start+1)):
 
 
-        data_calc = {'T_dis':[T_dis_ANN[i]],'m_suc':[m_suc_ANN[i]],'m_inj':[m_inj_ANN[i]],'m_tot':[m_tot_ANN[i]],'W_comp':[W_comp_ANN[i]],'f_loss':[f_loss_ANN[i]]}
+        data_calc = {'T_dis':[T_dis_ANN[i]],'m_suc':[m_suc_ANN[i]],'m_inj':[m_inj_ANN[i]],'m_tot':[m_tot_ANN[i]],'W_comp':[W_comp_ANN[i]]} #,'f_loss':[f_loss_ANN[i]]
             
         
         # Write to Excel
@@ -424,39 +424,39 @@ def Calculate():
     plt.show()
     fig.savefig('ANN_W_comp.pdf')
     
-    # Validation f_loss
-    fig=pylab.figure(figsize=(4,4))
-
-    plt.plot(f_loss_ANN[:n_training],f_loss[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
-    plt.plot(f_loss_ANN[-n_split:],f_loss[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
-    plt.text(6,3,'R$^2$ = {:0.01f}%\n'.format(Rsquared(f_loss,f_loss_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(f_loss_ANN,f_loss))+'RMSE = {:0.01f}%\n'.format(rmse(f_loss_ANN,f_loss)),ha='left',va='center',fontsize = 8)
-
-    plt.xlabel('$f_{loss,pred}$ [%]')
-    plt.ylabel('$f_{loss,exp}$ [%]')
-
-    Tmin = 2
-    Tmax = 8
-    x=[Tmin,Tmax]
-    y=[Tmin,Tmax]
-    y105=[1.05*Tmin,1.05*Tmax]
-    y95=[0.95*Tmin,0.95*Tmax]
-    
-    plt.plot(x,y,'k-')
-    plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
-    plt.xlim(Tmin,Tmax)
-    plt.ylim(Tmin,Tmax)
-    plt.legend(loc=2,fontsize=9)
-    plt.tight_layout(pad=0.2)        
-    plt.tick_params(direction='in')
-    plt.show()
-    fig.savefig('ANN_f_loss.pdf')
+#     # Validation f_loss
+#     fig=pylab.figure(figsize=(4,4))
+# 
+#     plt.plot(f_loss_ANN[:n_training],f_loss[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
+#     plt.plot(f_loss_ANN[-n_split:],f_loss[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
+#     plt.text(6,3,'R$^2$ = {:0.01f}%\n'.format(Rsquared(f_loss,f_loss_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(f_loss_ANN,f_loss))+'RMSE = {:0.01f}%\n'.format(rmse(f_loss_ANN,f_loss)),ha='left',va='center',fontsize = 8)
+# 
+#     plt.xlabel('$f_{loss,pred}$ [%]')
+#     plt.ylabel('$f_{loss,exp}$ [%]')
+# 
+#     Tmin = 2
+#     Tmax = 8
+#     x=[Tmin,Tmax]
+#     y=[Tmin,Tmax]
+#     y105=[1.05*Tmin,1.05*Tmax]
+#     y95=[0.95*Tmin,0.95*Tmax]
+#     
+#     plt.plot(x,y,'k-')
+#     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
+#     plt.xlim(Tmin,Tmax)
+#     plt.ylim(Tmin,Tmax)
+#     plt.legend(loc=2,fontsize=9)
+#     plt.tight_layout(pad=0.2)        
+#     plt.tick_params(direction='in')
+#     plt.show()
+#     fig.savefig('ANN_f_loss.pdf')
     
     print 'T_dis:',REmean(T_dis,T_dis_ANN),Rsquared(T_dis,T_dis_ANN)*100
     print 'm_suc:',REmean(m_suc,m_suc_ANN),Rsquared(m_suc,m_suc_ANN)*100
     print 'm_inj:',REmean(m_inj,m_inj_ANN),Rsquared(m_inj,m_inj_ANN)*100
     print 'm_tot:',REmean(m_tot,m_tot_ANN),Rsquared(m_tot,m_tot_ANN)*100
     print 'W_comp:',REmean(W_comp,W_comp_ANN),Rsquared(W_comp,W_comp_ANN)*100
-    print 'f_loss:',REmean(f_loss,f_loss_ANN),Rsquared(f_loss,f_loss_ANN)*100
+    #print 'f_loss:',REmean(f_loss,f_loss_ANN),Rsquared(f_loss,f_loss_ANN)*100
 
     
 if __name__ == '__main__':
