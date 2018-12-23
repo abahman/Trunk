@@ -274,7 +274,7 @@ def Calculate():
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     plt.show()
-    fig.savefig('ANN_Tmin.pdf')
+    fig.savefig('ANN_Tmin_3hidden12.pdf')
     
     print 'Tmin:',REmean(Tmin_exp,Tmin_ANN),Rsquared(Tmin_exp,Tmin_ANN)*100 #print 'Wdot:',REmean(W_meas,W),Rsquared(W_meas,W)*100
 
