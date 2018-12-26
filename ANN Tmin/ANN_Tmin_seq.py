@@ -152,10 +152,10 @@ def Calculate():
     if mode == 'training':
         # create model
         model = Sequential()
-        model.add(Dense(12, input_dim=4, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
+        model.add(Dense(100, input_dim=4, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
         #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
-        model.add(Dense(12, activation='tanh'))
-        model.add(Dense(12, activation='tanh'))
+        #model.add(Dense(20, activation='tanh'))
+        #model.add(Dense(12, activation='tanh'))
         model.add(Dense(1, activation='linear'))
           
         plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
@@ -177,7 +177,7 @@ def Calculate():
         fig=pylab.figure(figsize=(6,4))
         plt.semilogy(history.history['loss'])
         plt.semilogy(history.history['val_loss'])
-        #plt.semilogy(history.history['val_mean_absolute_error'])
+        #plt.semilogy(history.history['mae'])
         plt.ylabel('loss [-]')
         plt.xlabel('epoch [-]')
         plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
@@ -214,7 +214,7 @@ def Calculate():
     
     # save as YAML
     # yaml_string = model.to_yaml()
-
+    
 
     for i in range(0,(end-start+1)):
 
@@ -252,8 +252,8 @@ def Calculate():
     # Validation Tmin
     fig=pylab.figure(figsize=(4,4))
 
-    plt.plot(Tmin_ANN[:n_training],Tmin_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points ')
-    plt.plot(Tmin_ANN[-n_split:],Tmin_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points ')
+    plt.plot(Tmin_ANN[:n_training],Tmin_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
+    plt.plot(Tmin_ANN[-n_split:],Tmin_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
     plt.text(550,200,'R$^2$ = {:0.01f}%\n'.format(Rsquared(Tmin_exp,Tmin_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(Tmin_ANN,Tmin_exp))+'RMSE = {:0.01f}%\n'.format(rmse(Tmin_ANN,Tmin_exp)),ha='left',va='center',fontsize = 8)
 
     plt.xlabel('$T_{min,pred}$ [$\degree$C]')
@@ -274,11 +274,72 @@ def Calculate():
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     plt.show()
-    fig.savefig('ANN_Tmin_3hidden12.pdf')
+    fig.savefig('ANN_Tmin.pdf')
     
     print 'Tmin:',REmean(Tmin_exp,Tmin_ANN),Rsquared(Tmin_exp,Tmin_ANN)*100 #print 'Wdot:',REmean(W_meas,W),Rsquared(W_meas,W)*100
 
 
+#     #Validation with Shikha's data
+#     "Import Experimental Data"
+#     start=1
+#     end=48
+#     filename = 'Data_shikha.csv'
+#     #Define inputs
+#     [Tmin_exp_shikha,Tsub,Psat,Mat,LD,Bf,Bw,BfBw] = Import(start,end,filename)
+#     #Normalize all parameters
+#     Tmin_exp_norm = Normalize(Tmin_exp_shikha, 206.8841, 727.8873239)
+#     Tsub_norm = Normalize(Tsub, 0, 39.84150546)
+#     Psat_norm = Normalize(Psat, 0.001185867, 3.003378378)
+#     LD_norm = Normalize(LD, 2.67, 63.5)
+#     Bf_norm = Normalize(Bf, 2428162.849, 2744290.164)
+#     Bw_norm = Normalize(Bw, 5168800, 1379121205)
+#     BfBw_norm = Normalize(BfBw, 0.001989845, 0.530923555)
+#     #convert to numpy array
+#     Tmin_exp_norm = np.array(Tmin_exp_norm)
+#     Tsub_norm = np.array(Tsub_norm)
+#     Psat_norm = np.array(Psat_norm)
+#     LD_norm = np.array(LD_norm)
+#     Bf_norm = np.array(Bf_norm)
+#     Bw_norm = np.array(Bw_norm)
+#     BfBw_norm = np.array(BfBw_norm)
+#     # split into input (X) and output (Y) variables
+#     X = np.column_stack((Tsub_norm, Psat_norm))
+#     X = np.column_stack((X, LD_norm))
+#     X = np.column_stack((X, BfBw_norm))
+#     # Load the model
+#     model = load_model('ANN_model_Tmin.h5')
+#     # Run the model
+#     Tmin_ANN_shikha = model.predict(X)
+#     Tmin_ANN_shikha = DeNormalize(Tmin_ANN_shikha.reshape(-1), 206.8841, 727.8873239)
+#     
+#     # New Validation Tmin of shikha
+#     fig=pylab.figure(figsize=(4,4))
+# 
+#     plt.plot(Tmin_ANN[:n_training],Tmin_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
+#     plt.plot(Tmin_ANN[-n_split:],Tmin_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
+#     plt.plot(Tmin_ANN_shikha,Tmin_exp_shikha,'g^',ms = 4,mec='black',mew=0.5,label='Validation points')
+#     plt.text(550,200,'R$^2$ = {:0.01f}%\n'.format(Rsquared(Tmin_exp_shikha,Tmin_ANN_shikha)*100)+'MAE = {:0.01f}%\n'.format(mape(Tmin_ANN_shikha,Tmin_exp_shikha))+'RMSE = {:0.01f}%\n'.format(rmse(Tmin_ANN_shikha,Tmin_exp_shikha)),ha='left',va='center',fontsize = 8)
+# 
+#     plt.xlabel('$T_{min,pred}$ [$\degree$C]')
+#     plt.ylabel('$T_{min,exp}$ [$\degree$C]')
+# 
+#     Tmin = 100
+#     Tmax = 800
+#     x=[Tmin,Tmax]
+#     y=[Tmin,Tmax]
+#     y105=[1.1*Tmin,1.1*Tmax]
+#     y95=[0.9*Tmin,0.9*Tmax]
+#     
+#     plt.plot(x,y,'k-')
+#     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
+#     plt.xlim(Tmin,Tmax)
+#     plt.ylim(Tmin,Tmax)
+#     plt.legend(loc=2,fontsize=9)
+#     plt.tight_layout(pad=0.2)        
+#     plt.tick_params(direction='in')
+#     plt.show()
+#     fig.savefig('ANN_Tmin_shikha.pdf')
+    
     
 if __name__ == '__main__':
     
