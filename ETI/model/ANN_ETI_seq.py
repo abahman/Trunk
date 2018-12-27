@@ -14,6 +14,8 @@ from scipy import optimize,stats
 import pandas as pd
 from openpyxl import load_workbook
 
+from keras import backend as K
+
 warnings.simplefilter("ignore",RuntimeWarning)
 from random import randint, random
 
@@ -117,6 +119,12 @@ def Rsquared(y_true,y_pred):
     slope, intercept, r_value, p_value, std_err = stats.linregress(y_true,y_pred)    
     
     return r_value**2
+
+def coeff_determination(y_true, y_pred):
+    
+    SS_res =  K.sum(K.square( y_true-y_pred ))
+    SS_tot = K.sum(K.square( y_true - K.mean(y_true) ) )
+    return ( 1 - SS_res/(SS_tot + K.epsilon()) )
     
 def Calculate():
 
@@ -184,10 +192,14 @@ def Calculate():
     Y = np.column_stack((Y, W_comp_norm))
     #Y = np.column_stack((Y, f_loss_norm))
     
+    from sklearn.model_selection import train_test_split
+    # shuffle the data before splitting for validation
+    X_train, X_valid, Y_train, Y_valid = train_test_split(X, Y, test_size=0.2, shuffle= True)
+    
     if mode == 'training':
         # create model
         model = Sequential()
-        model.add(Dense(12, input_dim=5, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
+        model.add(Dense(6, input_dim=5, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
         #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
         #model.add(Dense(18, activation='tanh'))
         #model.add(Dense(12, activation='tanh'))
@@ -196,14 +208,16 @@ def Calculate():
         plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
   
         # Compile model
-        model.compile(optimizer='adamax',loss='mse',metrics=['mae'])
+        model.compile(optimizer='adamax',loss='mse',metrics=['mae',coeff_determination])
           
         # fit the model
-        history = model.fit(X,
-                            Y,
-                            epochs=8000 , #Cut the epochs in half when using sequential 
+        history = model.fit(X_train,
+                            Y_train,
+                            epochs=4000 , #Cut the epochs in half when using sequential 
                             batch_size=15, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
-                            validation_split=0.2,
+                            #validation_split=0.2,
+                            validation_data=(X_valid,Y_valid),
+                            shuffle=True, #this is always set as True, even if not specified
                             )    
           
         
@@ -213,14 +227,26 @@ def Calculate():
         plt.semilogy(history.history['loss'])
         plt.semilogy(history.history['val_loss'])
         #plt.semilogy(history.history['val_mean_absolute_error'])
-        plt.ylabel('loss [-]')
-        plt.xlabel('epoch [-]')
+        plt.ylabel('MSE')
+        plt.xlabel('epochs')
         plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
         #plt.ylim(0,0.1)
         plt.tight_layout(pad=0.2)  
         plt.tick_params(direction='in')      
-        fig.savefig('ANN_history_ETI.pdf')
-        
+        fig.savefig('ANN_history_ETI_loss.pdf')
+    
+    #   #History plot for accuracy
+        fig=pylab.figure(figsize=(6,4))
+        plt.semilogy(history.history['coeff_determination'])
+        plt.semilogy(history.history['val_coeff_determination'])
+        plt.ylabel('R$^2$')
+        plt.xlabel('epochs')
+        plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
+        #plt.ylim(0,0.1)
+        plt.tight_layout(pad=0.2)  
+        plt.tick_params(direction='in')      
+        fig.savefig('ANN_history_ETI_acc.pdf')
+            
         # Save the model
         model.save('ANN_model_ETI.h5')
     
@@ -256,30 +282,30 @@ def Calculate():
     # yaml_string = model.to_yaml()
 
 
-    for i in range(0,(end-start+1)):
-
-
-        data_calc = {'T_dis':[T_dis_ANN[i]],'m_suc':[m_suc_ANN[i]],'m_inj':[m_inj_ANN[i]],'m_tot':[m_tot_ANN[i]],'W_comp':[W_comp_ANN[i]]} #,'f_loss':[f_loss_ANN[i]]
-            
-        
-        # Write to Excel
-        filename = os.path.dirname(__file__)+'/ETI_output.xlsx'
-        xl = pd.read_excel(filename, sheet_name='ANN_Validation')
-
-        df = pd.DataFrame(data=data_calc)
-
-        df.reindex(columns=xl.columns)
-        df_final=xl.append(df,ignore_index=True)
-        df_final.tail()
-        
-        book = load_workbook(filename)
-        writer = pd.ExcelWriter(filename, engine='openpyxl',index=False)
-        writer.book = book
-        writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-        df_final.to_excel(writer,index=False,sheet_name='ANN_Validation')
-        
-        # 
-        writer.save()
+#     for i in range(0,(end-start+1)):
+# 
+# 
+#         data_calc = {'T_dis':[T_dis_ANN[i]],'m_suc':[m_suc_ANN[i]],'m_inj':[m_inj_ANN[i]],'m_tot':[m_tot_ANN[i]],'W_comp':[W_comp_ANN[i]]} #,'f_loss':[f_loss_ANN[i]]
+#             
+#         
+#         # Write to Excel
+#         filename = os.path.dirname(__file__)+'/ETI_output.xlsx'
+#         xl = pd.read_excel(filename, sheet_name='ANN_Validation')
+# 
+#         df = pd.DataFrame(data=data_calc)
+# 
+#         df.reindex(columns=xl.columns)
+#         df_final=xl.append(df,ignore_index=True)
+#         df_final.tail()
+#         
+#         book = load_workbook(filename)
+#         writer = pd.ExcelWriter(filename, engine='openpyxl',index=False)
+#         writer.book = book
+#         writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
+#         df_final.to_excel(writer,index=False,sheet_name='ANN_Validation')
+#         
+#         # 
+#         writer.save()
 
     
     #Separate testing from calibrating

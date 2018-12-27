@@ -35,25 +35,27 @@ def Import(start,end,filename):
     
     i = 0  
     "initialize arrays"
-    Tmin = float(data[i][0]) #Tamb = float(data[i][0])
-    Tsub = float(data[i][1]) #Tsuc = float(data[i][1])
-    Psat = float(data[i][2]) #Pev = float(data[i][2])
-    Mat = str(data[i][3]) #Tex = float(data[i][3])
-    LD = float(data[i][4]) #Pcd = float(data[i][4])
-    MatNum = float(data[i][5])
-
+    Tmin = float(data[i][0])
+    Tsub = float(data[i][1])
+    Psat = float(data[i][2])
+    Mat = str(data[i][3])
+    LD = float(data[i][4])
+    Bf = float(data[i][5])
+    Bw = float(data[i][6])
+    BfBw = float(data[i][7])
     i=i+1
     
     while i < (end - start+1):
-        Tmin = np.append(Tmin,float(data[i][0])) #Tamb = np.append(Tamb,float(data[i][0]))
-        Tsub = np.append(Tsub,float(data[i][1])) #Tsuc = np.append(Tsuc,float(data[i][1]))
-        Psat = np.append(Psat,float(data[i][2])) #Pev = np.append(Pev,float(data[i][2]))
-        Mat = np.append(Mat,str(data[i][3])) #Tex = np.append(Tex,float(data[i][3]))
-        LD = np.append(LD,float(data[i][4])) #Pcd = np.append(Pcd,float(data[i][4]))
-        MatNum = np.append(MatNum,float(data[i][5]))
-#        print "i: ",i
+        Tmin = np.append(Tmin,float(data[i][0]))
+        Tsub = np.append(Tsub,float(data[i][1]))
+        Psat = np.append(Psat,float(data[i][2])) 
+        Mat = np.append(Mat,str(data[i][3]))
+        LD = np.append(LD,float(data[i][4]))
+        Bf = np.append(Bf,float(data[i][5]))
+        Bw = np.append(Bw,float(data[i][6]))
+        BfBw = np.append(BfBw,float(data[i][7]))
         i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD,MatNum]
+        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw]
     
     return Data
     
@@ -106,10 +108,10 @@ def Calculate():
 
     "Import Experimental Data"
     start=1
-    end=376
+    end=379
     filename = 'Data_Collection.csv' #'scroll_inj_R407C.csv'
     #[T_amb,T_suc,P_ev,T_ex_meas,P_cd,T_inj,P_inj,m_gas_meas,m_inj_meas,ratio_minj,Q_meas,W_meas,eta_s_meas] = Import(start,end,filename)
-    [Tmin_exp,Tsub,Psat,Mat,LD,MatNum] = Import(start,end,filename)
+    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw] = Import(start,end,filename)
     
 
     mode = 'training'
@@ -127,23 +129,27 @@ def Calculate():
     Tsub = Tsub.reshape(-1,1,1) #P_ev = P_ev.reshape(-1,1,1)
     Psat = Psat.reshape(-1,1,1) #T_suc = T_suc.reshape(-1,1,1)
     LD = LD.reshape(-1,1,1) #P_cd = P_cd.reshape(-1,1,1)
-    MatNum = MatNum.reshape(-1,1,1)
+    Bf = Bf.reshape(-1,1,1)
+    Bw = Bw.reshape(-1,1,1)
+    BfBw = BfBw.reshape(-1,1,1)
     #P_inj = P_inj.reshape(-1,1,1)
     #T_amb = T_amb.reshape(-1,1,1)
     
     
     #Normalize all parameters
-    Tmin_exp_norm = Normalize(Tmin_exp, 206.8841, 727.8873239) #P_ev_norm = Normalize(P_ev,100, 900)
-    Tsub_norm = Normalize(Tsub, 0, 39.84150546) #T_suc_norm = Normalize(T_suc,263.15,300)
-    Psat_norm = Normalize(Psat, 0.001185867, 3.003378378) #P_cd_norm = Normalize(P_cd,1000, 3500)
-    LD_norm = Normalize(LD, 2.67, 63.5) #T_inj_norm = Normalize(T_inj,273.15,330.15)
-    MatNum_norm = Normalize(MatNum,1, 8)
+    Tmin_exp_norm = Normalize(Tmin_exp, 206.8841, 727.8873239)
+    Tsub_norm = Normalize(Tsub, 0, 39.84150546)
+    Psat_norm = Normalize(Psat, 0.001185867, 3.003378378)
+    LD_norm = Normalize(LD, 2.67, 63.5)
+    Bf_norm = Normalize(Bf, 2428162.849, 2744290.164)
+    Bw_norm = Normalize(Bw, 5168800, 1379121205)
+    BfBw_norm = Normalize(BfBw, 0.001989845, 0.530923555)
     
     if mode == 'training':
         visible1 = Input(shape=(1,1), name='Tsub') #visible1 = Input(shape=(1,1), name='P_ev')
         visible2 = Input(shape=(1,1), name='Psat') #visible2 = Input(shape=(1,1), name='T_suc')
         visible3 = Input(shape=(1,1), name='LD') #visible3 = Input(shape=(1,1), name='P_cd')
-        visible4 = Input(shape=(1,1), name='MatNum')
+        visible4 = Input(shape=(1,1), name='BfBw')
         #visible5 = Input(shape=(1,1), name='P_inj')
         #visible6 = Input(shape=(1,1), name='T_amb')
     
@@ -176,22 +182,20 @@ def Calculate():
         
         model.compile(optimizer='adamax',loss='mse',metrics=['mae']) #model.compile(optimizer='adamax',loss=['mse','mse','mse','mse','mse','mse']) #metrics are not included in the training
         
-        history = model.fit([Tsub_norm,Psat_norm,LD_norm,MatNum_norm],
+        history = model.fit([Tsub_norm,Psat_norm,LD_norm,BfBw_norm],
                             [Tmin_exp_norm],
                             epochs=8000 ,
                             batch_size=30, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
                             validation_split=0.2,
                             )
         
-        # evaluate the model
-        scores = model.evaluate([Tsub_norm,Psat_norm,LD_norm,MatNum_norm],[Tmin_exp_norm])
-        print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+
         
     #   #History plot
         fig=pylab.figure(figsize=(6,4))
         plt.semilogy(history.history['loss'])
         plt.semilogy(history.history['val_loss'])
-        #plt.semilogy(history.history['val_mean_absolute_error'])
+        #plt.semilogy(history.history['mae'])
         plt.ylabel('loss [-]')
         plt.xlabel('epoch [-]')
         plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
@@ -209,9 +213,17 @@ def Calculate():
         model = load_model('ANN_model_Tmin.h5')
     
     # Run the model
-    Tmin_ANN = model.predict([Tsub_norm,Psat_norm,LD_norm,MatNum_norm]) #[Mref,Minj,W,T,eta_s,Q] = model.predict([P_ev_norm,T_suc_norm,P_cd_norm,T_inj_norm,P_inj_norm,T_amb_norm])
+    Tmin_ANN = model.predict([Tsub_norm,Psat_norm,LD_norm,BfBw_norm]) #[Mref,Minj,W,T,eta_s,Q] = model.predict([P_ev_norm,T_suc_norm,P_cd_norm,T_inj_norm,P_inj_norm,T_amb_norm])
     Tmin_ANN = DeNormalize(Tmin_ANN.reshape(-1), 206.8841, 727.8873239) #W = DeNormalize(W.reshape(-1),1000,8000)
-
+    
+    # evaluate the model
+    scores = model.evaluate([Tsub_norm,Psat_norm,LD_norm,BfBw_norm],[Tmin_exp_norm])
+    print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+    
+#     # extract the weight and bias
+#     weights = model.layers[0].get_weights()[0]
+#     biases = model.layers[0].get_weights()[1]
+    
 
     # Save the architecture of a model, and not its weights or its training configuration
     # save as JSON
