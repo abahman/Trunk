@@ -47,7 +47,12 @@ mpl.rcParams['figure.figsize'] = [6,4]
 # #===============================================================================
 # # END of Latex render
 # #===============================================================================
- 
+
+def savefigs(name):
+    #plt.savefig(name+'.eps')
+    plt.savefig(name+'.pdf')
+    plt.savefig(name+'.png',dpi=600)
+
 
 #import the excel file
 df = pd.read_excel("data_2ph_injection.xlsx",sheet_name='All_data')
@@ -115,7 +120,7 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout()
-plt.savefig('T_dis.pdf')
+savefigs('T_dis')
 plt.show()
 
 
@@ -146,7 +151,7 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout()
-plt.savefig('Q_evap.pdf')
+savefigs('Q_evap')
 plt.show()
 
 ##########plot compressor work##########
@@ -176,7 +181,7 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout()
-plt.savefig('W_comp.pdf')
+savefigs('W_comp')
 plt.show()
 
 ##########plot system COP##########
@@ -206,5 +211,5 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout()
-plt.savefig('COP_sys.pdf')
+savefigs('COP_sys')
 plt.show()

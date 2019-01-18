@@ -136,7 +136,7 @@ def Calculate():
     #Define inputs
     [T_env,T_suc,P_suc,T_dis,P_dis,T_inj,P_inj,x_inj,h_inj,m_suc,m_inj,m_tot,Q_loss,W_comp,f_loss] = Import(start,end,filename)
     
-    mode = 'training'
+    mode = 'run'
     
     from keras.models import Model,Sequential,load_model
     from keras.layers import Input,Flatten,Dense,LSTM,merge,Dropout,concatenate
@@ -196,142 +196,148 @@ def Calculate():
     # shuffle the data before splitting for validation
     X_train, X_valid, Y_train, Y_valid = train_test_split(X, Y, test_size=0.2, shuffle= True)
     
-    if mode == 'training':
-        # create model
-        model = Sequential()
-        model.add(Dense(6, input_dim=5, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
-        #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
-        #model.add(Dense(18, activation='tanh'))
-        #model.add(Dense(12, activation='tanh'))
-        model.add(Dense(5, activation='linear'))
-          
-        plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
-  
-        # Compile model
-        model.compile(optimizer='adamax',loss='mse',metrics=['mae',coeff_determination])
-          
-        # fit the model
-        history = model.fit(X_train,
-                            Y_train,
-                            epochs=4000 , #Cut the epochs in half when using sequential 
-                            batch_size=15, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
-                            #validation_split=0.2,
-                            validation_data=(X_valid,Y_valid),
-                            shuffle=True, #this is always set as True, even if not specified
-                            )    
-          
-        
+    SC = np.array([]) #empty score array
+    
+    for i in range(1):
+        if mode == 'training':
+            # create model
+            model = Sequential()
+            model.add(Dense(i+5, input_dim=5, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero'
+            #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
+            #model.add(Dense(18, activation='tanh'))
+            #model.add(Dense(12, activation='tanh'))
+            model.add(Dense(5, activation='linear'))
+              
+            plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
+      
+            # Compile model
+            model.compile(optimizer='adamax',loss='mse',metrics=['mae',coeff_determination])
+              
+            # fit the model
+            history = model.fit(X_train,
+                                Y_train,
+                                epochs=4000 , #Cut the epochs in half when using sequential 
+                                batch_size=15, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
+                                #validation_split=0.2,
+                                validation_data=(X_valid,Y_valid),
+                                shuffle=True, #this is always set as True, even if not specified
+                                )    
+              
             
-    #   #History plot
-        fig=pylab.figure(figsize=(6,4))
-        plt.semilogy(history.history['loss'])
-        plt.semilogy(history.history['val_loss'])
-        #plt.semilogy(history.history['val_mean_absolute_error'])
-        plt.ylabel('MSE')
-        plt.xlabel('epochs')
-        plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
-        #plt.ylim(0,0.1)
-        plt.tight_layout(pad=0.2)  
-        plt.tick_params(direction='in')      
-        fig.savefig('ANN_history_ETI_loss.pdf')
-    
-    #   #History plot for accuracy
-        fig=pylab.figure(figsize=(6,4))
-        plt.semilogy(history.history['coeff_determination'])
-        plt.semilogy(history.history['val_coeff_determination'])
-        plt.ylabel('R$^2$')
-        plt.xlabel('epochs')
-        plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
-        #plt.ylim(0,0.1)
-        plt.tight_layout(pad=0.2)  
-        plt.tick_params(direction='in')      
-        fig.savefig('ANN_history_ETI_acc.pdf')
-            
-        # Save the model
-        model.save('ANN_model_ETI.h5')
-    
-    elif mode == 'run':
-    
-        # Load the model
-        model = load_model('ANN_model_ETI.h5')
-    
-    # Run the model
-    predictions = model.predict(X)
-    T_dis_ANN = DeNormalize(predictions[:,0].reshape(-1), 342.5, 380.5)
-    m_suc_ANN = DeNormalize(predictions[:,1].reshape(-1), 0.0466, 0.1045)
-    m_inj_ANN = DeNormalize(predictions[:,2].reshape(-1), 0.00496, 0.04302)
-    m_tot_ANN = DeNormalize(predictions[:,3].reshape(-1), 0.05507, 0.14702)
-    W_comp_ANN = DeNormalize(predictions[:,4].reshape(-1), 3.154, 7.806)
-    #f_loss_ANN = DeNormalize(predictions[:,5].reshape(-1), -0.8931, 6.691)
-
-    # evaluate the model
-    scores = model.evaluate(X,Y)
-    print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+                
+        #   #History plot
+            fig=pylab.figure(figsize=(6,4))
+            plt.semilogy(history.history['loss'])
+            plt.semilogy(history.history['val_loss'])
+            #plt.semilogy(history.history['val_mean_absolute_error'])
+            plt.ylabel('MSE')
+            plt.xlabel('epochs')
+            plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
+            #plt.ylim(0,0.1)
+            plt.tight_layout(pad=0.2)  
+            plt.tick_params(direction='in')      
+            fig.savefig('ANN_history_ETI_loss_'+str(i+5)+'.pdf')
         
-    # extract the weight and bias
-    weights = model.layers[0].get_weights()[0]
-    biases = model.layers[0].get_weights()[1]
+        #   #History plot for accuracy
+            fig=pylab.figure(figsize=(6,4))
+            plt.semilogy(history.history['coeff_determination'])
+            plt.semilogy(history.history['val_coeff_determination'])
+            plt.ylabel('R$^2$')
+            plt.xlabel('epochs')
+            plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
+            #plt.ylim(0,0.1)
+            plt.tight_layout(pad=0.2)  
+            plt.tick_params(direction='in')      
+            fig.savefig('ANN_history_ETI_acc.pdf')
+                
+            # Save the model
+            model.save('ANN_model_ETI_'+str(i+5)+'.h5')
+        
+        elif mode == 'run':
+        
+            # Load the model
+            model = load_model('ANN_model_ETI.h5',custom_objects={'coeff_determination': coeff_determination})
+        
+        # Run the model
+        predictions = model.predict(X)
+        T_dis_ANN = DeNormalize(predictions[:,0].reshape(-1), 342.5, 380.5)
+        m_suc_ANN = DeNormalize(predictions[:,1].reshape(-1), 0.0466, 0.1045)
+        m_inj_ANN = DeNormalize(predictions[:,2].reshape(-1), 0.00496, 0.04302)
+        m_tot_ANN = DeNormalize(predictions[:,3].reshape(-1), 0.05507, 0.14702)
+        W_comp_ANN = DeNormalize(predictions[:,4].reshape(-1), 3.154, 7.806)
+        #f_loss_ANN = DeNormalize(predictions[:,5].reshape(-1), -0.8931, 6.691)
     
-    print 'weights = ', weights
-    print 'biases = ', biases
-    # Save the architecture of a model, and not its weights or its training configuration
-    # save as JSON
-    # json_string = model.to_json()
-    
-    # save as YAML
-    # yaml_string = model.to_yaml()
-
-
-#     for i in range(0,(end-start+1)):
-# 
-# 
-#         data_calc = {'T_dis':[T_dis_ANN[i]],'m_suc':[m_suc_ANN[i]],'m_inj':[m_inj_ANN[i]],'m_tot':[m_tot_ANN[i]],'W_comp':[W_comp_ANN[i]]} #,'f_loss':[f_loss_ANN[i]]
-#             
-#         
-#         # Write to Excel
-#         filename = os.path.dirname(__file__)+'/ETI_output.xlsx'
-#         xl = pd.read_excel(filename, sheet_name='ANN_Validation')
-# 
-#         df = pd.DataFrame(data=data_calc)
-# 
-#         df.reindex(columns=xl.columns)
-#         df_final=xl.append(df,ignore_index=True)
-#         df_final.tail()
-#         
-#         book = load_workbook(filename)
-#         writer = pd.ExcelWriter(filename, engine='openpyxl',index=False)
-#         writer.book = book
-#         writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-#         df_final.to_excel(writer,index=False,sheet_name='ANN_Validation')
-#         
-#         # 
-#         writer.save()
-
-    
+        # evaluate the model
+        scores = model.evaluate(X,Y)
+        SC = np.append(SC,scores[1]*100)
+        print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+        
+        # extract the weight and bias
+        weights = model.layers[0].get_weights()[0]
+        biases = model.layers[0].get_weights()[1]
+        
+        print 'weights = ', weights
+        print 'biases = ', biases
+        # Save the architecture of a model, and not its weights or its training configuration
+        # save as JSON
+        # json_string = model.to_json()
+        
+        # save as YAML
+        # yaml_string = model.to_yaml()
+    print('')
+    for i in range(len(SC)):
+        print (SC[i])
+        
+    for i in range(0,(end-start+1)):
+ 
+ 
+        data_calc = {'T_dis':[T_dis_ANN[i]],'m_suc':[m_suc_ANN[i]],'m_inj':[m_inj_ANN[i]],'m_tot':[m_tot_ANN[i]],'W_comp':[W_comp_ANN[i]]} #,'f_loss':[f_loss_ANN[i]]
+             
+         
+        # Write to Excel
+        filename = os.path.dirname(__file__)+'/ETI_output.xlsx'
+        xl = pd.read_excel(filename, sheet_name='ANN_Validation')
+ 
+        df = pd.DataFrame(data=data_calc)
+ 
+        df.reindex(columns=xl.columns)
+        df_final=xl.append(df,ignore_index=True)
+        df_final.tail()
+         
+        book = load_workbook(filename)
+        writer = pd.ExcelWriter(filename, engine='openpyxl',index=False)
+        writer.book = book
+        writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
+        df_final.to_excel(writer,index=False,sheet_name='ANN_Validation')
+         
+        # 
+        writer.save()
+ 
+     
     #Separate testing from calibrating
     sep_val = 0.2
     n_len = len(T_dis_ANN)
     n_split = int(np.floor(sep_val*n_len))
     n_training = int(n_len-n_split-1)
-
-
+ 
+ 
     # Validation T_dis
     fig=pylab.figure(figsize=(4,4))
-
+ 
     plt.plot(T_dis_ANN[:n_training],T_dis[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
     plt.plot(T_dis_ANN[-n_split:],T_dis[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
     plt.text(370,330,'R$^2$ = {:0.01f}%\n'.format(Rsquared(T_dis,T_dis_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(T_dis_ANN,T_dis))+'RMSE = {:0.01f}%\n'.format(rmse(T_dis_ANN,T_dis)),ha='left',va='center',fontsize = 8)
-
+ 
     plt.xlabel('$T_{dis,pred}$ [K]')
     plt.ylabel('$T_{dis,exp}$ [K]')
-
+ 
     Tmin = 320
     Tmax = 400
     x=[Tmin,Tmax]
     y=[Tmin,Tmax]
     y105=[1.05*Tmin,1.05*Tmax]
     y95=[0.95*Tmin,0.95*Tmax]
-    
+     
     plt.plot(x,y,'k-')
     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
     plt.xlim(Tmin,Tmax)
@@ -341,24 +347,24 @@ def Calculate():
     plt.tick_params(direction='in')
     plt.show()
     fig.savefig('ANN_T_dis.pdf')
-    
+     
     # Validation m_suc
     fig=pylab.figure(figsize=(4,4))
-
+ 
     plt.plot(m_suc_ANN[:n_training],m_suc[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
     plt.plot(m_suc_ANN[-n_split:],m_suc[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
     plt.text(0.08,0.02,'R$^2$ = {:0.01f}%\n'.format(Rsquared(m_suc,m_suc_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(m_suc_ANN,m_suc))+'RMSE = {:0.01f}%\n'.format(rmse(m_suc_ANN,m_suc)),ha='left',va='center',fontsize = 8)
-
+ 
     plt.xlabel('$\dot m_{suc,pred}$ [kg/s]')
     plt.ylabel('$\dot m_{suc,exp}$ [kg/s]')
-
+ 
     Tmin = 0.0
     Tmax = 0.12
     x=[Tmin,Tmax]
     y=[Tmin,Tmax]
     y105=[1.05*Tmin,1.05*Tmax]
     y95=[0.95*Tmin,0.95*Tmax]
-    
+     
     plt.plot(x,y,'k-')
     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
     plt.xlim(Tmin,Tmax)
@@ -368,24 +374,24 @@ def Calculate():
     plt.tick_params(direction='in')
     plt.show()
     fig.savefig('ANN_m_suc.pdf')
-    
+     
     # Validation m_inj
     fig=pylab.figure(figsize=(4,4))
-
+ 
     plt.plot(m_inj_ANN[:n_training],m_inj[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
     plt.plot(m_inj_ANN[-n_split:],m_inj[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
     plt.text(0.04,0.01,'R$^2$ = {:0.01f}%\n'.format(Rsquared(m_inj,m_inj_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(m_inj_ANN,m_inj))+'RMSE = {:0.01f}%\n'.format(rmse(m_inj_ANN,m_inj)),ha='left',va='center',fontsize = 8)
-
+ 
     plt.xlabel('$\dot m_{inj,pred}$ [kg/s]')
     plt.ylabel('$\dot m_{inj,exp}$ [kg/s]')
-
+ 
     Tmin = 0
     Tmax = 0.06
     x=[Tmin,Tmax]
     y=[Tmin,Tmax]
     y105=[1.1*Tmin,1.1*Tmax]
     y95=[0.9*Tmin,0.9*Tmax]
-    
+     
     plt.plot(x,y,'k-')
     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
     plt.xlim(Tmin,Tmax)
@@ -395,24 +401,24 @@ def Calculate():
     plt.tick_params(direction='in')
     plt.show()
     fig.savefig('ANN_m_inj.pdf')
-    
+     
     # Validation m_tot
     fig=pylab.figure(figsize=(4,4))
-
+ 
     plt.plot(m_tot_ANN[:n_training],m_tot[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
     plt.plot(m_tot_ANN[-n_split:],m_tot[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
     plt.text(0.125,0.05,'R$^2$ = {:0.01f}%\n'.format(Rsquared(m_tot,m_tot_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(m_tot_ANN,m_tot))+'RMSE = {:0.01f}%\n'.format(rmse(m_tot_ANN,m_tot)),ha='left',va='center',fontsize = 8)
-
+ 
     plt.xlabel('$\dot m_{tot,pred}$ [kg/s]')
     plt.ylabel('$\dot m_{tot,exp}$ [kg/s]')
-
+ 
     Tmin = 0
     Tmax = 0.2
     x=[Tmin,Tmax]
     y=[Tmin,Tmax]
     y105=[1.05*Tmin,1.05*Tmax]
     y95=[0.95*Tmin,0.95*Tmax]
-    
+     
     plt.plot(x,y,'k-')
     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
     plt.xlim(Tmin,Tmax)
@@ -422,24 +428,24 @@ def Calculate():
     plt.tick_params(direction='in')
     plt.show()
     fig.savefig('ANN_m_tot.pdf')
-    
+     
     # Validation W_comp
     fig=pylab.figure(figsize=(4,4))
-
+ 
     plt.plot(W_comp_ANN[:n_training],W_comp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
     plt.plot(W_comp_ANN[-n_split:],W_comp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
     plt.text(6,3,'R$^2$ = {:0.01f}%\n'.format(Rsquared(W_comp,W_comp_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(W_comp_ANN,W_comp))+'RMSE = {:0.01f}%\n'.format(rmse(W_comp_ANN,W_comp)),ha='left',va='center',fontsize = 8)
-
+ 
     plt.xlabel('$\dot W_{comp,pred}$ [kW]')
     plt.ylabel('$\dot W_{comp,exp}$ [kW]')
-
+ 
     Tmin = 2
     Tmax = 8
     x=[Tmin,Tmax]
     y=[Tmin,Tmax]
     y105=[1.05*Tmin,1.05*Tmax]
     y95=[0.95*Tmin,0.95*Tmax]
-    
+     
     plt.plot(x,y,'k-')
     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
     plt.xlim(Tmin,Tmax)
@@ -449,7 +455,7 @@ def Calculate():
     plt.tick_params(direction='in')
     plt.show()
     fig.savefig('ANN_W_comp.pdf')
-    
+     
 #     # Validation f_loss
 #     fig=pylab.figure(figsize=(4,4))
 # 
@@ -476,7 +482,7 @@ def Calculate():
 #     plt.tick_params(direction='in')
 #     plt.show()
 #     fig.savefig('ANN_f_loss.pdf')
-    
+     
     print 'T_dis:',REmean(T_dis,T_dis_ANN),Rsquared(T_dis,T_dis_ANN)*100
     print 'm_suc:',REmean(m_suc,m_suc_ANN),Rsquared(m_suc,m_suc_ANN)*100
     print 'm_inj:',REmean(m_inj,m_inj_ANN),Rsquared(m_inj,m_inj_ANN)*100

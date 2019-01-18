@@ -221,7 +221,7 @@ def Calculate():
     elif mode == 'run':
     
         # Load the model
-        model = load_model('ANN_model_Tmin.h5')
+        model = load_model('ANN_model_Tmin.h5',custom_objects={'coeff_determination': coeff_determination})
     
     # Run the model
     Tmin_ANN = model.predict(X)
