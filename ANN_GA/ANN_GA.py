@@ -305,8 +305,8 @@ def Calculate():
     plt.plot(Q_ANN[-n_split:],Q_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
     plt.text(25,10,'R$^2$ = {:0.01f}%\n'.format(Rsquared(Q_exp,Q_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(Q_ANN,Q_exp))+'RMSE = {:0.01f}%\n'.format(rmse(Q_ANN,Q_exp)),ha='left',va='center',fontsize = 8)
 
-    plt.xlabel('$Q_{pred}$ [kW]')
-    plt.ylabel('$Q_{exp}$ [kW]')
+    plt.xlabel('$\dot Q_{pred}$ [kW]')
+    plt.ylabel('$\dot Q_{exp}$ [kW]')
 
     Tmin = 0
     Tmax = 40

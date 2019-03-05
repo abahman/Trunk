@@ -150,11 +150,11 @@ def Calculate():
     T_wb_out_norm = Normalize(T_wb_out, 0,23.9)
     T_sub_norm = Normalize(T_sub, 0.29,16.95)
     T_sup_norm = Normalize(T_sup, 3.324,31.039)
-    #T_cond_norm = Normalize(T_cond, 44.56,65.98)
-    #T_evap_norm = Normalize(T_evap, -5.58,13.25)
+    T_cond_norm = Normalize(T_cond, 44.56,65.98)
+    T_evap_norm = Normalize(T_evap, -5.58,13.25)
     Q_exp_norm = Normalize(Q_exp, 4.66443073,36.58203557)
-    #W_tot_exp_norm = Normalize(W_tot_exp, 2.07,16.31)
-    COP_exp_norm = Normalize(COP_exp, 1.519597253,3.12397863)
+    W_tot_exp_norm = Normalize(W_tot_exp, 2.07,16.31)
+    #COP_exp_norm = Normalize(COP_exp, 1.519597253,3.12397863)
     
     #convert to numpy array
     T_db_in_norm = np.array(T_db_in_norm)
@@ -163,11 +163,11 @@ def Calculate():
     T_wb_out_norm = np.array(T_wb_out_norm)
     T_sub_norm = np.array(T_sub_norm)
     T_sup_norm = np.array(T_sup_norm)
-    #T_cond_norm = np.array(T_cond_norm)
-    #T_evap_norm = np.array(T_evap_norm)
+    T_cond_norm = np.array(T_cond_norm)
+    T_evap_norm = np.array(T_evap_norm)
     Q_exp_norm = np.array(Q_exp_norm)
-    #W_tot_exp_norm = np.array(W_tot_exp_norm)
-    COP_exp_norm = np.array(COP_exp_norm)
+    W_tot_exp_norm = np.array(W_tot_exp_norm)
+    #COP_exp_norm = np.array(COP_exp_norm)
     
     # split into input (X) and output (Y) variables
     X = np.column_stack((T_db_in_norm, T_wb_in_norm))
@@ -176,9 +176,10 @@ def Calculate():
     X = np.column_stack((X, T_sub_norm))
     X = np.column_stack((X, T_sup_norm))
     #X = np.column_stack((T_sub_norm, T_sup_norm))
-    #X = np.column_stack((X, T_cond_norm))
-    #X = np.column_stack((X, T_evap_norm))
-    Y = np.column_stack((Q_exp_norm, COP_exp_norm))
+    X = np.column_stack((X, T_cond_norm))
+    X = np.column_stack((X, T_evap_norm))
+    #Y = np.column_stack((Q_exp_norm, COP_exp_norm))
+    Y = np.column_stack((Q_exp_norm, W_tot_exp_norm))
     
     from sklearn.model_selection import train_test_split
     # shuffle the data before splitting for validation
@@ -191,12 +192,15 @@ def Calculate():
         if mode == 'training':
             # create model
             model = Sequential()
-            model.add(Dense(i+7, input_dim=6, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero' #4 is perfect
+            model.add(Dense(i+8, input_dim=8, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero' #4 is perfect
             #model.add(GaussianNoise(0.1))
             #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
-            model.add(Dense(7, activation='tanh'))
+            model.add(Dense(8, activation='tanh'))
             #model.add(GaussianNoise(0.1))
-            #model.add(Dense(10, activation='tanh'))
+            model.add(Dense(8, activation='tanh'))
+            model.add(Dense(8, activation='tanh'))
+            model.add(Dense(8, activation='tanh'))
+            model.add(Dense(8, activation='tanh'))
             model.add(Dense(2, activation='linear'))
               
             plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
@@ -251,7 +255,8 @@ def Calculate():
         # Run the model
         predictions = model.predict(X)
         Q_ANN = DeNormalize(predictions[:,0].reshape(-1), 4.66443073,36.58203557)
-        COP_ANN = DeNormalize(predictions[:,1].reshape(-1), 1.519597253,3.12397863)
+        #COP_ANN = DeNormalize(predictions[:,1].reshape(-1), 1.519597253,3.12397863)
+        W_tot_ANN = DeNormalize(predictions[:,1].reshape(-1), 2.07,16.31)
         
         # evaluate the model (for the last batch)
         scores = model.evaluate(X,Y)
@@ -279,30 +284,30 @@ def Calculate():
     for i in range(len(SC)):
         print (SC[i])
         
-    for i in range(0,(end-start+1)):
- 
- 
-        data_calc = {'Q_ANN':[Q_ANN[i]],'COP_ANN':[COP_ANN[i]]} 
-             
-         
-        # Write to Excel
-        filename = os.path.dirname(__file__)+'/GA_output.xlsx'
-        xl = pd.read_excel(filename, sheet_name='ANN_Validation')
- 
-        df = pd.DataFrame(data=data_calc)
- 
-        df.reindex(columns=xl.columns)
-        df_final=xl.append(df,ignore_index=True)
-        df_final.tail()
-         
-        book = load_workbook(filename)
-        writer = pd.ExcelWriter(filename, engine='openpyxl',index=False)
-        writer.book = book
-        writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
-        df_final.to_excel(writer,index=False,sheet_name='ANN_Validation')
-         
-        # 
-        writer.save()
+#     for i in range(0,(end-start+1)):
+#  
+#  
+#         data_calc = {'Q_ANN':[Q_ANN[i]],'COP_ANN':[COP_ANN[i]]} 
+#              
+#          
+#         # Write to Excel
+#         filename = os.path.dirname(__file__)+'/GA_output.xlsx'
+#         xl = pd.read_excel(filename, sheet_name='ANN_Validation')
+#  
+#         df = pd.DataFrame(data=data_calc)
+#  
+#         df.reindex(columns=xl.columns)
+#         df_final=xl.append(df,ignore_index=True)
+#         df_final.tail()
+#          
+#         book = load_workbook(filename)
+#         writer = pd.ExcelWriter(filename, engine='openpyxl',index=False)
+#         writer.book = book
+#         writer.sheets = dict((ws.title, ws) for ws in book.worksheets)
+#         df_final.to_excel(writer,index=False,sheet_name='ANN_Validation')
+#          
+#         # 
+#         writer.save()
 
     
     #Separate testing from calibrating
@@ -319,8 +324,8 @@ def Calculate():
     plt.plot(Q_ANN[-n_split:],Q_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
     plt.text(25,10,'R$^2$ = {:0.01f}%\n'.format(Rsquared(Q_exp,Q_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(Q_ANN,Q_exp))+'RMSE = {:0.01f}%\n'.format(rmse(Q_ANN,Q_exp)),ha='left',va='center',fontsize = 8)
 
-    plt.xlabel('$Q_{pred}$ [kW]')
-    plt.ylabel('$Q_{exp}$ [kW]')
+    plt.xlabel('$\dot Q_{pred}$ [kW]')
+    plt.ylabel('$\dot Q_{exp}$ [kW]')
 
     Tmin = 0
     Tmax = 40
@@ -339,18 +344,45 @@ def Calculate():
     plt.show()
     fig.savefig('ANN_Q.pdf')
     
-    # Validation COP
+#     # Validation COP
+#     fig=pylab.figure(figsize=(4,4))
+# 
+#     plt.plot(COP_ANN[:n_training],COP_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
+#     plt.plot(COP_ANN[-n_split:],COP_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
+#     plt.text(3,1.5,'R$^2$ = {:0.01f}%\n'.format(Rsquared(COP_exp,COP_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(COP_ANN,COP_exp))+'RMSE = {:0.01f}%\n'.format(rmse(COP_ANN,COP_exp)),ha='left',va='center',fontsize = 8)
+# 
+#     plt.xlabel('COP [-]')
+#     plt.ylabel('COP [-]')
+# 
+#     Tmin = 1
+#     Tmax = 4
+#     x=[Tmin,Tmax]
+#     y=[Tmin,Tmax]
+#     y105=[1.1*Tmin,1.1*Tmax]
+#     y95=[0.9*Tmin,0.9*Tmax]
+#     
+#     plt.plot(x,y,'k-')
+#     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
+#     plt.xlim(Tmin,Tmax)
+#     plt.ylim(Tmin,Tmax)
+#     plt.legend(loc=2,fontsize=9)
+#     plt.tight_layout(pad=0.2)        
+#     plt.tick_params(direction='in')
+#     plt.show()
+#     fig.savefig('ANN_COP.pdf')
+    
+    # Validation W
     fig=pylab.figure(figsize=(4,4))
 
-    plt.plot(COP_ANN[:n_training],COP_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
-    plt.plot(COP_ANN[-n_split:],COP_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
-    plt.text(3,1.5,'R$^2$ = {:0.01f}%\n'.format(Rsquared(COP_exp,COP_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(COP_ANN,COP_exp))+'RMSE = {:0.01f}%\n'.format(rmse(COP_ANN,COP_exp)),ha='left',va='center',fontsize = 8)
+    plt.plot(W_tot_ANN[:n_training],W_tot_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
+    plt.plot(W_tot_ANN[-n_split:],W_tot_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
+    plt.text(12,4,'R$^2$ = {:0.01f}%\n'.format(Rsquared(W_tot_exp,W_tot_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(W_tot_ANN,W_tot_exp))+'RMSE = {:0.01f}%\n'.format(rmse(W_tot_ANN,W_tot_exp)),ha='left',va='center',fontsize = 8)
 
-    plt.xlabel('COP [-]')
-    plt.ylabel('COP [-]')
+    plt.xlabel('$\dot W_{pred}$ [kW]')
+    plt.ylabel('$\dot W_{exp}$ [kW]')
 
     Tmin = 1
-    Tmax = 4
+    Tmax = 18
     x=[Tmin,Tmax]
     y=[Tmin,Tmax]
     y105=[1.1*Tmin,1.1*Tmax]
@@ -364,10 +396,11 @@ def Calculate():
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     plt.show()
-    fig.savefig('ANN_COP.pdf')
+    fig.savefig('ANN_W_tot.pdf')
     
     print 'Q:',REmean(Q_exp,Q_ANN),Rsquared(Q_exp,Q_ANN)*100 
-    print 'COP:',REmean(COP_exp,COP_ANN),Rsquared(COP_exp,COP_ANN)*100 
+#     print 'COP:',REmean(COP_exp,COP_ANN),Rsquared(COP_exp,COP_ANN)*100 
+    print 'W_tot:',REmean(W_tot_exp,W_tot_ANN),Rsquared(W_tot_exp,W_tot_ANN)*100 
 
 
     #Validation with Shikha's data
