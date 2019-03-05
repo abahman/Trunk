@@ -144,135 +144,141 @@ def Calculate():
     
     
     #Normalize all parameters
-    #T_db_in_norm = Normalize(T_db_in, 26.7,26.7)
-    #T_wb_in_norm = Normalize(T_wb_in, 19.4,19.4)
-    #T_db_out_norm = Normalize(T_db_out, 35,48)
-    #T_wb_out_norm = Normalize(T_wb_out, 23.9,23.9)
+    T_db_in_norm = Normalize(T_db_in, 0,26.7)
+    T_wb_in_norm = Normalize(T_wb_in, 0,19.4)
+    T_db_out_norm = Normalize(T_db_out, 35,48)
+    T_wb_out_norm = Normalize(T_wb_out, 0,23.9)
     T_sub_norm = Normalize(T_sub, 0.29,16.95)
     T_sup_norm = Normalize(T_sup, 3.324,31.039)
-    T_cond_norm = Normalize(T_cond, 44.56,65.98)
-    T_evap_norm = Normalize(T_evap, -5.58,13.25)
+    #T_cond_norm = Normalize(T_cond, 44.56,65.98)
+    #T_evap_norm = Normalize(T_evap, -5.58,13.25)
     Q_exp_norm = Normalize(Q_exp, 4.66443073,36.58203557)
     #W_tot_exp_norm = Normalize(W_tot_exp, 2.07,16.31)
     COP_exp_norm = Normalize(COP_exp, 1.519597253,3.12397863)
     
     #convert to numpy array
-    #T_db_in_norm = np.array(T_db_in_norm)
-    #T_wb_in_norm = np.array(T_wb_in_norm)
-    #T_db_out_norm = np.array(T_db_out_norm)
-    #T_wb_out_norm = np.array(T_wb_out_norm)
+    T_db_in_norm = np.array(T_db_in_norm)
+    T_wb_in_norm = np.array(T_wb_in_norm)
+    T_db_out_norm = np.array(T_db_out_norm)
+    T_wb_out_norm = np.array(T_wb_out_norm)
     T_sub_norm = np.array(T_sub_norm)
     T_sup_norm = np.array(T_sup_norm)
-    T_cond_norm = np.array(T_cond_norm)
-    T_evap_norm = np.array(T_evap_norm)
+    #T_cond_norm = np.array(T_cond_norm)
+    #T_evap_norm = np.array(T_evap_norm)
     Q_exp_norm = np.array(Q_exp_norm)
     #W_tot_exp_norm = np.array(W_tot_exp_norm)
     COP_exp_norm = np.array(COP_exp_norm)
     
     # split into input (X) and output (Y) variables
-    #X = np.column_stack((T_db_in_norm, T_wb_in_norm))
-    #X = np.column_stack((X, T_db_out_norm))
-    #X = np.column_stack((X, T_wb_out_norm))
-    #X = np.column_stack((X, T_sub_norm))
-    #X = np.column_stack((X, T_sup_norm))
-    X = np.column_stack((T_sub_norm, T_sup_norm))
-    X = np.column_stack((X, T_cond_norm))
-    X = np.column_stack((X, T_evap_norm))
+    X = np.column_stack((T_db_in_norm, T_wb_in_norm))
+    X = np.column_stack((X, T_db_out_norm))
+    X = np.column_stack((X, T_wb_out_norm))
+    X = np.column_stack((X, T_sub_norm))
+    X = np.column_stack((X, T_sup_norm))
+    #X = np.column_stack((T_sub_norm, T_sup_norm))
+    #X = np.column_stack((X, T_cond_norm))
+    #X = np.column_stack((X, T_evap_norm))
     Y = np.column_stack((Q_exp_norm, COP_exp_norm))
     
     from sklearn.model_selection import train_test_split
     # shuffle the data before splitting for validation
     #X_remain, X_valid, Y_remain, Y_valid = train_test_split(X, Y, test_size=0.15, shuffle= True)
     X_train, X_test, Y_train, Y_test = train_test_split(X, Y, test_size=0.2, shuffle= True)
-
-    if mode == 'training':
-        # create model
-        model = Sequential()
-        model.add(Dense(10, input_dim=4, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero' #4 is perfect
-        #model.add(GaussianNoise(0.1))
-        #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
-        model.add(Dense(10, activation='tanh'))
-        #model.add(GaussianNoise(0.1))
-        #model.add(Dense(10, activation='tanh'))
-        model.add(Dense(2, activation='linear'))
-          
-        plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
-  
-        # Compile model
-        model.compile(optimizer='adamax',loss='mse',metrics=['mae',coeff_determination])
-          
-        # fit the model
-        history = model.fit(X_train,
-                            Y_train,
-                            epochs=2000 , #Cut the epochs in half when using sequential 
-                            batch_size=15, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
-                            #validation_split=0.2,
-                            validation_data=(X_test,Y_test),
-                            shuffle=True, #this is always set as True, even if not specified
-                            )    
-          
-        
+    
+    SC = np.array([]) #empty score array
+    
+    for i in range(1):
+        if mode == 'training':
+            # create model
+            model = Sequential()
+            model.add(Dense(i+7, input_dim=6, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero' #4 is perfect
+            #model.add(GaussianNoise(0.1))
+            #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
+            model.add(Dense(7, activation='tanh'))
+            #model.add(GaussianNoise(0.1))
+            #model.add(Dense(10, activation='tanh'))
+            model.add(Dense(2, activation='linear'))
+              
+            plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
+      
+            # Compile model
+            model.compile(optimizer='adamax',loss='mse',metrics=['mae',coeff_determination])
+              
+            # fit the model
+            history = model.fit(X_train,
+                                Y_train,
+                                epochs=4000 , #Cut the epochs in half when using sequential 
+                                batch_size=20, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
+                                #validation_split=0.2,
+                                validation_data=(X_test,Y_test),
+                                shuffle=True, #this is always set as True, even if not specified
+                                )    
+              
             
-    #   #History plot for loss
-        fig=pylab.figure(figsize=(6,4))
-        plt.semilogy(history.history['loss'])
-        plt.semilogy(history.history['val_loss'])
-        plt.ylabel('MSE')
-        plt.xlabel('epochs')
-        plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
-        #plt.ylim(0,0.1)
-        plt.tight_layout(pad=0.2)  
-        plt.tick_params(direction='in')      
-        fig.savefig('ANN_history_GA_loss.pdf')
-
-    #   #History plot for accuracy
-        fig=pylab.figure(figsize=(6,4))
-        plt.semilogy(history.history['coeff_determination'])
-        plt.semilogy(history.history['val_coeff_determination'])
-        plt.ylabel('R$^2$')
-        plt.xlabel('epochs')
-        plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
-        #plt.ylim(0,0.1)
-        plt.tight_layout(pad=0.2)  
-        plt.tick_params(direction='in')      
-        fig.savefig('ANN_history_GA_acc.pdf')
                 
-        # Save the model
-        model.save('ANN_model_GA.h5')
+        #   #History plot for loss
+            fig=pylab.figure(figsize=(6,4))
+            plt.semilogy(history.history['loss'])
+            plt.semilogy(history.history['val_loss'])
+            plt.ylabel('MSE')
+            plt.xlabel('epochs')
+            plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
+            #plt.ylim(0,0.1)
+            plt.tight_layout(pad=0.2)  
+            plt.tick_params(direction='in')      
+            fig.savefig('ANN_history_GA_loss.pdf')
     
-    elif mode == 'run':
-    
-        # Load the model
-        model = load_model('ANN_model_GA.h5',custom_objects={'coeff_determination': coeff_determination})
-    
-    # Run the model
-    predictions = model.predict(X)
-    #print (predictions)
-    Q_ANN, COP_ANN = predictions.T
-    Q_ANN = DeNormalize(Q_ANN.reshape(-1), 4.66443073,36.58203557)
-    COP_ANN = DeNormalize(COP_ANN.reshape(-1), 1.519597253,3.12397863)
-    
-    # evaluate the model (for the last batch)
-    scores = model.evaluate(X,Y)
+        #   #History plot for accuracy
+            fig=pylab.figure(figsize=(6,4))
+            plt.semilogy(history.history['coeff_determination'])
+            plt.semilogy(history.history['val_coeff_determination'])
+            plt.ylabel('R$^2$')
+            plt.xlabel('epochs')
+            plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
+            #plt.ylim(0,0.1)
+            plt.tight_layout(pad=0.2)  
+            plt.tick_params(direction='in')      
+            fig.savefig('ANN_history_GA_acc.pdf')
+                    
+            # Save the model
+            model.save('ANN_model_GA.h5')
+        
+        elif mode == 'run':
+        
+            # Load the model
+            model = load_model('ANN_model_GA.h5',custom_objects={'coeff_determination': coeff_determination})
+        
+        # Run the model
+        predictions = model.predict(X)
+        Q_ANN = DeNormalize(predictions[:,0].reshape(-1), 4.66443073,36.58203557)
+        COP_ANN = DeNormalize(predictions[:,1].reshape(-1), 1.519597253,3.12397863)
+        
+        # evaluate the model (for the last batch)
+        scores = model.evaluate(X,Y)
+        SC = np.append(SC,scores[1]*100)
+        print('')
+        print("%s: %.2f%%" % (model.metrics_names[0], scores[0]*100))
+        print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
+        print("%s: %.2f%%" % (model.metrics_names[2], scores[2]*100))
+           
+        # extract the weight and bias
+        weights = model.layers[0].get_weights()[0]
+        biases = model.layers[0].get_weights()[1]
+        print('')
+        print 'weights = ', weights
+        print 'biases = ', biases
+        # Save the architecture of a model, and not its weights or its training configuration
+        # save as JSON
+        # json_string = model.to_json()
+        
+        # save as YAML
+        # yaml_string = model.to_yaml()
+        
+        # to SAVE into excel file
     print('')
-    print("%s: %.2f%%" % (model.metrics_names[0], scores[0]*100))
-    print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
-    print("%s: %.2f%%" % (model.metrics_names[2], scores[2]*100))
-       
-    # extract the weight and bias
-    weights = model.layers[0].get_weights()[0]
-    biases = model.layers[0].get_weights()[1]
-    print('')
-    print 'weights = ', weights
-    print 'biases = ', biases
-    # Save the architecture of a model, and not its weights or its training configuration
-    # save as JSON
-    # json_string = model.to_json()
-    
-    # save as YAML
-    # yaml_string = model.to_yaml()
-    
-    # to SAVE into excel file
+    for i in range(len(SC)):
+        print (SC[i])
+        
     for i in range(0,(end-start+1)):
  
  
