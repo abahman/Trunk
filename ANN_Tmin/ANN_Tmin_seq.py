@@ -45,6 +45,14 @@ def Import(start,end,filename):
     Bf = float(data[i][5])
     Bw = float(data[i][6])
     BfBw = float(data[i][7])
+    Tmin_Mori=float(data[i][8])
+    Tmin_Adler=float(data[i][9])
+    Tmin_Dhir=float(data[i][10])
+    Tmin_Lauer=float(data[i][11])
+    Tmin_Freud=float(data[i][12])
+    Tmin_shikha_7=float(data[i][13])
+    Tmin_shikha_8=float(data[i][14])
+    Tmin_shikha_9=float(data[i][15])
     i=i+1
     
     while i < (end - start+1):
@@ -56,8 +64,16 @@ def Import(start,end,filename):
         Bf = np.append(Bf,float(data[i][5]))
         Bw = np.append(Bw,float(data[i][6]))
         BfBw = np.append(BfBw,float(data[i][7]))
+        Tmin_Mori= np.append(Tmin_Mori,float(data[i][8]))
+        Tmin_Adler=np.append(Tmin_Adler,float(data[i][9]))
+        Tmin_Dhir=np.append(Tmin_Dhir,float(data[i][10]))
+        Tmin_Lauer=np.append(Tmin_Lauer,float(data[i][11]))
+        Tmin_Freud=np.append(Tmin_Freud,float(data[i][12]))
+        Tmin_shikha_7=np.append(Tmin_shikha_7,float(data[i][13]))
+        Tmin_shikha_8=np.append(Tmin_shikha_8,float(data[i][14]))
+        Tmin_shikha_9=np.append(Tmin_shikha_9,float(data[i][15]))
         i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw]
+        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9]
     
     return Data
     
@@ -120,7 +136,7 @@ def Calculate():
     filename = 'Data_Collection.csv'
     
     #Define inputs
-    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw] = Import(start,end,filename)
+    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9] = Import(start,end,filename)
     
     mode = 'run'
     
@@ -240,11 +256,17 @@ def Calculate():
         print("%s: %.2f%%" % (model.metrics_names[2], scores[2]*100))
            
         # extract the weight and bias
-        weights = model.layers[0].get_weights()[0]
-        biases = model.layers[0].get_weights()[1]
+        weights = model.layers[3].get_weights()[0]
+        biases = model.layers[3].get_weights()[1]
+        
+        #to chnage the percision of printed numbers
+        np.set_printoptions(precision=4, suppress=True,
+                       threshold=10000,
+                       linewidth=150)
         print('')
-        print 'weights = ', weights
+        print 'weights = ', weights.transpose()
         print 'biases = ', biases
+
         # Save the architecture of a model, and not its weights or its training configuration
         # save as JSON
         # json_string = model.to_json()
@@ -316,7 +338,16 @@ def Calculate():
 #     plt.show()
 #     fig.savefig('ANN_Tmin.pdf')
     
-    print 'Tmin:',mse(Tmin_ANN,Tmin_exp),REmean(Tmin_exp,Tmin_ANN)*100,Rsquared(Tmin_exp,Tmin_ANN)*100 #print 'Wdot:',REmean(W_meas,W),Rsquared(W_meas,W)*100
+    print 'Method:','MSE','MAE','MAPE','Rsquared'
+    print 'Tmin_ANN:',mse(Tmin_ANN,Tmin_exp),REmean(Tmin_exp,Tmin_ANN),mape(Tmin_ANN, Tmin_exp),Rsquared(Tmin_exp,Tmin_ANN)*100
+    print 'Tmin_Mori:',mse(Tmin_Mori,Tmin_exp),REmean(Tmin_exp,Tmin_Mori),mape(Tmin_Mori, Tmin_exp),Rsquared(Tmin_exp,Tmin_Mori)*100
+    print 'Tmin_Adler:',mse(Tmin_Adler,Tmin_exp),REmean(Tmin_exp,Tmin_Adler),mape(Tmin_Adler, Tmin_exp),Rsquared(Tmin_exp,Tmin_Adler)*100
+    print 'Tmin_Dhir:',mse(Tmin_Dhir,Tmin_exp),REmean(Tmin_exp,Tmin_Dhir),mape(Tmin_Dhir, Tmin_exp),Rsquared(Tmin_exp,Tmin_Dhir)*100
+    print 'Tmin_Lauer:',mse(Tmin_Lauer,Tmin_exp),REmean(Tmin_exp,Tmin_Lauer),mape(Tmin_Lauer, Tmin_exp),Rsquared(Tmin_exp,Tmin_Lauer)*100
+    print 'Tmin_Freud:',mse(Tmin_Freud,Tmin_exp),REmean(Tmin_exp,Tmin_Freud),mape(Tmin_Freud, Tmin_exp),Rsquared(Tmin_exp,Tmin_Freud)*100
+    print 'Tmin_shikha_7:',mse(Tmin_shikha_7,Tmin_exp),REmean(Tmin_exp,Tmin_shikha_7),mape(Tmin_shikha_7, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_7)*100
+    print 'Tmin_shikha_8:',mse(Tmin_shikha_8,Tmin_exp),REmean(Tmin_exp,Tmin_shikha_8),mape(Tmin_shikha_8, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_8)*100
+    print 'Tmin_shikha_9:',mse(Tmin_shikha_9,Tmin_exp),REmean(Tmin_exp,Tmin_shikha_9),mape(Tmin_shikha_9, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_9)*100
 #     for i in range(len(Tmin_ANN)): # print the measure absolute error (%) for all data
 #         print (REmean(Tmin_exp[i],Tmin_ANN[i])*100)
     error = np.array([0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100])
