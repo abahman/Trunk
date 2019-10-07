@@ -53,6 +53,11 @@ def Import(start,end,filename):
     Tmin_shikha_7=float(data[i][13])
     Tmin_shikha_8=float(data[i][14])
     Tmin_shikha_9=float(data[i][15])
+    Tmin_Brenson=float(data[i][16])
+    Tmin_Henry=float(data[i][17])
+    Tmin_Perenson=float(data[i][18])
+    Tmin_Shikha=float(data[i][19])
+    Tmin_Sakurai=float(data[i][20])
     i=i+1
     
     while i < (end - start+1):
@@ -72,8 +77,13 @@ def Import(start,end,filename):
         Tmin_shikha_7=np.append(Tmin_shikha_7,float(data[i][13]))
         Tmin_shikha_8=np.append(Tmin_shikha_8,float(data[i][14]))
         Tmin_shikha_9=np.append(Tmin_shikha_9,float(data[i][15]))
+        Tmin_Brenson=np.append(Tmin_Brenson,float(data[i][16]))
+        Tmin_Henry=np.append(Tmin_Henry,float(data[i][17]))
+        Tmin_Perenson=np.append(Tmin_Perenson,float(data[i][18]))
+        Tmin_Shikha=np.append(Tmin_Shikha,float(data[i][19]))
+        Tmin_Sakurai=np.append(Tmin_Sakurai,float(data[i][20]))
         i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9]
+        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9,Tmin_Brenson,Tmin_Henry,Tmin_Perenson,Tmin_Shikha,Tmin_Sakurai]
     
     return Data
     
@@ -90,7 +100,7 @@ def mape(y_pred, y_true):  #maps==mean_absolute_percentage_error
     Mean Absolute Percentage Error
     '''
     MAPE = np.mean(np.abs((y_true - y_pred) / y_true)) * 100
-    return MAPE
+    return round(MAPE,4)
 
 def mse(y_pred, y_true):
     '''
@@ -98,7 +108,7 @@ def mse(y_pred, y_true):
     '''
     from sklearn.metrics import mean_squared_error
     MSE = mean_squared_error(y_pred, y_true)
-    return MSE
+    return round(MSE,4)
 
 def Normalize(y_data,y_data_min,y_data_max):
     
@@ -113,6 +123,7 @@ def DeNormalize(y_norm,y_data_min,y_data_max):
     return y
 
 def REmean(y_true,y_pred):
+    "same as Mean absolute error"
     
     return np.mean(np.fabs(y_true - y_pred)/y_true)    
 
@@ -120,7 +131,7 @@ def Rsquared(y_true,y_pred):
     
     slope, intercept, r_value, p_value, std_err = stats.linregress(y_true,y_pred)    
     
-    return r_value**2
+    return round(r_value**2,4)
 
 def coeff_determination(y_true, y_pred):
     
@@ -136,7 +147,7 @@ def Calculate():
     filename = 'Data_Collection.csv'
     
     #Define inputs
-    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9] = Import(start,end,filename)
+    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9,Tmin_Brenson,Tmin_Henry,Tmin_Perenson,Tmin_Shikha,Tmin_Sakurai] = Import(start,end,filename)
     
     mode = 'run'
     
@@ -256,8 +267,8 @@ def Calculate():
         print("%s: %.2f%%" % (model.metrics_names[2], scores[2]*100))
            
         # extract the weight and bias
-        weights = model.layers[3].get_weights()[0]
-        biases = model.layers[3].get_weights()[1]
+        weights = model.layers[0].get_weights()[0]
+        biases = model.layers[0].get_weights()[1]
         
         #to chnage the percision of printed numbers
         np.set_printoptions(precision=4, suppress=True,
@@ -338,16 +349,23 @@ def Calculate():
 #     plt.show()
 #     fig.savefig('ANN_Tmin.pdf')
     
-    print 'Method:','MSE','MAE','MAPE','Rsquared'
-    print 'Tmin_ANN:',mse(Tmin_ANN,Tmin_exp),REmean(Tmin_exp,Tmin_ANN),mape(Tmin_ANN, Tmin_exp),Rsquared(Tmin_exp,Tmin_ANN)*100
-    print 'Tmin_Mori:',mse(Tmin_Mori,Tmin_exp),REmean(Tmin_exp,Tmin_Mori),mape(Tmin_Mori, Tmin_exp),Rsquared(Tmin_exp,Tmin_Mori)*100
-    print 'Tmin_Adler:',mse(Tmin_Adler,Tmin_exp),REmean(Tmin_exp,Tmin_Adler),mape(Tmin_Adler, Tmin_exp),Rsquared(Tmin_exp,Tmin_Adler)*100
-    print 'Tmin_Dhir:',mse(Tmin_Dhir,Tmin_exp),REmean(Tmin_exp,Tmin_Dhir),mape(Tmin_Dhir, Tmin_exp),Rsquared(Tmin_exp,Tmin_Dhir)*100
-    print 'Tmin_Lauer:',mse(Tmin_Lauer,Tmin_exp),REmean(Tmin_exp,Tmin_Lauer),mape(Tmin_Lauer, Tmin_exp),Rsquared(Tmin_exp,Tmin_Lauer)*100
-    print 'Tmin_Freud:',mse(Tmin_Freud,Tmin_exp),REmean(Tmin_exp,Tmin_Freud),mape(Tmin_Freud, Tmin_exp),Rsquared(Tmin_exp,Tmin_Freud)*100
-    print 'Tmin_shikha_7:',mse(Tmin_shikha_7,Tmin_exp),REmean(Tmin_exp,Tmin_shikha_7),mape(Tmin_shikha_7, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_7)*100
-    print 'Tmin_shikha_8:',mse(Tmin_shikha_8,Tmin_exp),REmean(Tmin_exp,Tmin_shikha_8),mape(Tmin_shikha_8, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_8)*100
-    print 'Tmin_shikha_9:',mse(Tmin_shikha_9,Tmin_exp),REmean(Tmin_exp,Tmin_shikha_9),mape(Tmin_shikha_9, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_9)*100
+    print 'Method:','MSE','MAPE','Rsquared'
+    print 'Tmin_ANN:',mse(Tmin_ANN,Tmin_exp),mape(Tmin_ANN, Tmin_exp),Rsquared(Tmin_exp,Tmin_ANN)
+    print 'Tmin_Mori:',mse(Tmin_Mori,Tmin_exp),mape(Tmin_Mori, Tmin_exp),Rsquared(Tmin_exp,Tmin_Mori)
+    print 'Tmin_Adler:',mse(Tmin_Adler,Tmin_exp),mape(Tmin_Adler, Tmin_exp),Rsquared(Tmin_exp,Tmin_Adler)
+    print 'Tmin_Dhir:',mse(Tmin_Dhir,Tmin_exp),mape(Tmin_Dhir, Tmin_exp),Rsquared(Tmin_exp,Tmin_Dhir)
+    print 'Tmin_Lauer:',mse(Tmin_Lauer,Tmin_exp),mape(Tmin_Lauer, Tmin_exp),Rsquared(Tmin_exp,Tmin_Lauer)
+    print 'Tmin_Freud:',mse(Tmin_Freud,Tmin_exp),mape(Tmin_Freud, Tmin_exp),Rsquared(Tmin_exp,Tmin_Freud)
+    print 'Tmin_shikha_7:',mse(Tmin_shikha_7,Tmin_exp),mape(Tmin_shikha_7, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_7)
+    print 'Tmin_shikha_8:',mse(Tmin_shikha_8,Tmin_exp),mape(Tmin_shikha_8, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_8)
+    print 'Tmin_shikha_9:',mse(Tmin_shikha_9,Tmin_exp),mape(Tmin_shikha_9, Tmin_exp),Rsquared(Tmin_exp,Tmin_shikha_9)
+    print 'NEW'
+    print 'Tmin_Brenson:',mse(Tmin_Brenson,Tmin_exp),mape(Tmin_Brenson, Tmin_exp),Rsquared(Tmin_exp,Tmin_Brenson)
+    print 'Tmin_Henry:',mse(Tmin_Henry,Tmin_exp),mape(Tmin_Henry, Tmin_exp),Rsquared(Tmin_exp,Tmin_Henry)
+    print 'Tmin_Perenson:',mse(Tmin_Perenson,Tmin_exp),mape(Tmin_Perenson, Tmin_exp),Rsquared(Tmin_exp,Tmin_Perenson)
+    print 'Tmin_Shikha:',mse(Tmin_Shikha,Tmin_exp),mape(Tmin_Shikha, Tmin_exp),Rsquared(Tmin_exp,Tmin_Shikha)
+    print 'Tmin_Sakurai:',mse(Tmin_Sakurai,Tmin_exp),mape(Tmin_Sakurai, Tmin_exp),Rsquared(Tmin_exp,Tmin_Sakurai)
+    
 #     for i in range(len(Tmin_ANN)): # print the measure absolute error (%) for all data
 #         print (REmean(Tmin_exp[i],Tmin_ANN[i])*100)
     error = np.array([0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100])
@@ -666,7 +684,7 @@ def Calculate():
     frame  = leg.get_frame()  
     frame.set_linewidth(0.5)
     plt.tight_layout()
-    plt.show()
+    #plt.show()
     fig.savefig('ANN_Tmin_vary_pressure_BfBw.pdf')
     plt.close() 
     
@@ -704,7 +722,7 @@ def Calculate():
     x = Psat[19:35]
     y1 = Tmin_exp[19:35]
     x2 = np.linspace(0, 3, num=100)
-    y2 = [273.1280517578125, 300.3673095703125, 326.5037536621094, 351.4905700683594, 375.29498291015625, 397.8983154296875, 419.2935791015625, 439.48504638671875, 458.4864501953125, 476.31982421875, 493.0143737792969, 508.6046447753906, 523.1304931640625, 536.6343994140625, 549.1622314453125, 560.7611083984375, 571.4794921875, 581.3660888671875, 590.468994140625, 598.83642578125, 606.514892578125, 613.5503540039062, 619.986083984375, 625.8648681640625, 631.2266235351562, 636.1103515625, 640.552490234375, 644.5872802734375, 648.247802734375, 651.5645751953125, 654.5663452148438, 657.280029296875, 659.7313842773438, 661.943603515625, 663.9381103515625, 665.736328125, 667.356689453125, 668.816650390625, 670.1329956054688, 671.320068359375, 672.3925170898438, 673.36279296875, 674.2427978515625, 675.04345703125, 675.77490234375, 676.446044921875, 677.0655517578125, 677.6412353515625, 678.18017578125, 678.6883544921875, 679.1724853515625, 679.6372680664062, 680.0879516601562, 680.5286865234375, 680.9636840820312, 681.3966064453125, 681.8308715820312, 682.2691040039062, 682.71435546875, 683.168701171875, 683.6341552734375, 684.1131591796875, 684.60693359375, 685.1170043945312, 685.6453857421875, 686.1920166015625, 686.7587890625, 687.3463134765625, 687.955322265625, 688.5862426757812, 689.2401123046875, 689.916748046875, 690.6168823242188, 691.3404541015625, 692.0880126953125, 692.8594970703125, 693.65478515625, 694.4742431640625, 695.317626953125, 696.184814453125, 697.075927734375, 697.9905395507812, 698.9287109375, 699.8900146484375, 700.8740234375, 701.8812255859375, 702.9104614257812, 703.9622802734375, 705.035888671875, 706.1307373046875, 707.2469482421875, 708.3843383789062, 709.5419921875, 710.7198486328125, 711.91748046875, 713.1348876953125, 714.371337890625, 715.62646484375, 716.9000244140625, 718.1917724609375]
+    y2 = [296.452880859375, 322.1654357910156, 346.71063232421875, 370.0582275390625, 392.1911926269531, 413.10504150390625, 432.80633544921875, 451.3104248046875, 468.641845703125, 484.8313903808594, 499.9156799316406, 513.935546875, 526.935546875, 538.9627685546875, 550.0654296875, 560.2928466796875, 569.69482421875, 578.3203125, 586.218017578125, 593.4353637695312, 600.0181884765625, 606.010986328125, 611.45654296875, 616.3955078125, 620.8662109375, 624.9061279296875, 628.54931640625, 631.8291625976562, 634.7762451171875, 637.4193115234375, 639.78564453125, 641.9004516601562, 643.7874755859375, 645.4682006835938, 646.9632568359375, 648.2918701171875, 649.47119140625, 650.5174560546875, 651.44580078125, 652.27001953125, 653.0028076171875, 653.6557006835938, 654.2398681640625, 654.7648315429688, 655.2398681640625, 655.673095703125, 656.0723876953125, 656.444091796875, 656.794921875, 657.1304931640625, 657.4560546875, 657.776123046875, 658.0953369140625, 658.4168701171875, 658.7447509765625, 659.081787109375, 659.430908203125, 659.7942504882812, 660.1744384765625, 660.572998046875, 660.9920654296875, 661.4325561523438, 661.896240234375, 662.384033203125, 662.8971557617188, 663.4359130859375, 664.0013427734375, 664.5938720703125, 665.2139892578125, 665.862060546875, 666.5380859375, 667.2425537109375, 667.9751586914062, 668.7364501953125, 669.5260620117188, 670.34375, 671.189697265625, 672.0635986328125, 672.9650268554688, 673.8938598632812, 674.85009765625, 675.8328247070312, 676.8421630859375, 677.8775024414062, 678.9388427734375, 680.0252685546875, 681.1365966796875, 682.2724609375, 683.4324340820312, 684.6162109375, 685.822998046875, 687.0523681640625, 688.3043212890625, 689.5780029296875, 690.873046875, 692.189208984375, 693.5256958007812, 694.8824462890625, 696.2587890625, 697.654296875]#273.1280517578125, 300.3673095703125, 326.5037536621094, 351.4905700683594, 375.29498291015625, 397.8983154296875, 419.2935791015625, 439.48504638671875, 458.4864501953125, 476.31982421875, 493.0143737792969, 508.6046447753906, 523.1304931640625, 536.6343994140625, 549.1622314453125, 560.7611083984375, 571.4794921875, 581.3660888671875, 590.468994140625, 598.83642578125, 606.514892578125, 613.5503540039062, 619.986083984375, 625.8648681640625, 631.2266235351562, 636.1103515625, 640.552490234375, 644.5872802734375, 648.247802734375, 651.5645751953125, 654.5663452148438, 657.280029296875, 659.7313842773438, 661.943603515625, 663.9381103515625, 665.736328125, 667.356689453125, 668.816650390625, 670.1329956054688, 671.320068359375, 672.3925170898438, 673.36279296875, 674.2427978515625, 675.04345703125, 675.77490234375, 676.446044921875, 677.0655517578125, 677.6412353515625, 678.18017578125, 678.6883544921875, 679.1724853515625, 679.6372680664062, 680.0879516601562, 680.5286865234375, 680.9636840820312, 681.3966064453125, 681.8308715820312, 682.2691040039062, 682.71435546875, 683.168701171875, 683.6341552734375, 684.1131591796875, 684.60693359375, 685.1170043945312, 685.6453857421875, 686.1920166015625, 686.7587890625, 687.3463134765625, 687.955322265625, 688.5862426757812, 689.2401123046875, 689.916748046875, 690.6168823242188, 691.3404541015625, 692.0880126953125, 692.8594970703125, 693.65478515625, 694.4742431640625, 695.317626953125, 696.184814453125, 697.075927734375, 697.9905395507812, 698.9287109375, 699.8900146484375, 700.8740234375, 701.8812255859375, 702.9104614257812, 703.9622802734375, 705.035888671875, 706.1307373046875, 707.2469482421875, 708.3843383789062, 709.5419921875, 710.7198486328125, 711.91748046875, 713.1348876953125, 714.371337890625, 715.62646484375, 716.9000244140625, 718.1917724609375]
     plt.plot(x,y1,'k^',markersize=5,markeredgewidth=0.1,alpha=0.9,label=r'$L/D = 5.15, \beta_f/\beta_w=0.117$ (Zirconium)')
     #plt.errorbar(x,y1,yerr=0.2*y1,fmt='',linestyle="None",color='k')
     plt.plot(x2,y2,'-k',markersize=5,markeredgewidth=0.1,alpha=0.9,label=r'ANN')

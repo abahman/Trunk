@@ -131,8 +131,8 @@ def Calculate():
         Tmin_exp = 0
         Tsub = 0
         Psat = s[i]
-        LD = 24.4
-        BfBw = 0.014
+        LD = 5
+        BfBw = 0.1
         
         #Normalize all parameters
         Tsub_norm = Normalize(Tsub, 0, 39.84150546)
