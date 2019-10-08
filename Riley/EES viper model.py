@@ -205,6 +205,7 @@ class ViperClass():
             AS.update(CP.PT_INPUTS, p_t_1, T_t_1)
             h_t_1 = AS.hmass() #[J/kg]
             s_t_1 = AS.smass() #[J/kg-K]
+            
             AS.update(CP.PSmass_INPUTS, p_t_2, s_t_1)
             h_t2s = AS.hmass() #[J/kg]
             h_t_2 = h_t_1 + self.eta_nozzle*(h_t2s - h_t_1)
@@ -250,7 +251,7 @@ if __name__=='__main__':
         'del_x_sep' : 0.025,  # Percentage vapor/liquid separation [-]
         'W_dot_elec': 59,      # Generator power output   [W]
         'eta_nozzle' : 0.504,
-        'delta_p_Viper': 176,
+        'delta_p_Viper': 176000,
         'D_tube': in2m(0.3),    # Diameter of nozzle tube [m]
         'diameter': in2m(2.75), # Diameter of viper [m]
         'height' : in2m(9.75),  # Height of viper [m]
@@ -265,5 +266,5 @@ if __name__=='__main__':
     viper = ViperClass(**params)
     Values = viper.Calculate()
     Values = ViperClass(**Values)
-    print(Values.Quality,Values.eta_flow)
+    print(Values.Quality,Values.eta_flow,Values.delta_p_nozzle)
     
