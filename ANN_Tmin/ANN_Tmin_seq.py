@@ -58,6 +58,10 @@ def Import(start,end,filename):
     Tmin_Perenson=float(data[i][18])
     Tmin_Shikha=float(data[i][19])
     Tmin_Sakurai=float(data[i][20])
+    Tmin_Henry_1atm=float(data[i][21])
+    Tmin_exp_1atm=float(data[i][22])
+    Tmin_exp2_1atm=float(data[i][23])
+    Tmin_ANN_1atm=float(data[i][24])
     i=i+1
     
     while i < (end - start+1):
@@ -82,8 +86,12 @@ def Import(start,end,filename):
         Tmin_Perenson=np.append(Tmin_Perenson,float(data[i][18]))
         Tmin_Shikha=np.append(Tmin_Shikha,float(data[i][19]))
         Tmin_Sakurai=np.append(Tmin_Sakurai,float(data[i][20]))
+        Tmin_Henry_1atm=np.append(Tmin_Henry_1atm,float(data[i][21]))
+        Tmin_exp_1atm=np.append(Tmin_exp_1atm,float(data[i][22]))
+        Tmin_exp2_1atm=np.append(Tmin_exp2_1atm,float(data[i][23]))
+        Tmin_ANN_1atm=np.append(Tmin_ANN_1atm,float(data[i][24]))
         i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9,Tmin_Brenson,Tmin_Henry,Tmin_Perenson,Tmin_Shikha,Tmin_Sakurai]
+        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9,Tmin_Brenson,Tmin_Henry,Tmin_Perenson,Tmin_Shikha,Tmin_Sakurai,Tmin_Henry_1atm,Tmin_exp_1atm,Tmin_exp2_1atm,Tmin_ANN_1atm]
     
     return Data
     
@@ -147,7 +155,7 @@ def Calculate():
     filename = 'Data_Collection.csv'
     
     #Define inputs
-    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9,Tmin_Brenson,Tmin_Henry,Tmin_Perenson,Tmin_Shikha,Tmin_Sakurai] = Import(start,end,filename)
+    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9,Tmin_Brenson,Tmin_Henry,Tmin_Perenson,Tmin_Shikha,Tmin_Sakurai,Tmin_Henry_1atm,Tmin_exp_1atm,Tmin_exp2_1atm,Tmin_ANN_1atm] = Import(start,end,filename)
     
     mode = 'run'
     
@@ -191,6 +199,9 @@ def Calculate():
     X_train, X_test, Y_train, Y_test = train_test_split(X_remain, Y_remain, test_size=0.15, shuffle= True)
     
     SC = np.array([]) #empty score array
+    ms = np.array([])
+    ma = np.array([])
+    R2 = np.array([])
     
     for i in range(1):
         if mode == 'training':
@@ -201,10 +212,10 @@ def Calculate():
             #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
             model.add(Dense(i+12, activation='tanh'))
             #model.add(GaussianNoise(0.1))
-            model.add(Dense(i+12, activation='tanh'))
+            #model.add(Dense(i+10, activation='tanh'))
             model.add(Dense(1, activation='linear'))
               
-            plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
+            #plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
       
             # Compile model
             model.compile(optimizer='adamax',loss='mse',metrics=['mae',coeff_determination])
@@ -213,7 +224,7 @@ def Calculate():
             history = model.fit(X_train,
                                 Y_train,
                                 epochs=6000 , #Cut the epochs in half when using sequential 
-                                batch_size=30, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
+                                batch_size=30, #increase the batch size results in faster compiler and high error, while smaller batch size results in slower compiler and slightly accurate model
                                 #validation_split=0.2,
                                 validation_data=(X_test,Y_test),
                                 shuffle=True, #this is always set as True, even if not specified
@@ -230,7 +241,8 @@ def Calculate():
             plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
             #plt.ylim(0,0.1)
             plt.tight_layout(pad=0.2)  
-            plt.tick_params(direction='in')      
+            plt.tick_params(direction='in') 
+            #plt.show()     
             fig.savefig('ANN_history_Tmin_loss.pdf')
     
         #   #History plot for accuracy
@@ -242,16 +254,17 @@ def Calculate():
             plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
             #plt.ylim(0,0.1)
             plt.tight_layout(pad=0.2)  
-            plt.tick_params(direction='in')      
+            plt.tick_params(direction='in')
+            #plt.show()     
             fig.savefig('ANN_history_Tmin_acc.pdf')
                     
             # Save the model
-            model.save('ANN_model_Tmin_2.h5')
+            model.save('ANN_model_Tmin_new.h5')
         
         elif mode == 'run':
         
             # Load the model
-            model = load_model('ANN_model_Tmin.h5',custom_objects={'coeff_determination': coeff_determination})
+            model = load_model('ANN_model_Tmin_new.h5',custom_objects={'coeff_determination': coeff_determination})
             
         
         # Run the model
@@ -261,6 +274,10 @@ def Calculate():
         # evaluate the model (for the last batch)
         scores = model.evaluate(X,Y)
         SC = np.append(SC,scores[1]*100)
+        ms = np.append(ms,mse(Tmin_ANN,Tmin_exp))
+        ma = np.append(ma,mape(Tmin_ANN, Tmin_exp))
+        R2 = np.append(R2,Rsquared(Tmin_exp,Tmin_ANN))
+        
         print('')
         print("%s: %.2f%%" % (model.metrics_names[0], scores[0]*100))
         print("%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
@@ -286,7 +303,8 @@ def Calculate():
         # yaml_string = model.to_yaml()
     print('')
     for i in range(len(SC)):
-        print (SC[i])    
+        #print (SC[i])
+        print (ms[i],ma[i],R2[i])    
         
     # to SAVE into excel file
 #     for i in range(0,(end-start+1)):
@@ -348,7 +366,7 @@ def Calculate():
 #     plt.tick_params(direction='in')
 #     plt.show()
 #     fig.savefig('ANN_Tmin.pdf')
-    
+
     print 'Method:','MSE','MAPE','Rsquared'
     print 'Tmin_ANN:',mse(Tmin_ANN,Tmin_exp),mape(Tmin_ANN, Tmin_exp),Rsquared(Tmin_exp,Tmin_ANN)
     print 'Tmin_Mori:',mse(Tmin_Mori,Tmin_exp),mape(Tmin_Mori, Tmin_exp),Rsquared(Tmin_exp,Tmin_Mori)
@@ -365,11 +383,13 @@ def Calculate():
     print 'Tmin_Perenson:',mse(Tmin_Perenson,Tmin_exp),mape(Tmin_Perenson, Tmin_exp),Rsquared(Tmin_exp,Tmin_Perenson)
     print 'Tmin_Shikha:',mse(Tmin_Shikha,Tmin_exp),mape(Tmin_Shikha, Tmin_exp),Rsquared(Tmin_exp,Tmin_Shikha)
     print 'Tmin_Sakurai:',mse(Tmin_Sakurai,Tmin_exp),mape(Tmin_Sakurai, Tmin_exp),Rsquared(Tmin_exp,Tmin_Sakurai)
+    print 'Tmin_Henry_1atm:',mse(Tmin_Henry_1atm[0:119],Tmin_exp_1atm[0:119]),mape(Tmin_Henry_1atm[0:119], Tmin_exp_1atm[0:119]),Rsquared(Tmin_exp_1atm[0:119],Tmin_Henry_1atm[0:119])
+    print 'Tmin_ANN_1atm:',mse(Tmin_ANN_1atm[0:152],Tmin_exp2_1atm[0:152]),mape(Tmin_ANN_1atm[0:152], Tmin_exp2_1atm[0:152]),Rsquared(Tmin_exp2_1atm[0:152],Tmin_ANN_1atm[0:152])
     
 #     for i in range(len(Tmin_ANN)): # print the measure absolute error (%) for all data
 #         print (REmean(Tmin_exp[i],Tmin_ANN[i])*100)
-    error = np.array([0,1,2,3,4,5,6,7,8,9,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100])
-    set = np.array([0,13.72031662,27.44063325,37.73087071,49.34036939,59.10290237,67.01846966,73.08707124,78.89182058,82.58575198,85.75197889,95.25065963,97.09762533,98.1530343,98.1530343,98.1530343,98.41688654,98.41688654,98.41688654,98.41688654,98.41688654,98.94459103,99.20844327,99.47229551,99.73614776,99.73614776,99.73614776,100,100])
+    error = np.array([0,1,2,3,4,6,7,8,10,15,20,25,30,35,40,45,50,55,60,65,70,75,80,85,90,95,100])
+    set = np.array([0,14.77572559,25.59366755,36.93931398,48.28496042,67.54617414,73.87862797,78.36411609,86.01583113,94.19525066,99.20844327,99.73614776,100,100,100,100,100,100,100,100,100,100,100,100,100,100,100])
 
     #Validation with Shikha's data
 #     "Import Experimental Data"
@@ -685,7 +705,7 @@ def Calculate():
     frame.set_linewidth(0.5)
     plt.tight_layout()
     #plt.show()
-    fig.savefig('ANN_Tmin_vary_pressure_BfBw.pdf')
+    #fig.savefig('ANN_Tmin_vary_pressure_BfBw.pdf')
     plt.close() 
     
      

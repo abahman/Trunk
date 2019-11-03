@@ -30,37 +30,6 @@ mpl.rcParams['figure.figsize'] = [6,4]
 mpl.rcParams['legend.numpoints'] = 1
 
 #--------------------------------------------------------------------------
-def Import(start,end,filename):
-    "import experimental data"
-    
-    [data,rownum] = DataIO.ParameterImport(start,end,filename)
-    
-    i = 0  
-    "initialize arrays"
-    Tmin = float(data[i][0])
-    Tsub = float(data[i][1])
-    Psat = float(data[i][2])
-    Mat = str(data[i][3])
-    LD = float(data[i][4])
-    Bf = float(data[i][5])
-    Bw = float(data[i][6])
-    BfBw = float(data[i][7])
-    i=i+1
-    
-    while i < (end - start+1):
-        Tmin = np.append(Tmin,float(data[i][0]))
-        Tsub = np.append(Tsub,float(data[i][1]))
-        Psat = np.append(Psat,float(data[i][2])) 
-        Mat = np.append(Mat,str(data[i][3]))
-        LD = np.append(LD,float(data[i][4]))
-        Bf = np.append(Bf,float(data[i][5]))
-        Bw = np.append(Bw,float(data[i][6]))
-        BfBw = np.append(BfBw,float(data[i][7]))
-        i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw]
-    
-    return Data
-    
 def rmse(predictions, targets):
     '''
     Root Mean Square Error
@@ -128,11 +97,10 @@ def Calculate():
     
     s = np.linspace(0, 3, num=100)
     for i in range(len(s)):
-        Tmin_exp = 0
         Tsub = 0
         Psat = s[i]
-        LD = 5
-        BfBw = 0.1
+        LD = 5.15
+        BfBw = 0.117
         
         #Normalize all parameters
         Tsub_norm = Normalize(Tsub, 0, 39.84150546)
@@ -154,7 +122,7 @@ def Calculate():
     
             
         # Load the model
-        model = load_model('ANN_model_Tmin.h5',custom_objects={'coeff_determination': coeff_determination})
+        model = load_model('ANN_model_Tmin_new.h5',custom_objects={'coeff_determination': coeff_determination})
                 
             
         # Run the model
