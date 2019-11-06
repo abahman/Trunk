@@ -99,8 +99,8 @@ def Calculate():
     for i in range(len(s)):
         Tsub = 0
         Psat = s[i]
-        LD = 5.15
-        BfBw = 0.117
+        LD = 23
+        BfBw = 0.014
         
         #Normalize all parameters
         Tsub_norm = Normalize(Tsub, 0, 39.84150546)
@@ -118,8 +118,7 @@ def Calculate():
         X = np.column_stack((Tsub_norm, Psat_norm))
         X = np.column_stack((X, LD_norm))
         X = np.column_stack((X, BfBw_norm))
-    #     Y = Tmin_exp_norm
-    
+           
             
         # Load the model
         model = load_model('ANN_model_Tmin_new.h5',custom_objects={'coeff_determination': coeff_determination})

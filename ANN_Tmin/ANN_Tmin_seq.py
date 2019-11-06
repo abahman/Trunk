@@ -22,6 +22,8 @@ from random import randint, random
 import DataIO
 from CoolProp.CoolProp import PropsSI
 
+import pickle
+
 plt.style.use('Elsevier.mplstyle')
 mpl.style.use('classic')
 mpl.style.use('Elsevier.mplstyle')
@@ -228,9 +230,8 @@ def Calculate():
                                 #validation_split=0.2,
                                 validation_data=(X_test,Y_test),
                                 shuffle=True, #this is always set as True, even if not specified
+                                #use_multiprocessing=False,
                                 )    
-              
-            
                 
         #   #History plot for loss
             fig=pylab.figure(figsize=(6,4))
@@ -239,7 +240,7 @@ def Calculate():
             plt.ylabel('MSE')
             plt.xlabel('epochs')
             plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
-            #plt.ylim(0,0.1)
+            plt.ylim(0.001,1)
             plt.tight_layout(pad=0.2)  
             plt.tick_params(direction='in') 
             plt.show()     
@@ -252,7 +253,7 @@ def Calculate():
             plt.ylabel('R$^2$')
             plt.xlabel('epochs')
             plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
-            #plt.ylim(0,0.1)
+            plt.ylim(0.01,1)
             plt.tight_layout(pad=0.2)  
             plt.tick_params(direction='in')
             plt.show()     
@@ -260,16 +261,22 @@ def Calculate():
                     
             # Save the model
             model.save('ANN_model_Tmin_new.h5')
-        
+            # Save the history
+            H = history.history
+            with open('HistoryDict.pickle', 'wb') as handle:
+                pickle.dump(H, handle)
+                
         elif mode == 'run':
         
             # Load the model
             model = load_model('ANN_model_Tmin_new.h5',custom_objects={'coeff_determination': coeff_determination})
+            # Load the history
+            with open('HistoryDict.pickle', 'rb') as handle:
+                H = pickle.load(handle)
             
-        
         # Run the model
         Tmin_ANN = model.predict(X)
-        Tmin_ANN = DeNormalize(Tmin_ANN.reshape(-1), 206.8841, 727.8873239) #W = DeNormalize(W.reshape(-1),1000,8000)
+        Tmin_ANN = DeNormalize(Tmin_ANN.reshape(-1), 206.8841, 727.8873239)
         
         # evaluate the model (for the last batch)
         scores = model.evaluate(X,Y)
@@ -284,8 +291,8 @@ def Calculate():
         print("%s: %.2f%%" % (model.metrics_names[2], scores[2]*100))
            
         # extract the weight and bias
-        weights = model.layers[2].get_weights()[0]
-        biases = model.layers[2].get_weights()[1]
+        weights = model.layers[0].get_weights()[0]
+        biases = model.layers[0].get_weights()[1]
         
         #to chnage the percision of printed numbers
         np.set_printoptions(precision=4, suppress=True,
@@ -457,7 +464,7 @@ def Calculate():
     plt.legend(loc=2,fontsize=9)
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
-    plt.show()
+    #plt.show()
     fig.savefig('ANN_Tmin_all.pdf')
     plt.close()
     
@@ -480,7 +487,7 @@ def Calculate():
     plt.legend(loc=2,fontsize=9)
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
-    plt.show()
+    #plt.show()
     fig.savefig('ANN_Tmin_training.pdf')  
     plt.close()
     
@@ -503,7 +510,7 @@ def Calculate():
     plt.legend(loc=2,fontsize=9)
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
-    plt.show()
+    #plt.show()
     fig.savefig('ANN_Tmin_testing.pdf')
     plt.close()
     
@@ -526,7 +533,7 @@ def Calculate():
     plt.legend(loc=2,fontsize=9)
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
-    plt.show()
+    #plt.show()
     fig.savefig('ANN_Tmin_validation.pdf') 
     plt.close()
     
@@ -659,7 +666,7 @@ def Calculate():
     #plt.errorbar(x,y1,yerr=0.2*y1,fmt='',linestyle="None",color='k')
     plt.plot(x2,y2,'-k',markersize=5,markeredgewidth=0.1,alpha=0.9,label=r'ANN')
     
-    #plt.ylim(200,700)
+    plt.ylim(200,700)
     plt.xlim(0,20)
     plt.xlabel(r'$T_{sub}$ [$\degree$C]')
     plt.ylabel(r'$T_{min}$ [$\degree$C]')
@@ -697,7 +704,7 @@ def Calculate():
     #plt.errorbar(x,y1,yerr=0.2*y1,fmt='',linestyle="None",color='k')
     plt.plot(x2,y2,'-k',markersize=5,markeredgewidth=0.1,alpha=0.9,label=r'ANN')
     
-    #plt.ylim(200,700)
+    plt.ylim(150,400)
     plt.xlim(0,2)
     plt.xlabel(r'$P_{sat}$ [MPa]')
     plt.ylabel(r'$T_{min}$ [$\degree$C]')
