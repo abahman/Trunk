@@ -99,7 +99,7 @@ def Calculate():
     for i in range(len(s)):
         Tsub = 0
         Psat = s[i]
-        LD = 23
+        LD = 26
         BfBw = 0.014
         
         #Normalize all parameters

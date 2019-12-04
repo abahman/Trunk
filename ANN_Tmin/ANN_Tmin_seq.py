@@ -273,7 +273,7 @@ def Calculate():
             # Load the history
             with open('HistoryDict.pickle', 'rb') as handle:
                 H = pickle.load(handle)
-            
+  
         # Run the model
         Tmin_ANN = model.predict(X)
         Tmin_ANN = DeNormalize(Tmin_ANN.reshape(-1), 206.8841, 727.8873239)
@@ -465,7 +465,7 @@ def Calculate():
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     #plt.show()
-    fig.savefig('ANN_Tmin_all.pdf')
+    #fig.savefig('ANN_Tmin_all.pdf')
     plt.close()
     
     # ICERD plots (training)
@@ -488,7 +488,7 @@ def Calculate():
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     #plt.show()
-    fig.savefig('ANN_Tmin_training.pdf')  
+    #fig.savefig('ANN_Tmin_training.pdf')  
     plt.close()
     
     # ICERD plots (testing)
@@ -511,7 +511,7 @@ def Calculate():
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     #plt.show()
-    fig.savefig('ANN_Tmin_testing.pdf')
+    #fig.savefig('ANN_Tmin_testing.pdf')
     plt.close()
     
     # ICERD plots (validation)
@@ -534,7 +534,7 @@ def Calculate():
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     #plt.show()
-    fig.savefig('ANN_Tmin_validation.pdf') 
+    #fig.savefig('ANN_Tmin_validation.pdf') 
     plt.close()
     
     # Cumulative Distribution of all data versus maximum absolute error
