@@ -153,8 +153,8 @@ def Calculate():
 
     "Import Experimental Data"
     start=1
-    end=379
-    filename = 'Data_Collection.csv'
+    end=84#129#379
+    filename = 'Data_of_shikha.csv'#Data_of_peterson.csv #Data_Collection.csv
     
     #Define inputs
     [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw,Tmin_Mori,Tmin_Adler,Tmin_Dhir,Tmin_Lauer,Tmin_Freud,Tmin_shikha_7,Tmin_shikha_8,Tmin_shikha_9,Tmin_Brenson,Tmin_Henry,Tmin_Perenson,Tmin_Shikha,Tmin_Sakurai,Tmin_Henry_1atm,Tmin_exp_1atm,Tmin_exp2_1atm,Tmin_ANN_1atm] = Import(start,end,filename)
@@ -388,8 +388,8 @@ def Calculate():
     print 'NEW'
     print 'Tmin_Brenson:',mse(Tmin_Brenson,Tmin_exp),mape(Tmin_Brenson, Tmin_exp),Rsquared(Tmin_exp,Tmin_Brenson)
     print 'Tmin_Henry:',mse(Tmin_Henry,Tmin_exp),mape(Tmin_Henry, Tmin_exp),Rsquared(Tmin_exp,Tmin_Henry)
-    print 'Tmin_Perenson:',mse(Tmin_Perenson,Tmin_exp),mape(Tmin_Perenson, Tmin_exp),Rsquared(Tmin_exp,Tmin_Perenson)
-    print 'Tmin_Shikha:',mse(Tmin_Shikha,Tmin_exp),mape(Tmin_Shikha, Tmin_exp),Rsquared(Tmin_exp,Tmin_Shikha)
+    print 'Tmin_Perenson:',mse(Tmin_Perenson,Tmin_exp),mape(Tmin_Perenson, Tmin_exp),Rsquared(Tmin_exp,Tmin_Perenson),rmse(Tmin_Perenson, Tmin_exp)
+    print 'Tmin_Shikha:',mse(Tmin_Shikha,Tmin_exp),mape(Tmin_Shikha, Tmin_exp),Rsquared(Tmin_exp,Tmin_Shikha),rmse(Tmin_Shikha, Tmin_exp)
     print 'Tmin_Sakurai:',mse(Tmin_Sakurai,Tmin_exp),mape(Tmin_Sakurai, Tmin_exp),Rsquared(Tmin_exp,Tmin_Sakurai)
     print 'Tmin_Henry_1atm:',mse(Tmin_Henry_1atm[0:119],Tmin_exp_1atm[0:119]),mape(Tmin_Henry_1atm[0:119], Tmin_exp_1atm[0:119]),Rsquared(Tmin_exp_1atm[0:119],Tmin_Henry_1atm[0:119])
     print 'Tmin_ANN_1atm:',mse(Tmin_ANN_1atm[0:152],Tmin_exp2_1atm[0:152]),mape(Tmin_ANN_1atm[0:152], Tmin_exp2_1atm[0:152]),Rsquared(Tmin_exp2_1atm[0:152],Tmin_ANN_1atm[0:152])
