@@ -18,7 +18,7 @@ mpl.rcParams['legend.numpoints'] = 1
 # # Latex render
 # #===============================================================================
 # #mpl.use('pgf')
-# 
+#  
 # def figsize(scale):
 #     fig_width_pt = 469.755                          # Get this from LaTeX using \the\textwidth
 #     inches_per_pt = 1.0/72.27                       # Convert pt to inch
@@ -27,7 +27,7 @@ mpl.rcParams['legend.numpoints'] = 1
 #     fig_height = fig_width*golden_mean              # height in inches
 #     fig_size = [fig_width,fig_height]
 #     return fig_size
-# 
+#  
 # pgf_with_latex = {                      # setup matplotlib to use latex for output
 # "pgf.texsystem": "pdflatex",        # change this if using xetex or lautex
 # "text.usetex": True,                # use LaTeX to write all text
