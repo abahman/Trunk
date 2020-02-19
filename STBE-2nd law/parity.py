@@ -52,7 +52,12 @@ mpl.rcParams['legend.numpoints'] = 1
 # # END of Latex render
 # #===============================================================================
     
-
+def savefigs(name):
+    #plt.savefig(name+'.eps')
+    plt.savefig(name+'.pdf')
+    plt.savefig(name+'.png',dpi=600)
+    #plt.show()
+    
 #import data from excel file
 df1 = pd.read_excel('data_tables.xlsx',sheet_name='60K ECU',header=0) #file name
 df2 = pd.read_excel('data_tables.xlsx',sheet_name='36K ECU',header=0) #file name
@@ -122,7 +127,7 @@ frame=leg.get_frame()
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2)        
 plt.tick_params(direction='in')
-fig.savefig('parity_2.pdf')
+savefigs('parity_2')
 plt.show()
 plt.close()
 

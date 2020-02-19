@@ -47,7 +47,13 @@ mpl.rcParams['legend.numpoints'] = 1
 # #===============================================================================
 # # END of Latex render
 # #===============================================================================
-     
+
+def savefigs(name):
+    #plt.savefig(name+'.eps')
+    plt.savefig(name+'.pdf')
+    plt.savefig(name+'.png',dpi=600)
+    #plt.show()
+    
 ################################
 ##### exergy destruction #######
 ################################
@@ -139,7 +145,7 @@ frame=leg.get_frame()
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2)        
 plt.tick_params(direction='in')
-plt.savefig('irrev2.pdf')
+savefigs('irrev2')
 plt.show()
 plt.close()
 
@@ -236,6 +242,6 @@ frame=leg.get_frame()
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2)        
 plt.tick_params(direction='in')
-plt.savefig('exergy_ratio2.pdf')
+savefigs('exergy_ratio2')
 plt.show()
 plt.close()

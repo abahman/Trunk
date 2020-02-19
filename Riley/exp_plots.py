@@ -81,33 +81,48 @@ electric = np.array([58.6,58.4,58,76.4,71.7,59]) #[W]
 #===============================================================================
 # #Bar plots
 #===============================================================================
+# fig, ax1 = plt.subplots()
+# 
+# ax2 = ax1.twinx()
+# ax1.plot(x, y1, 'g-')
+# ax2.plot(x, y2, 'b-')
+
+# ax1.set_xlabel('X data')
+# ax1.set_ylabel('Y1 data', color='g')
+# ax2.set_ylabel('Y2 data', color='b')
+
+
 #COPS
-fig=plt.figure(figsize=(6,4.5))
-plt.bar(np.arange(1,7,1)-0.1,COPS_exp,width=0.2,color='r',linewidth=0.9,align='center',alpha=0.9,label=r'COP [$-$]',hatch=5*'\\')
-plt.errorbar(np.arange(1,7,1)-0.1,COPS_exp,yerr=[0.044,0.044,0.043,0.034,0.036,0.043],capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
-plt.bar(np.arange(1,7,1)+0.1,cooling_capacity_exp,width=0.2,color='b',linewidth=0.9,align='center',alpha=0.9,label=r'Cooling Capacity [kW]',hatch=2*'//')
-plt.errorbar(np.arange(1,7,1)+0.1,cooling_capacity_exp,yerr=[0.2391,0.2384,0.2369,0.2071,0.2104,0.2379],capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
+fig, ax1=plt.subplots(figsize=(6,4))
+ax2 = ax1.twinx()
+p1 = ax1.bar(np.arange(1,7,1)-0.1,COPS_exp,width=0.2,color='r',linewidth=0.9,align='center',alpha=0.9,label=r'COP',hatch=5*'\\')
+ax1.errorbar(np.arange(1,7,1)-0.1,COPS_exp,yerr=[0.044,0.044,0.043,0.034,0.036,0.043],capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
+p2 = ax2.bar(np.arange(1,7,1)+0.1,cooling_capacity_exp,width=0.2,color='b',linewidth=0.9,align='center',alpha=0.9,label=r'Cooling Capacity',hatch=2*'//')
+ax2.errorbar(np.arange(1,7,1)+0.1,cooling_capacity_exp,yerr=[0.2391,0.2384,0.2369,0.2071,0.2104,0.2379],capsize=2,elinewidth=0.7,fmt='',linestyle="None",color='k')
 # plt.text(1,3.65,r'Improvment at Test 4/A = {:0.01f}\%'.format((COPS2[3]-COPS_exp[3])/COPS_exp[3] *100),ha='left',va='center',fontsize = 10)
 # plt.text(1,4,r'Improvment at Test 1 = {:0.01f}\%'.format((COPS2[0]-COPS_exp[0])/COPS_exp[0] *100),ha='left',va='center',fontsize = 10)
-plt.ylim(0,18)
-plt.xlim(0,7)
+ax2.set_ylim(0,18)
+ax1.set_xlim(0,7)
 # plt.yticks([0, 3, 6, 9, 12, 15, 18],
 #             [r'0', r'3', r'6', r'9',r'12', r'15', r'18'])
 plt.xticks([0, 1, 2, 3, 4, 5, 6],
             [r'', r'25/35', r'25/40', r'25/42',r'26.7/35', r'23.5/35', r'24/35'])
-plt.tick_params(
-    axis='x',          # changes apply to the x-axis
-    which='both',      # both major and minor ticks are affected
-    bottom=False,      # ticks along the bottom edge are off
-    top=False,         # ticks along the top edge are off
-    labelbottom=True) # labels along the bottom edge are off
-plt.xlabel(r'Test condition (indoor/outdoor) [$\degree$C]')
-plt.ylabel(r'Performance')
-leg = plt.legend(loc='upper center', bbox_to_anchor=(0.5, 1.25),fancybox=False,numpoints=1)
-frame  = leg.get_frame()  
-frame.set_linewidth(0.5)
+# ax1.tick_params(
+#     axis='x',          # changes apply to the x-axis
+#     which='both',      # both major and minor ticks are affected
+#     bottom=False,      # ticks along the bottom edge are off
+#     top=False,         # ticks along the top edge are off
+#     labelbottom=True) # labels along the bottom edge are off
+ax1.set_xlabel(r'Test condition (indoor/outdoor) [$\degree$C]')
+ax1.set_ylabel(r'COP [$-$]')
+ax2.set_ylabel(r'Cooling capacity [kW]')
+
+lines = [p1, p2]
+# leg = ax1.legend(lines, [l.get_label() for l in lines], loc='upper center', bbox_to_anchor=(0.5, 1.25),fancybox=False,numpoints=1)
+# frame  = leg.get_frame()  
+# frame.set_linewidth(0.5)
 plt.tight_layout() 
-plt.savefig('performance_bar.pdf')
+plt.savefig('performance_bar_no_legend.pdf')
 plt.show()
 
 
