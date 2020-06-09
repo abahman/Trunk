@@ -70,17 +70,17 @@ x2 = df1['Threaded_t'][0:2411]
 y2 = df1['Threaded_Tc'][0:2411]
 x3 = df1['Knurled_t'][0:2606]
 y3 = df1['Knurled_Tc'][0:2606]
- 
- 
+  
+  
 plt.plot(x1,y1,'r-',label=r'Smooth ($T_{c}$)')    
 # plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth ($T_{s}$)')#markeredgewidth=0.1,,markersize=5
- 
+  
 plt.plot(x2,y2,'g-',label=r'Threaded ($T_{c}$)')
 # plt.errorbar(np.arange(1,9,1),Tdis_0K,yerr=1.1,fmt='',linestyle="None",color='k')
- 
+  
 plt.plot(x3,y3,'b-',label=r'Knurled ($T_{c}$)')
 # plt.errorbar(np.arange(1,9,1),Tdis_0K,yerr=1.1,fmt='',linestyle="None",color='k')
- 
+  
 plt.ylim(100,600)
 plt.xlim(0,70)
 # plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -100,8 +100,8 @@ plt.tight_layout(pad=0.2)
 savefigs('fig3')
 plt.show()
 plt.close()
- 
- 
+  
+  
 #########################
 ##### Figure 4 #######
 #########################
@@ -114,21 +114,21 @@ x2 = df2['Threaded_delT'][0:2411]
 y2 = df2['Threaded_q'][0:2411]/1000 #convert W to kW
 x3 = df2['Knurled_delT'][0:2606]
 y3 = df2['Knurled_q'][0:2606]/1000 #convert W to kW
- 
+  
 # other statistics
 y11 = df2['Smooth_q'][0:2411].rolling(15).mean()
 y22 = df2['Threaded_q'][0:2411].rolling(15).mean()
 y33 = df2['Knurled_q'][0:2606].rolling(15).mean()
- 
-plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x1, y11/1000,'r-',linewidth=2.5,label=r'Smooth (average)')
- 
-plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x2, y22/1000,'g--',linewidth=2.5,label=r'Smooth (average)')
- 
-plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x3, y33/1000,'b.-',linewidth=2.5,label=r'Smooth (average)')
- 
+  
 plt.ylim(0,600)
 plt.xlim(50,450)
 # plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -148,8 +148,8 @@ plt.tight_layout(pad=0.2)
 savefigs('fig4')
 plt.show()
 plt.close()
- 
- 
+  
+  
 #########################
 ##### Figure 5 #######
 #########################
@@ -162,21 +162,21 @@ x2 = df3['Threaded_delT'][0:2411]
 y2 = df3['Threaded_h'][0:2411]/1000 #convert W to kW
 x3 = df3['Knurled_delT'][0:2606]
 y3 = df3['Knurled_h'][0:2606]/1000 #convert W to kW
- 
+  
 # other statistics
 y11 = df3['Smooth_h'][0:2411].rolling(15).mean()
 y22 = df3['Threaded_h'][0:2411].rolling(15).mean()
 y33 = df3['Knurled_h'][0:2606].rolling(15).mean()
- 
-plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x1, y11/1000,'r-',linewidth=2.5,label=r'Smooth (average)')
- 
-plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x2, y22/1000,'g--',linewidth=2.5,label=r'Smooth (average)')
- 
-plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x3, y33/1000,'b.-',linewidth=2.5,label=r'Smooth (average)')
- 
+  
 plt.ylim(0,4)
 plt.xlim(50,450)
 # plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -196,8 +196,8 @@ plt.tight_layout(pad=0.2)
 savefigs('fig5')
 plt.show()
 plt.close()
- 
- 
+  
+  
 #########################
 ##### Figure 6 #######
 #########################
@@ -210,21 +210,21 @@ x2 = df4['Threaded_delT'][0:2411]
 y2 = df4['Threaded_del'][0:2411]
 x3 = df4['Knurled_delT'][0:2606]
 y3 = df4['Knurled_del'][0:2606]
- 
+  
 # other statistics
 y11 = df4['Smooth_del'][0:2411].rolling(15).mean()
 y22 = df4['Threaded_del'][0:2411].rolling(15).mean()
 y33 = df4['Knurled_del'][0:2606].rolling(15).mean()
- 
-plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5)#markeredgewidth=0.1,,markersize=5
 # plt.plot(x1, y11,'r-',linewidth=2.5,label=r'Smooth (average)')
- 
-plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5)#markeredgewidth=0.1,,markersize=5
 # plt.plot(x2, y22,'g--',linewidth=2.5,label=r'Smooth (average)')
- 
-plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=4)#markeredgewidth=0.1,,markersize=5
+  
+plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5)#markeredgewidth=0.1,,markersize=5
 # plt.plot(x3, y33,'b.-',linewidth=2.5,label=r'Smooth (average)')
- 
+  
 plt.ylim(0,500)
 plt.xlim(50,450)
 # plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
@@ -244,8 +244,8 @@ plt.tight_layout(pad=0.2)
 savefigs('fig6')
 plt.show()
 plt.close()
- 
- 
+  
+  
 #########################
 ##### Figure 8 #######
 #########################
@@ -256,11 +256,11 @@ x = df5['EXP'][0:10]
 y1 = df5['Smooth'][0:10]
 y2 = df5['Threaded'][0:10]
 y3 = df5['Knurled'][0:10]
- 
+  
 plt.plot(x, y1,'ro-',label=r'Smooth',markerfacecolor='white',markeredgecolor='r') 
 plt.plot(x, y2,'gs-',label=r'Threaded',markerfacecolor='white',markeredgecolor='g')
 plt.plot(x, y3,'b^-',label=r'Knurled',markerfacecolor='white',markeredgecolor='b')
- 
+  
 # plt.ylim(10,50)
 plt.xlim(0,11)
 plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
@@ -280,8 +280,8 @@ plt.tight_layout(pad=0.2)
 savefigs('fig8')
 plt.show()
 plt.close()
- 
- 
+  
+  
 #########################
 ##### Figure 9 #######
 #########################
@@ -292,11 +292,11 @@ x = df6['EXP'][0:10]
 y1 = df6['Smooth'][0:10]
 y2 = df6['Threaded'][0:10]
 y3 = df6['Knurled'][0:10]
- 
+  
 plt.plot(x, y1,'ro-',label=r'Smooth',markerfacecolor='white',markeredgecolor='r') 
 plt.plot(x, y2,'gs-',label=r'Threaded',markerfacecolor='white',markeredgecolor='g')
 plt.plot(x, y3,'b^-',label=r'Knurled',markerfacecolor='white',markeredgecolor='b')
- 
+  
 # plt.ylim(0,60)
 plt.xlim(0,11)
 plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11],
@@ -322,7 +322,7 @@ plt.close()
 ##### Figure 13 #######
 #########################
 #import data from excel file
-fig=plt.figure(figsize=(6,5))
+fig=plt.figure(figsize=(6,6))
 
 df7 = pd.read_excel('Results.xlsx',sheet_name='Figure 13',header=0) #file name
 #assign axes
@@ -337,7 +337,7 @@ barlist[2].set_color('b')
 
 # plt.ylim(0,9000)
 # plt.xlim(-2,16)
-plt.xticks(x_pos,x,rotation=90, fontsize=10)
+plt.xticks(x_pos,x,rotation=90, fontsize=12)
 plt.tick_params(
     axis='x',          # changes apply to the x-axis
     which='both',      # both major and minor ticks are affected
@@ -372,13 +372,13 @@ y11 = df8['Smooth_Bi'][0:2411].rolling(15).mean()
 y22 = df8['Threaded_Bi'][0:2411].rolling(15).mean()
 y33 = df8['Knurled_Bi'][0:2606].rolling(15).mean()
  
-plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=4)#markeredgewidth=0.1,,markersize=5
+plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x1, y11,'r-',linewidth=2.5,label=r'Smooth (average)')
  
-plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=4)#markeredgewidth=0.1,,markersize=5
+plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x2, y22,'g--',linewidth=2.5,label=r'Smooth (average)')
  
-plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=4)#markeredgewidth=0.1,,markersize=5
+plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5)#markeredgewidth=0.1,,markersize=5
 plt.plot(x3, y33,'b.-',linewidth=2.5,label=r'Smooth (average)')
  
 plt.ylim(0,0.8)
