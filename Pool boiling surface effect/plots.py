@@ -76,13 +76,15 @@ x3 = df1['Knurled_t'][0:2606]
 y3 = df1['Knurled_Tc'][0:2606]
 y33 = df1['Knurled_Ts'][0:2606]
   
-  
-plt.plot(x1,y1,'r-',label=r'Smooth ($T_{c}$)',linewidth=2.5,markevery=10)    
-plt.plot(x1,y11,'o',label=r'Smooth ($T_{s}$)',markeredgecolor='r',markerfacecolor='none',markersize=5,markevery=7)    
-plt.plot(x2,y2,'g--',label=r'Threaded ($T_{c}$)',linewidth=2.5,markevery=10)
-plt.plot(x2,y22,'s',label=r'Threaded ($T_{s}$)',markeredgecolor='g',markerfacecolor='none',markersize=5,markevery=10)
-plt.plot(x3,y3,'b.-',label=r'Knurled ($T_{c}$)',linewidth=2.5,markevery=10)
-plt.plot(x3,y33,'^',label=r'Knurled ($T_{s}$)',markeredgecolor='b',markerfacecolor='none',markersize=5,markevery=7)
+
+plt.plot(x1,y1,'o',label=r'Smooth ($T_{c}$)',markeredgecolor='r',markerfacecolor='none',markersize=5,markevery=12)    
+plt.plot(x1,y11,'r-',label=r'Smooth ($T_{s}$)',linewidth=2.5)    
+
+plt.plot(x2,y2,'s',label=r'Threaded ($T_{c}$)',markeredgecolor='g',markerfacecolor='none',markersize=5,markevery=15)
+plt.plot(x2,y22,'g--',label=r'Threaded ($T_{s}$)',linewidth=2.5)
+
+plt.plot(x3,y3,'^',label=r'Knurled ($T_{c}$)',markeredgecolor='b',markerfacecolor='none',markersize=5,markevery=12)
+plt.plot(x3,y33,'b.-',label=r'Knurled ($T_{s}$)',linewidth=2.5)
   
 plt.ylim(100,600)
 plt.xlim(0,70)
@@ -344,7 +346,7 @@ plt.ylabel(r'$T_{min}$ [$\degree$C]')
 # frame  = leg.get_frame()  
 # frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('fig13')
+savefigs('fig11')
 plt.show()
 
 
