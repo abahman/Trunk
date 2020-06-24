@@ -100,7 +100,7 @@ plt.tick_params(
     top='off',         # ticks along the top edge are off
     labelbottom='on') # labels along the bottom edge are off
 plt.xlabel(r'Test condition')
-plt.ylabel(r'$\mathrm{COP}_{c}$ [$-$]')
+plt.ylabel(r'$\mathrm{COP}_{c}$ ($-$)')
 leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
@@ -132,7 +132,7 @@ plt.tick_params(
     top='off',         # ticks along the top edge are off
     labelbottom='on') # labels along the bottom edge are off
 plt.xlabel(r'Test condition')
-plt.ylabel(r'$\dot I$ [W]')
+plt.ylabel(r'$\dot I$ (W)')
 leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
@@ -174,7 +174,7 @@ plt.tick_params(
     top='off',         # ticks along the top edge are off
     labelbottom='on') # labels along the bottom edge are off
 plt.xlabel(r'Test condition')
-plt.ylabel(r'$\varepsilon_{c}$ [%]') 
+plt.ylabel(r'$\varepsilon_{c}$ (%)') 
 leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)

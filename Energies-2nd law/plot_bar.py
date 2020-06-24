@@ -51,7 +51,7 @@ mpl.rcParams['legend.numpoints'] = 1
 def savefigs(name):
     #plt.savefig(name+'.eps')
     plt.savefig(name+'.pdf')
-    plt.savefig(name+'.png',dpi=600)
+#     plt.savefig(name+'.png',dpi=600)
     #plt.show()
     
 ################################
@@ -137,7 +137,7 @@ plt.tick_params(
     top=False,         # ticks along the top edge are off
     labelbottom=True) # labels along the bottom edge are off
 #plt.xlabel(r'Test condition')
-plt.ylabel(r'$\dot I$ [W]')
+plt.ylabel(r'$\dot I$ (W)')
 plt.ylim(0,8000)
 # leg=plt.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])
 leg = plt.legend(loc='upper center',bbox_to_anchor=(0.5, 1.22),fancybox=False,numpoints=1,ncol=3)#, bbox_to_anchor=(0.5, 1.15)
@@ -234,7 +234,7 @@ plt.tick_params(
     top=False,         # ticks along the top edge are off
     labelbottom=True) # labels along the bottom edge are off
 #plt.xlabel(r'Test condition')
-plt.ylabel(r'$E_d$ [$\%$]')
+plt.ylabel(r'$E_d$ ($\%$)')
 plt.ylim(0,100)
 leg = plt.legend(loc='upper center',bbox_to_anchor=(0.5, 1.22),fancybox=False,numpoints=1,ncol=3)
 # leg=plt.legend(loc='upper left',scatterpoints=1,scatteryoffsets=[0.5])

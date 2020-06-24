@@ -55,7 +55,7 @@ mpl.rcParams['legend.numpoints'] = 1
 def savefigs(name):
     #plt.savefig(name+'.eps')
     plt.savefig(name+'.pdf')
-    plt.savefig(name+'.png',dpi=600)
+#     plt.savefig(name+'.png',dpi=600)
     #plt.show()
     
 #import data from excel file
@@ -96,8 +96,8 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 ax.set_xlim((ax_min,ax_max))
 ax.set_ylim((ax_min,ax_max))
-plt.xlabel(r'$\dot Q_{evap,r}$ [kW]')
-plt.ylabel(r'$\dot Q_{evap,a}$ [kW]')
+plt.xlabel(r'$\dot Q_{evap,r}$ (kW)')
+plt.ylabel(r'$\dot Q_{evap,a}$ (kW)')
 plt.tight_layout(pad=0.2)       
 plt.savefig('parity_1.pdf')
 plt.show()
@@ -110,8 +110,8 @@ fig=pylab.figure(figsize=(4,4))
 plt.plot(x1,y1,'rs',ms = 6,mec='black',mew=0.5,label='5-RT ECU')
 plt.plot(x2,y2,'b^',ms = 6,mec='black',mew=0.5,label='3-RT ECU')
 plt.plot(x3,y3,'go',ms = 6,mec='black',mew=0.5,label='1.5-RT ECU')
-plt.xlabel(r'$\dot Q_{evap,r}$ [kW]')
-plt.ylabel(r'$\dot Q_{evap,a}$ [kW]')
+plt.xlabel(r'$\dot Q_{evap,r}$ (kW)')
+plt.ylabel(r'$\dot Q_{evap,a}$ (kW)')
 Tmin = 0
 Tmax = 25
 x=[Tmin,Tmax]

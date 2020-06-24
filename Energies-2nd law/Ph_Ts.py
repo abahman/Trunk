@@ -110,8 +110,8 @@ ph_plot_R407C = PropertyPlot(ref_fluid,'Ph')
 ph_plot_R407C.draw() #actually draw isoline
 ph_plot_R407C.isolines.clear() #stop isoline, to avoid ploting the isoline at the end 
 ph_plot_R407C.title('P-h R407C')
-ph_plot_R407C.xlabel(r'$h$ [kJ/kg]')#r'$h$ [{kJ} {kg$^{-1}$}]'
-ph_plot_R407C.ylabel(r'$P$ [kPa]')
+ph_plot_R407C.xlabel(r'$h$ (kJ/kg)')#r'$h$ [{kJ} {kg$^{-1}$}]'
+ph_plot_R407C.ylabel(r'$P$ (kPa)')
 ph_plot_R407C.axis.set_yscale('log')
 
 maxline, = plt.plot(hx0_407C,Px0_407C,'k-',linewidth=1.25)
@@ -150,8 +150,8 @@ ts_plot_R407C = PropertyPlot(ref_fluid, 'Ts',unit_system='KSI')
 ts_plot_R407C.draw() #actually draw isoline
 ts_plot_R407C.isolines.clear() #stop isoline, to avoid ploting the isoline at the end 
 ts_plot_R407C.title('T-s R407C')
-ts_plot_R407C.xlabel(r'$s$ [kJ/kg-K]')#r'$s$ [{kJ} {kg$^{-1}$ K$^{-1}$}]'
-ts_plot_R407C.ylabel(r'$T$ [$\degree$C]')#{\textdegree}C
+ts_plot_R407C.xlabel(r'$s$ (kJ/(kg.K))')#r'$s$ [{kJ} {kg$^{-1}$ K$^{-1}$}]'
+ts_plot_R407C.ylabel(r'$T$ ($\degree$C)')#{\textdegree}C
 #ts_plot_R407C.grid()
  
 maxline, = plt.plot(sx0_407C,Tx0_407C,'k-',linewidth=1.25)

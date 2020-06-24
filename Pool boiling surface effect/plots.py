@@ -103,7 +103,7 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
 savefigs('fig3')
-plt.show()
+# plt.show()
 plt.close()
   
   
@@ -149,7 +149,7 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
 savefigs('fig4')
-plt.show()
+# plt.show()
 plt.close()
   
   
@@ -195,7 +195,7 @@ frame  = leg.get_frame()
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
 savefigs('fig5')
-plt.show()
+# plt.show()
 plt.close()
   
   
@@ -213,14 +213,17 @@ x3 = df4['Knurled_delT'][0:2606]
 y3 = df4['Knurled_del'][0:2606]
   
 # other statistics
-y11 = df4['Smooth_del'][0:2411].rolling(15).mean()
-y22 = df4['Threaded_del'][0:2411].rolling(15).mean()
-y33 = df4['Knurled_del'][0:2606].rolling(15).mean()
+y11 = df4['Smooth_del'][0:2411].rolling(30).mean()
+y22 = df4['Threaded_del'][0:2411].rolling(30).mean()
+y33 = df4['Knurled_del'][0:2606].rolling(30).mean()
   
 plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5,markevery=2)#markeredgewidth=0.1,
-plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5,markevery=2)#markeredgewidth=0.1,  
+# plt.plot(x1, y11,'r-',linewidth=2.5,label=r'Smooth (averaged)')
+plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5,markevery=2)#markeredgewidth=0.1,
+# plt.plot(x2, y22,'g--',linewidth=2.5,label=r'Threaded (averaged)')
 plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5,markevery=2)#markeredgewidth=0.1,
-  
+# plt.plot(x3, y33,'b.-',linewidth=2.5,label=r'Knurled (averaged)')
+
 plt.ylim(0,500)
 plt.xlim(50,450)
 # plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
