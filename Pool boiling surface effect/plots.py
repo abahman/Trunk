@@ -59,7 +59,7 @@ def savefigs(name):
     #plt.show()
 
 #########################
-##### Figure 3 #######
+##### quenching_curve #######
 #########################    
 #import data from excel file
 df1 = pd.read_excel('Results.xlsx',sheet_name='Figure 3',header=0) #file name
@@ -102,13 +102,13 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1, markerscale=1.25)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('fig3')
+savefigs('quenching_curve')
 # plt.show()
 plt.close()
   
   
 #########################
-##### Figure 4 #######
+##### boiling_curve #######
 #########################
 #import data from excel file
 df2 = pd.read_excel('Results.xlsx',sheet_name='Figure 4',header=0) #file name
@@ -148,38 +148,63 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1, markerscale=1.25)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('fig4')
+savefigs('boiling_curve')
 # plt.show()
 plt.close()
   
   
 #########################
-##### Figure 5 #######
+##### HTC #######
 #########################
 #import data from excel file
 df3 = pd.read_excel('Results.xlsx',sheet_name='Figure 5',header=0) #file name
 #assign axes
 x1 = df3['Smooth_delT'][0:2411]
-y1 = df3['Smooth_h'][0:2411]/1000 #convert W to kW
+y1 = df3['Smooth_h'][0:2411]#/1000 #convert W to kW
 x2 = df3['Threaded_delT'][0:2411]
-y2 = df3['Threaded_h'][0:2411]/1000 #convert W to kW
+y2 = df3['Threaded_h'][0:2411]#/1000 #convert W to kW
 x3 = df3['Knurled_delT'][0:2606]
-y3 = df3['Knurled_h'][0:2606]/1000 #convert W to kW
+y3 = df3['Knurled_h'][0:2606]#/1000 #convert W to kW
   
 # other statistics
 y11 = df3['Smooth_h'][0:2411].rolling(15).mean()
 y22 = df3['Threaded_h'][0:2411].rolling(15).mean()
 y33 = df3['Knurled_h'][0:2606].rolling(15).mean()
+
+#Calculate the polynomial for smooth
+coefficients = np.polyfit(x1[0:1665], y1[0:1665], 2) #the end value is the T_min value so the fit will avoid including the otehr data
+poly = np.poly1d(coefficients)
+#Calculate new x and y values
+new_x1 = x1[0:1665]#np.linspace(x1[0], x1[-1])
+new_y1 = poly(new_x1)
+
+#Calculate the polynomial for threaded
+coefficients = np.polyfit(x2[0:1345], y2[0:1345], 2)
+poly = np.poly1d(coefficients)
+#Calculate new x and y values
+new_x2 = x2[0:1345]
+new_y2 = poly(new_x2)
+
+#Calculate the polynomial for knurled
+coefficients = np.polyfit(x3[0:783], y3[0:783], 2)
+poly = np.poly1d(coefficients)
+#Calculate new x and y values
+new_x3 = x3[0:783]
+new_y3 = poly(new_x3)
+
+#Plot the polynomial fit
+# plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5,markevery=10)
+plt.plot(new_x1, new_y1,'r-',linewidth=2.5,label=r'Smooth')
+# plt.plot(x1, y11/1000,'r-',linewidth=2.5,label=r'Smooth (averaged)')
+# plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5,markevery=10)
+plt.plot(new_x2, new_y2,'g--',linewidth=2.5,label=r'Threaded')
+# plt.plot(x2, y22/1000,'g--',linewidth=2.5,label=r'Threaded (averaged)')
+# plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5,markevery=10)
+plt.plot(new_x3, new_y3,'b:',linewidth=2.5,label=r'Knurled')
+# plt.plot(x3, y33/1000,'b.-',linewidth=2.5,label=r'Knurled (averaged)')
   
-plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5,markevery=2)#markeredgewidth=0.1,
-plt.plot(x1, y11/1000,'r-',linewidth=2.5,label=r'Smooth (averaged)')
-plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5,markevery=2)#markeredgewidth=0.1,
-plt.plot(x2, y22/1000,'g--',linewidth=2.5,label=r'Threaded (averaged)')
-plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5,markevery=2)#markeredgewidth=0.1,
-plt.plot(x3, y33/1000,'b.-',linewidth=2.5,label=r'Knurled (averaged)')
-  
-plt.ylim(0,4)
-plt.xlim(50,450)
+plt.ylim(0,600)
+plt.xlim(200,450)
 # plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 #            [r'', r'1', r'2', r'3',r'4/A', r'5', r'6', r'B', r'C', r''])
 # plt.tick_params(
@@ -189,18 +214,18 @@ plt.xlim(50,450)
 #     top='off',         # ticks along the top edge are off
 #     labelbottom='on') # labels along the bottom edge are off
 plt.xlabel(r'$\Delta T_{w}$ [$\degree$C]')
-plt.ylabel(r'HTC [kW/m$^2$-K]')
+plt.ylabel(r'HTC [W/m$^2$-K]')
 leg = plt.legend(loc='best',fancybox=False,numpoints=1, markerscale=1.25)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('fig5')
-# plt.show()
+savefigs('HTC')
+plt.show()
 plt.close()
   
   
 #########################
-##### Figure 6 #######
+##### film_thickness #######
 #########################
 #import data from excel file
 df4 = pd.read_excel('Results.xlsx',sheet_name='Figure 6',header=0) #file name
@@ -217,14 +242,14 @@ y11 = df4['Smooth_del'][0:2411].rolling(30).mean()
 y22 = df4['Threaded_del'][0:2411].rolling(30).mean()
 y33 = df4['Knurled_del'][0:2606].rolling(30).mean()
   
-plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5,markevery=2)#markeredgewidth=0.1,
+plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5,markevery=3)#markeredgewidth=0.1,
 # plt.plot(x1, y11,'r-',linewidth=2.5,label=r'Smooth (averaged)')
-plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5,markevery=2)#markeredgewidth=0.1,
+plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5,markevery=3)#markeredgewidth=0.1,
 # plt.plot(x2, y22,'g--',linewidth=2.5,label=r'Threaded (averaged)')
-plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5,markevery=2)#markeredgewidth=0.1,
+plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5,markevery=3)#markeredgewidth=0.1,
 # plt.plot(x3, y33,'b.-',linewidth=2.5,label=r'Knurled (averaged)')
 
-plt.ylim(0,500)
+plt.ylim(0,300)
 plt.xlim(50,450)
 # plt.xticks([0, 1, 2, 3, 4, 5, 6, 7, 8, 9],
 #            [r'', r'1', r'2', r'3',r'4/A', r'5', r'6', r'B', r'C', r''])
@@ -240,13 +265,13 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1, markerscale=1.25)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('fig6')
+savefigs('film_thickness')
 plt.show()
 plt.close()
   
   
 #########################
-##### Figure 8 #######
+##### quenching_time #######
 #########################
 #import data from excel file
 df5 = pd.read_excel('Results.xlsx',sheet_name='Figure 8',header=0) #file name
@@ -276,13 +301,13 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('fig8')
+savefigs('quenching_time')
 plt.show()
 plt.close()
   
   
 #########################
-##### Figure 9 #######
+##### T_min #######
 #########################
 #import data from excel file
 df6 = pd.read_excel('Results.xlsx',sheet_name='Figure 9',header=0) #file name
@@ -312,13 +337,13 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('fig9')
+savefigs('T_min')
 plt.show()
 plt.close()
 
 
 #########################
-##### Figure 13 #######
+##### comparison_barplot #######
 #########################
 #import data from excel file
 fig=plt.figure(figsize=(6,6))
@@ -349,12 +374,12 @@ plt.ylabel(r'$T_{min}$ [$\degree$C]')
 # frame  = leg.get_frame()  
 # frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('fig11')
+savefigs('comparison_barplot')
 plt.show()
 
 
 #########################
-##### Appendix #######
+##### biot_number #######
 #########################
 #import data from excel file
 df8 = pd.read_excel('Results.xlsx',sheet_name='Appendix',header=0) #file name
@@ -396,6 +421,6 @@ leg = plt.legend(loc='best',fancybox=False,numpoints=1, markerscale=1.25)
 frame  = leg.get_frame()  
 frame.set_linewidth(0.5)
 plt.tight_layout(pad=0.2) 
-savefigs('append_biot')
+savefigs('biot_number')
 plt.show()
 plt.close()
