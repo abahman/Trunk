@@ -281,9 +281,9 @@ y1 = df5['Smooth'][0:10]
 y2 = df5['Threaded'][0:10]
 y3 = df5['Knurled'][0:10]
   
-plt.plot(x, y1,'ro-',label=r'Smooth',markerfacecolor='white',markeredgecolor='r') 
-plt.plot(x, y2,'gs-',label=r'Threaded',markerfacecolor='white',markeredgecolor='g')
-plt.plot(x, y3,'b^-',label=r'Knurled',markerfacecolor='white',markeredgecolor='b')
+plt.plot(x, y1,'ro',label=r'Smooth',markerfacecolor='white',markeredgecolor='r') 
+plt.plot(x, y2,'gs',label=r'Threaded',markerfacecolor='white',markeredgecolor='g')
+plt.plot(x, y3,'b^',label=r'Knurled',markerfacecolor='white',markeredgecolor='b')
   
 # plt.ylim(10,50)
 plt.xlim(0,11)
@@ -317,9 +317,9 @@ y1 = df6['Smooth'][0:10]
 y2 = df6['Threaded'][0:10]
 y3 = df6['Knurled'][0:10]
   
-plt.plot(x, y1,'ro-',label=r'Smooth',markerfacecolor='white',markeredgecolor='r') 
-plt.plot(x, y2,'gs-',label=r'Threaded',markerfacecolor='white',markeredgecolor='g')
-plt.plot(x, y3,'b^-',label=r'Knurled',markerfacecolor='white',markeredgecolor='b')
+plt.plot(x, y1,'ro',label=r'Smooth',markerfacecolor='white',markeredgecolor='r') 
+plt.plot(x, y2,'gs',label=r'Threaded',markerfacecolor='white',markeredgecolor='g')
+plt.plot(x, y3,'b^',label=r'Knurled',markerfacecolor='white',markeredgecolor='b')
   
 # plt.ylim(0,60)
 plt.xlim(0,11)
