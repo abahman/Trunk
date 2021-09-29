@@ -246,30 +246,35 @@ y3 = df4['Knurled_del'][0:2606]
 # y3 = df4['Knurled_del'][0:783]
 
 # other statistics
-y11 = df4['Smooth_del'][0:2411].rolling(30).mean()
-y22 = df4['Threaded_del'][0:2411].rolling(30).mean()
-y33 = df4['Knurled_del'][0:2606].rolling(30).mean()
+# y11 = df4['Smooth_del'][0:2411].rolling(30).mean()
+# y22 = df4['Threaded_del'][0:2411].rolling(30).mean()
+# y33 = df4['Knurled_del'][0:2606].rolling(30).mean()
 
 #sheet_name='Figure 6 new'
-# y11 = df4['Smooth_del'][0:1667].rolling(30).mean()
-# y22 = df4['Threaded_del'][0:1345].rolling(30).mean()
-# y33 = df4['Knurled_del'][0:783].rolling(30).mean()
-  
+y11 = df4['Smooth_del'][0:1667].rolling(30).mean()
+y22 = df4['Threaded_del'][0:1345].rolling(30).mean()
+y33 = df4['Knurled_del'][0:783].rolling(30).mean()
+
+
 plt.plot(x1, y1,'o',markerfacecolor='none',markeredgecolor='r',label=r'Smooth',markersize=5,markevery=3)#markeredgewidth=0.1,
 # plt.plot(x1, y11,'r-',linewidth=2.5,label=r'Smooth (averaged)')
-plt.axvline(x=217,color='r',ls='-',linewidth=2.5,)
+# plt.axvline(x=217,color='r',ls='-',linewidth=2.5,)
+plt.axhline(y=df4['Smooth_del'][1667-1],color='r',ls='-',linewidth=2.5,)
+
 
 plt.plot(x2, y2,'s',markerfacecolor='none',markeredgecolor='g',label=r'Threaded',markersize=5,markevery=3)#markeredgewidth=0.1,
 # plt.plot(x2, y22,'g--',linewidth=2.5,label=r'Threaded (averaged)')
-plt.axvline(x=230,color='g',ls='--',linewidth=2.5,)
+# plt.axvline(x=230,color='g',ls='--',linewidth=2.5,)
+plt.axhline(y=df4['Threaded_del'][1345-1],color='g',ls='--',linewidth=2.5,)
 
 plt.plot(x3, y3,'^',markerfacecolor='none',markeredgecolor='b',label=r'Knurled',markersize=5,markevery=3)#markeredgewidth=0.1,
 # plt.plot(x3, y33,'b.-',linewidth=2.5,label=r'Knurled (averaged)')
-plt.axvline(x=293,color='b',ls=':',linewidth=2.5,)
+# plt.axvline(x=293,color='b',ls=':',linewidth=2.5,)
+plt.axhline(y=df4['Knurled_del'][783-1],color='b',ls=':',linewidth=2.5,)
 
 
-plt.annotate('Transition boiling',xy=(0,0),xytext=(65,150),annotation_clip=False)
-plt.annotate('Film boiling',xy=(0,0),xytext=(325,25),annotation_clip=False)
+plt.annotate('Film boiling',xy=(0,0),xytext=(85,150),annotation_clip=False)
+plt.annotate('Transition boiling',xy=(0,0),xytext=(300,15),annotation_clip=False)
 # plt.annotate('', xy=(300,25), xytext=(350,25), arrowprops=dict(facecolor='blue',arrowstyle='<|-',shrinkB=2.75,lw=1.0))
 
 
