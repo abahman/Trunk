@@ -171,7 +171,7 @@ def Calculate():
             model.add(Dense(i+12, input_dim=4, activation='tanh')) #init='uniform' #use_bias = True, bias_initializer='zero' #4 is perfect
             #model.add(GaussianNoise(0.1))
             #model.add(Dropout(0.2)) #Dropout is a technique where randomly selected neurons are ignored during training.
-            #model.add(Dense(i+12, activation='tanh'))
+            model.add(Dense(i+12, activation='tanh'))
             #model.add(GaussianNoise(0.1))
             #model.add(Dense(i+12, activation='tanh'))
             model.add(Dense(1, activation='linear'))
@@ -184,7 +184,7 @@ def Calculate():
             # fit the model
             history = model.fit(X_train,
                                 Y_train,
-                                epochs=3000 , #Cut the epochs in half when using sequential 
+                                epochs=4000 , #Cut the epochs in half when using sequential 
                                 batch_size=15, #increase the batch size results in faster compiler and high error, while smaller batch size results in slower compiler and slightly accurate model
                                 #validation_split=0.2,
                                 validation_data=(X_test,Y_test),
@@ -198,11 +198,11 @@ def Calculate():
             plt.semilogy(history.history['val_loss'])
             plt.ylabel('MSE')
             plt.xlabel('epochs')
-            plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
+            plt.legend(['Train', 'Test'], loc='upper right',fontsize=12)
             plt.ylim(0.001,1)
             plt.tight_layout(pad=0.2)  
             plt.tick_params(direction='in') 
-            plt.show()     
+#             plt.show()     
             fig.savefig('ANN_history_visc_loss.pdf')
     
         #   #History plot for accuracy
@@ -211,11 +211,11 @@ def Calculate():
             plt.semilogy(history.history['val_coeff_determination'])
             plt.ylabel('R$^2$')
             plt.xlabel('epochs')
-            plt.legend(['Train', 'Test'], loc='upper right',fontsize=9)
+            plt.legend(['Train', 'Test'], loc='upper right',fontsize=12)
             plt.ylim(0.01,1)
             plt.tight_layout(pad=0.2)  
             plt.tick_params(direction='in')
-            plt.show()     
+#             plt.show()     
             fig.savefig('ANN_history_visc_acc.pdf')
                     
             # Save the model
@@ -269,19 +269,18 @@ def Calculate():
         # yaml_string = model.to_yaml()
     print('')
     for i in range(len(SC)):
-        #print (SC[i])
-        #print(mape(Tmin_ANN[i], Tmin_exp[i]))
+        print (SC[i])
+        print (mape(visc_ANN[i], visc_exp[i]))
         print (ms[i],ma[i],R2[i])    
         
     # to SAVE into excel file
     for i in range(0,(end-start+1)):
   
-  
         data_calc = {'visc':[visc_ANN[i]]}  #data_calc = {'Tdis':[T[i]],'mdot':[Mref[i]],'mdot_inj':[Minj[i]], 'Wdot':[W[i]],'etaoa':[eta_s[i]],'fq':[Q[i]/W[i]]} 
               
           
         # Write to Excel
-        filename = os.path.dirname(__file__)+'/visc_output.xlsx'
+        filename = os.path.dirname(__file__)+'/visc_output2.xlsx'
         xl = pd.read_excel(filename, sheet_name='ANN_Validation')
   
         df = pd.DataFrame(data=data_calc)
@@ -404,10 +403,10 @@ def Calculate():
         
     # plot all data
     fig=pylab.figure(figsize=(4,4))
-    plt.plot(visc_ANN_train,visc_exp_train,'ro',ms = 3,mec='black',mew=0.5,label='Training points')
-    plt.plot(visc_ANN_test,visc_exp_test,'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
-    plt.plot(visc_ANN_valid,visc_exp_valid,'g^',ms = 4,mec='black',mew=0.5,label='Validation points')
-    plt.text(1,0.5,'R$^2$ = {:0.04f}\n'.format(Rsquared(visc_exp,visc_ANN))+'MAE = {:0.02f}%\n'.format(mape(visc_ANN,visc_exp))+'MSE = {:0.02f}\n'.format(mse(visc_ANN,visc_exp)),ha='left',va='center',fontsize = 8)
+    plt.plot(visc_ANN_train,visc_exp_train,'ro',ms = 4,mec='black',mew=0.5,label='Training points')
+    plt.plot(visc_ANN_test,visc_exp_test,'b*',ms = 6,mec='black',mew=0.5,label='Testing points')
+    plt.plot(visc_ANN_valid,visc_exp_valid,'g^',ms = 6,mec='black',mew=0.5,label='Validation points')
+    plt.text(1,0.5,'R$^2$ = {:0.03f}\n'.format(Rsquared(visc_exp,visc_ANN))+'MAE = {:0.02f}%\n'.format(mape(visc_ANN,visc_exp))+'MSE = {:0.03f}\n'.format(mse(visc_ANN,visc_exp)),ha='left',va='center',fontsize = 10)
     plt.xlabel('$\\nu_{pred}$ [$-$]')
     plt.ylabel('$\\nu_{exp}$ [$-$]')
     Vmin = 0
@@ -420,21 +419,21 @@ def Calculate():
     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
     plt.xlim(Vmin,Vmax)
     plt.ylim(Vmin,Vmax)
-    plt.legend(loc=2,fontsize=9)
+    plt.legend(loc=2,fontsize=12)
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     plt.show()
     fig.savefig('ANN_visc_all.pdf')
     plt.close()
     
-#     # ICERD plots (training)
+#     # plots (training)
 #     fig=pylab.figure(figsize=(4,4))
-#     plt.plot(Tmin_ANN_train,Tmin_exp_train,'ro',ms = 3,mec='black',mew=0.5,label='Training points')
-#     plt.text(550,200,'R$^2$ = {:0.04f}\n'.format(Rsquared(Tmin_exp_train,Tmin_ANN_train))+'MAE = {:0.02f}%\n'.format(mape(Tmin_ANN_train,Tmin_exp_train))+'MSE = {:0.02f}\n'.format(mse(Tmin_ANN_train,Tmin_exp_train)),ha='left',va='center',fontsize = 8)
-#     plt.xlabel('$T_{min,pred}$ [$\degree$C]')
-#     plt.ylabel('$T_{min,exp}$ [$\degree$C]')
-#     Tmin = 100
-#     Tmax = 800
+#     plt.plot(visc_ANN_train,visc_exp_train,'ro',ms = 4,mec='black',mew=0.5,label='Training points')
+#     plt.text(1,0.5,'R$^2$ = {:0.03f}\n'.format(Rsquared(visc_exp_train,visc_ANN_train))+'MAE = {:0.02f}%\n'.format(mape(visc_ANN_train,visc_exp_train))+'MSE = {:0.03f}\n'.format(mse(visc_ANN_train,visc_exp_train)),ha='left',va='center',fontsize = 10)
+#     plt.xlabel('$\\nu_{pred}$ [$-$]')
+#     plt.ylabel('$\\nu_{exp}$ [$-$]')
+#     Tmin = 0
+#     Tmax = 2
 #     x=[Tmin,Tmax]
 #     y=[Tmin,Tmax]
 #     y105=[1.1*Tmin,1.1*Tmax]
@@ -443,21 +442,21 @@ def Calculate():
 #     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
 #     plt.xlim(Tmin,Tmax)
 #     plt.ylim(Tmin,Tmax)
-#     plt.legend(loc=2,fontsize=9)
+#     plt.legend(loc=2,fontsize=12)
 #     plt.tight_layout(pad=0.2)        
 #     plt.tick_params(direction='in')
 #     #plt.show()
-#     #fig.savefig('ANN_Tmin_training.pdf')  
+#     #fig.savefig('ANN_visc_training.pdf')  
 #     plt.close()
 #     
-#     # ICERD plots (testing)
+#     #  plots (testing)
 #     fig=pylab.figure(figsize=(4,4))
-#     plt.plot(Tmin_ANN_test,Tmin_exp_test,'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
-#     plt.text(550,200,'R$^2$ = {:0.04f}\n'.format(Rsquared(Tmin_exp_test,Tmin_ANN_test))+'MAE = {:0.02f}%\n'.format(mape(Tmin_ANN_test,Tmin_exp_test))+'MSE = {:0.02f}\n'.format(mse(Tmin_ANN_test,Tmin_exp_test)),ha='left',va='center',fontsize = 8)
-#     plt.xlabel('$T_{min,pred}$ [$\degree$C]')
-#     plt.ylabel('$T_{min,exp}$ [$\degree$C]')
-#     Tmin = 100
-#     Tmax = 800
+#     plt.plot(visc_ANN_test,visc_exp_test,'b*',ms = 6,mec='black',mew=0.5,label='Testing points')
+#     plt.text(1,0.5,'R$^2$ = {:0.03f}\n'.format(Rsquared(visc_exp_test,visc_ANN_test))+'MAE = {:0.02f}%\n'.format(mape(visc_ANN_test,visc_exp_test))+'MSE = {:0.03f}\n'.format(mse(visc_ANN_test,visc_exp_test)),ha='left',va='center',fontsize = 10)
+#     plt.xlabel('$\\nu_{pred}$ [$-$]')
+#     plt.ylabel('$\\nu_{exp}$ [$-$]')
+#     Tmin = 0
+#     Tmax = 2
 #     x=[Tmin,Tmax]
 #     y=[Tmin,Tmax]
 #     y105=[1.1*Tmin,1.1*Tmax]
@@ -466,21 +465,21 @@ def Calculate():
 #     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
 #     plt.xlim(Tmin,Tmax)
 #     plt.ylim(Tmin,Tmax)
-#     plt.legend(loc=2,fontsize=9)
+#     plt.legend(loc=2,fontsize=12)
 #     plt.tight_layout(pad=0.2)        
 #     plt.tick_params(direction='in')
 #     #plt.show()
-#     #fig.savefig('ANN_Tmin_testing.pdf')
+#     #fig.savefig('ANN_visc_testing.pdf')
 #     plt.close()
 #     
-#     # ICERD plots (validation)
+#     # plots (validation)
 #     fig=pylab.figure(figsize=(4,4))
-#     plt.plot(Tmin_ANN_valid,Tmin_exp_valid,'g^',ms = 4,mec='black',mew=0.5,label='Validation points')
-#     plt.text(550,200,'R$^2$ = {:0.04f}\n'.format(Rsquared(Tmin_exp_valid,Tmin_ANN_valid))+'MAE = {:0.02f}%\n'.format(mape(Tmin_ANN_valid,Tmin_exp_valid))+'MSE = {:0.02f}\n'.format(mse(Tmin_ANN_valid,Tmin_exp_valid)),ha='left',va='center',fontsize = 8)
-#     plt.xlabel('$T_{min,pred}$ [$\degree$C]')
-#     plt.ylabel('$T_{min,exp}$ [$\degree$C]')
-#     Tmin = 100
-#     Tmax = 800
+#     plt.plot(visc_ANN_valid,visc_exp_valid,'g^',ms = 6,mec='black',mew=0.5,label='Validation points')
+#     plt.text(1,0.5,'R$^2$ = {:0.03f}\n'.format(Rsquared(visc_exp_valid,visc_ANN_valid))+'MAE = {:0.02f}%\n'.format(mape(visc_ANN_valid,visc_exp_valid))+'MSE = {:0.03f}\n'.format(mse(visc_ANN_valid,visc_exp_valid)),ha='left',va='center',fontsize = 10)
+#     plt.xlabel('$\\nu_{pred}$ [$-$]')
+#     plt.ylabel('$\\nu_{exp}$ [$-$]')
+#     Tmin = 0
+#     Tmax = 2
 #     x=[Tmin,Tmax]
 #     y=[Tmin,Tmax]
 #     y105=[1.1*Tmin,1.1*Tmax]
@@ -489,11 +488,11 @@ def Calculate():
 #     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
 #     plt.xlim(Tmin,Tmax)
 #     plt.ylim(Tmin,Tmax)
-#     plt.legend(loc=2,fontsize=9)
+#     plt.legend(loc=2,fontsize=12)
 #     plt.tight_layout(pad=0.2)        
 #     plt.tick_params(direction='in')
 #     #plt.show()
-#     #fig.savefig('ANN_Tmin_validation.pdf') 
+#     #fig.savefig('ANN_visc_validation.pdf') 
 #     plt.close()
 #     
 #     # Cumulative Distribution of all data versus maximum absolute error
