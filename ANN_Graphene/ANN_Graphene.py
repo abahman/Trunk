@@ -33,29 +33,25 @@ def Import(start,end,filename):
     
     [data,rownum] = DataIO.ParameterImport(start,end,filename)
     
-    i = 0  
+    i = 0
     "initialize arrays"
-    Tmin = float(data[i][0])
-    Tsub = float(data[i][1])
-    Psat = float(data[i][2])
-    Mat = str(data[i][3])
-    LD = float(data[i][4])
-    Bf = float(data[i][5])
-    Bw = float(data[i][6])
-    BfBw = float(data[i][7])
+    visc_exp = float(data[i][0])
+    Temp = float(data[i][1])
+    graphene_vol = float(data[i][2])
+    surfactant_rho = float(data[i][3])
+    surfactant_vol = float(data[i][4])
+#     surfactant_typ = str(data[i][5])
     i=i+1
     
     while i < (end - start+1):
-        Tmin = np.append(Tmin,float(data[i][0]))
-        Tsub = np.append(Tsub,float(data[i][1]))
-        Psat = np.append(Psat,float(data[i][2])) 
-        Mat = np.append(Mat,str(data[i][3]))
-        LD = np.append(LD,float(data[i][4]))
-        Bf = np.append(Bf,float(data[i][5]))
-        Bw = np.append(Bw,float(data[i][6]))
-        BfBw = np.append(BfBw,float(data[i][7]))
+        visc_exp = np.append(visc_exp,float(data[i][0]))
+        Temp = np.append(Temp,float(data[i][1]))
+        graphene_vol = np.append(graphene_vol,float(data[i][2])) 
+        surfactant_rho = np.append(surfactant_rho,float(data[i][3]))
+        surfactant_vol = np.append(surfactant_vol,float(data[i][4]))
+#         surfactant_typ = np.append(surfactant_typ,str(data[i][5]))
         i=i+1
-        Data = [Tmin,Tsub,Psat,Mat,LD,Bf,Bw,BfBw]
+        Data = [visc_exp,Temp,graphene_vol,surfactant_rho,surfactant_vol]
     
     return Data
     
@@ -108,10 +104,9 @@ def Calculate():
 
     "Import Experimental Data"
     start=1
-    end=379
-    filename = 'Data_Collection.csv' #'scroll_inj_R407C.csv'
-    #[T_amb,T_suc,P_ev,T_ex_meas,P_cd,T_inj,P_inj,m_gas_meas,m_inj_meas,ratio_minj,Q_meas,W_meas,eta_s_meas] = Import(start,end,filename)
-    [Tmin_exp,Tsub,Psat,Mat,LD,Bf,Bw,BfBw] = Import(start,end,filename)
+    end=88
+    filename = 'Data_Collection_new.csv'
+    [visc_exp,Temp,graphene_vol,surfactant_rho,surfactant_vol] = Import(start,end,filename)
     
 
     mode = 'training'
@@ -120,72 +115,64 @@ def Calculate():
     from keras.layers import Input,Flatten,Dense,LSTM,merge,Dropout,concatenate
     #from keras.engine import merge # from Keras version 1.2.2
     #from keras.layers.merge import concatenate
-    from keras.utils import plot_model
+    from keras.utils.vis_utils import plot_model
     from keras.callbacks import TensorBoard
     from keras import regularizers
     
 
     #Define inputs
-    Tsub = Tsub.reshape(-1,1,1) #P_ev = P_ev.reshape(-1,1,1)
-    Psat = Psat.reshape(-1,1,1) #T_suc = T_suc.reshape(-1,1,1)
-    LD = LD.reshape(-1,1,1) #P_cd = P_cd.reshape(-1,1,1)
-    Bf = Bf.reshape(-1,1,1)
-    Bw = Bw.reshape(-1,1,1)
-    BfBw = BfBw.reshape(-1,1,1)
-    #P_inj = P_inj.reshape(-1,1,1)
-    #T_amb = T_amb.reshape(-1,1,1)
+    Temp = Temp.reshape(-1,1,1) 
+    graphene_vol = graphene_vol.reshape(-1,1,1) 
+    surfactant_rho = surfactant_rho.reshape(-1,1,1)
+    surfactant_vol = surfactant_vol.reshape(-1,1,1)
     
     
     #Normalize all parameters
-    Tmin_exp_norm = Normalize(Tmin_exp, 206.8841, 727.8873239)
-    Tsub_norm = Normalize(Tsub, 0, 39.84150546)
-    Psat_norm = Normalize(Psat, 0.001185867, 3.003378378)
-    LD_norm = Normalize(LD, 2.67, 63.5)
-    Bf_norm = Normalize(Bf, 2428162.849, 2744290.164)
-    Bw_norm = Normalize(Bw, 5168800, 1379121205)
-    BfBw_norm = Normalize(BfBw, 0.001989845, 0.530923555)
+    visc_exp_norm = Normalize(visc_exp, 0.452954654, 1.269923504)
+    Temp_norm = Normalize(Temp, 20, 50)
+    graphene_vol_norm = Normalize(graphene_vol, 0.0, 0.5303025)
+    surfactant_rho_norm = Normalize(surfactant_rho, 0.0, 1.4)
+    surfactant_vol_norm = Normalize(surfactant_vol, 0.0, 0.79545375)
     
     if mode == 'training':
-        visible1 = Input(shape=(1,1), name='Tsub') #visible1 = Input(shape=(1,1), name='P_ev')
-        visible2 = Input(shape=(1,1), name='Psat') #visible2 = Input(shape=(1,1), name='T_suc')
-        visible3 = Input(shape=(1,1), name='LD') #visible3 = Input(shape=(1,1), name='P_cd')
-        visible4 = Input(shape=(1,1), name='BfBw')
-        #visible5 = Input(shape=(1,1), name='P_inj')
-        #visible6 = Input(shape=(1,1), name='T_amb')
+        visible1 = Input(shape=(1,1), name='Temp')
+        visible2 = Input(shape=(1,1), name='graphene_vol') 
+        visible3 = Input(shape=(1,1), name='surfactant_rho') 
+        visible4 = Input(shape=(1,1), name='surfactant_vol')
     
         shared_lstm = LSTM(4)
     
-        encoded_a = shared_lstm(visible1) #encoded_a = shared_lstm(visible1)
-        encoded_b = shared_lstm(visible2) #encoded_b = shared_lstm(visible2)
-        encoded_c = shared_lstm(visible3) #encoded_c = shared_lstm(visible3)
+        encoded_a = shared_lstm(visible1)
+        encoded_b = shared_lstm(visible2) 
+        encoded_c = shared_lstm(visible3) 
         encoded_d = shared_lstm(visible4)
 
     
         #Merge inputs
         #merged = merge([encoded_a,encoded_b,encoded_c,encoded_d,encoded_e,encoded_f],mode='concat',concat_axis=-1) #deprecated
-        merged = concatenate([encoded_a,encoded_b,encoded_c,encoded_d],axis=-1) #merged = concatenate([encoded_a,encoded_b,encoded_c,encoded_d,encoded_e,encoded_f],axis=-1)
+        merged = concatenate([encoded_a,encoded_b,encoded_c,encoded_d],axis=-1)
         
         #interpretation model
-        hidden1 = Dense(12,activation='tanh')(merged) #hidden1 = Dense(256, activation='tanh')(merged) ###'relu' shows good results
-        hidden2 = Dense(12, activation = 'tanh')(hidden1)
+        hidden2 = Dense(12,activation='tanh')(merged) #hidden1 = Dense(256, activation='tanh')(merged) ###'relu' shows good results
+#         hidden2 = Dense(12, activation = 'tanh')(hidden1)
         #hidden3 = Dropout(0.2, noise_shape=None, seed=None)(hidden2)
         #hidden3 = Dense(100, activation = 'tanh')(hidden2)
         #hidden4 = Dense(32, activation = 'tanh')(hidden3)
         
-        output1 = Dense(1, activation = 'linear',name='Tmin')(hidden2) #output1 = Dense(1, activation = 'linear',name='m_gas')(hidden3)
+        output1 = Dense(1, activation = 'linear',name='visc')(hidden2)
 
        
-        model = Model(input=[visible1,visible2,visible3,visible4],
-                        output = [output1])
+        model = Model([visible1,visible2,visible3,visible4],
+                        [output1])
         
-        plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
+#         plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
         
         model.compile(optimizer='adamax',loss='mse',metrics=['mae']) #model.compile(optimizer='adamax',loss=['mse','mse','mse','mse','mse','mse']) #metrics are not included in the training
         
-        history = model.fit([Tsub_norm,Psat_norm,LD_norm,BfBw_norm],
-                            [Tmin_exp_norm],
-                            epochs=8000 ,
-                            batch_size=30, #increase the batch size results in faster compiler an d high error, while smaller batch size results in slower compiler and slightly accurate model
+        history = model.fit([Temp_norm,graphene_vol_norm,surfactant_rho_norm,surfactant_vol_norm],
+                            [visc_exp_norm],
+                            epochs=1600,
+                            batch_size=10, #increase the batch size results in faster compiler and high error, while smaller batch size results in slower compiler and slightly accurate model
                             validation_split=0.2,
                             )
         
@@ -202,22 +189,22 @@ def Calculate():
         #plt.ylim(0,0.1)
         plt.tight_layout(pad=0.2)  
         plt.tick_params(direction='in')      
-        fig.savefig('ANN_history_Tmin.pdf')
+        fig.savefig('ANN_history_visc.pdf')
         
         # Save the model
-        model.save('ANN_model_Tmin.h5')
+        model.save('ANN_model_visc.h5')
     
     elif mode == 'run':
     
         # Load the model
-        model = load_model('ANN_model_Tmin.h5')
+        model = load_model('ANN_model_visc.h5')
     
     # Run the model
-    Tmin_ANN = model.predict([Tsub_norm,Psat_norm,LD_norm,BfBw_norm]) #[Mref,Minj,W,T,eta_s,Q] = model.predict([P_ev_norm,T_suc_norm,P_cd_norm,T_inj_norm,P_inj_norm,T_amb_norm])
-    Tmin_ANN = DeNormalize(Tmin_ANN.reshape(-1), 206.8841, 727.8873239) #W = DeNormalize(W.reshape(-1),1000,8000)
+    visc_ANN = model.predict([Temp_norm,graphene_vol_norm,surfactant_rho_norm,surfactant_vol_norm])
+    visc_ANN = DeNormalize(visc_ANN.reshape(-1), 0.452954654, 1.269923504)
     
     # evaluate the model
-    scores = model.evaluate([Tsub_norm,Psat_norm,LD_norm,BfBw_norm],[Tmin_exp_norm])
+    scores = model.evaluate([Temp_norm,graphene_vol_norm,surfactant_rho_norm,surfactant_vol_norm],[visc_exp_norm])
     print("\n%s: %.2f%%" % (model.metrics_names[1], scores[1]*100))
     
 #     # extract the weight and bias
@@ -236,11 +223,11 @@ def Calculate():
     for i in range(0,(end-start+1)):
 
 
-        data_calc = {'Tmin':[Tmin_ANN[i]]}  #data_calc = {'Tdis':[T[i]],'mdot':[Mref[i]],'mdot_inj':[Minj[i]], 'Wdot':[W[i]],'etaoa':[eta_s[i]],'fq':[Q[i]/W[i]]} 
+        data_calc = {'visc':[visc_ANN[i]]}  #data_calc = {'Tdis':[T[i]],'mdot':[Mref[i]],'mdot_inj':[Minj[i]], 'Wdot':[W[i]],'etaoa':[eta_s[i]],'fq':[Q[i]/W[i]]} 
             
         
         # Write to Excel
-        filename = os.path.dirname(__file__)+'/Tmin_output.xlsx'
+        filename = os.path.dirname(__file__)+'/visc_output.xlsx'
         xl = pd.read_excel(filename, sheet_name='ANN_Validation')
 
         df = pd.DataFrame(data=data_calc)
@@ -261,7 +248,7 @@ def Calculate():
     
     #Separate testing from calibrating
     sep_val = 0.2
-    n_len = len(Tmin_ANN)
+    n_len = len(visc_ANN)
     n_split = int(np.floor(sep_val*n_len))
     n_training = int(n_len-n_split-1)
 
@@ -269,31 +256,31 @@ def Calculate():
     # Validation Tmin
     fig=pylab.figure(figsize=(4,4))
 
-    plt.plot(Tmin_ANN[:n_training],Tmin_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
-    plt.plot(Tmin_ANN[-n_split:],Tmin_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
-    plt.text(550,200,'R$^2$ = {:0.01f}%\n'.format(Rsquared(Tmin_exp,Tmin_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(Tmin_ANN,Tmin_exp))+'RMSE = {:0.01f}%'.format(rmse(Tmin_ANN,Tmin_exp)),ha='left',va='center',fontsize = 8)
+    plt.plot(visc_ANN[:n_training],visc_exp[:n_training],'ro',ms = 3,mec='black',mew=0.5,label='Training points')
+    plt.plot(visc_ANN[-n_split:],visc_exp[-n_split:],'b*',ms = 4,mec='black',mew=0.5,label='Testing points')
+    plt.text(1,0.5,'R$^2$ = {:0.01f}%\n'.format(Rsquared(visc_exp,visc_ANN)*100)+'MAE = {:0.01f}%\n'.format(mape(visc_ANN,visc_exp))+'RMSE = {:0.01f}%'.format(rmse(visc_ANN,visc_exp)),ha='left',va='center',fontsize = 8)
 
-    plt.xlabel('$T_{min,pred}$ [$\degree$C]')
-    plt.ylabel('$T_{min,exp}$ [$\degree$C]')
+    plt.xlabel('$\\nu_{pred}$ [$-$]')
+    plt.ylabel('$\\nu_{exp}$ [$-$]')
 
-    Tmin = 100
-    Tmax = 800
-    x=[Tmin,Tmax]
-    y=[Tmin,Tmax]
-    y105=[1.1*Tmin,1.1*Tmax]
-    y95=[0.9*Tmin,0.9*Tmax]
+    Vmin = 0
+    Vmax = 2
+    x=[Vmin,Vmax]
+    y=[Vmin,Vmax]
+    y105=[1.1*Vmin,1.1*Vmax]
+    y95=[0.9*Vmin,0.9*Vmax]
     
     plt.plot(x,y,'k-')
     plt.fill_between(x,y105,y95,color='black',alpha=0.2)    
-    plt.xlim(Tmin,Tmax)
-    plt.ylim(Tmin,Tmax)
+    plt.xlim(Vmin,Vmax)
+    plt.ylim(Vmin,Vmax)
     plt.legend(loc=2,fontsize=9)
     plt.tight_layout(pad=0.2)        
     plt.tick_params(direction='in')
     plt.show()
-    fig.savefig('ANN_Tmin.pdf')
+    fig.savefig('ANN_visc.pdf')
     
-    print ('Tmin:',REmean(Tmin_exp,Tmin_ANN),Rsquared(Tmin_exp,Tmin_ANN)*100) #print 'Wdot:',REmean(W_meas,W),Rsquared(W_meas,W)*100
+    print ('visc:',REmean(visc_exp,visc_ANN),Rsquared(visc_exp,visc_ANN)*100)
 
 
     
