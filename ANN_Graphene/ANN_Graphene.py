@@ -130,9 +130,9 @@ def Calculate():
     #Normalize all parameters
     visc_exp_norm = Normalize(visc_exp, 0.452954654, 1.269923504)
     Temp_norm = Normalize(Temp, 20, 50)
-    graphene_vol_norm = Normalize(graphene_vol, 0.0, 0.5303025)
+    graphene_vol_norm = Normalize(graphene_vol, 0.0, 0.05303025)
     surfactant_rho_norm = Normalize(surfactant_rho, 0.0, 1.4)
-    surfactant_vol_norm = Normalize(surfactant_vol, 0.0, 0.79545375)
+    surfactant_vol_norm = Normalize(surfactant_vol, 0.0, 0.079545375)
     
     if mode == 'training':
         visible1 = Input(shape=(1,1), name='Temp')
