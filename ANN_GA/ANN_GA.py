@@ -352,8 +352,8 @@ def Calculate():
     plt.show()
     fig.savefig('ANN_COP.pdf')
     
-    print 'Q:',REmean(Q_exp,Q_ANN),Rsquared(Q_exp,Q_ANN)*100 
-    print 'COP:',REmean(COP_exp,COP_ANN),Rsquared(COP_exp,COP_ANN)*100 
+    print ('Q:',REmean(Q_exp,Q_ANN),Rsquared(Q_exp,Q_ANN)*100)
+    print ('COP:',REmean(COP_exp,COP_ANN),Rsquared(COP_exp,COP_ANN)*100) 
 
 
     

@@ -13,6 +13,7 @@ mpl.rcParams['mathtext.fontset'] = 'custom'
 mpl.rcParams['figure.figsize'] = [6,4]
 mpl.rcParams['legend.labelspacing'] = 0.2
 mpl.rcParams['legend.numpoints'] = 1
+mpl.rcParams['legend.fontsize'] = 10
 
 # #===============================================================================
 # # Latex render
@@ -130,6 +131,8 @@ par1.set_ylim(39, 49)
 host.annotate('', xy=(99,2.8), xytext=(99,3.27), arrowprops=dict(facecolor='black',arrowstyle='-|>',shrinkB=2.75,lw=1.0))
 host.annotate('', xy=(98,2.6), xytext=(98,2.13), arrowprops=dict(facecolor='black',arrowstyle='-|>',shrinkB=2.75,lw=1.0))
 
+host.text(98.5,3.0, '$T_{cond}$',fontsize=10,rotation=90)
+host.text(97.5,2.25, '$T_{evap}$',fontsize=10,rotation=90)
               
 par2.set_xlabel(r'$T_{evap}$ [$\degree$C]')
 host.set_ylabel(r'$\mathrm{COP_{H}}$ [$-$]')
@@ -151,9 +154,9 @@ host.set_xlabel(r'$T_{cond}$ [$\degree$C]')
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
         
-legend_elements = [Line2D([], [], color='red', marker='o',linestyle='',label='$\mathrm{COP_{H}}$ (Bertsch et al., 2008)'),
-                   Line2D([], [], color='blue', marker='s',linestyle='',label='$\mathrm{COP_{H}}$ (Cao et al., 2014)'),
-                   Line2D([], [], color='green', marker='^',linestyle='',label='$\eta_{ex}$ (Cao et al., 2014)'),
+legend_elements = [Line2D([], [], color='red', marker='o',linestyle='',label='$\mathrm{COP_{H}}$ vs. $T_{evap}$ (Bertsch et al., 2008)',),
+                   Line2D([], [], color='blue', marker='s',linestyle='',label='$\mathrm{COP_{H}}$ vs. $T_{cond}$ (Cao et al., 2014)'),
+                   Line2D([], [], color='green', marker='^',linestyle='',label='$\eta_{ex}$ vs. $T_{cond}$ (Cao et al., 2014)'),
                    Line2D([], [], color='black', marker='', linestyle='-',label='Present model'),
                    ]
   
