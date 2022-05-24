@@ -20,7 +20,7 @@ warnings.simplefilter("ignore",RuntimeWarning)
 from random import randint, random
 
 import DataIO
-from CoolProp.CoolProp import PropsSI
+# from CoolProp.CoolProp import PropsSI
 
 import pickle
 
@@ -179,7 +179,7 @@ def Calculate():
             #plot_model(model, to_file='model.pdf',show_shapes=True,show_layer_names=True)
       
             # Compile model
-            model.compile(optimizer='adamax',loss='mse',metrics=['mae',coeff_determination])
+            model.compile(optimizer='adam',loss='mse',metrics=['mae',coeff_determination])
               
             # fit the model
             history = model.fit(X_train,
@@ -235,7 +235,11 @@ def Calculate():
   
         # Run the model
         visc_ANN = model.predict(X)
+        print ('before',visc_ANN)
+        print ('before',visc_ANN[:,0])
+        print ('after',visc_ANN.reshape(-1))
         visc_ANN = DeNormalize(visc_ANN.reshape(-1), 0.452954654, 1.269923504)
+        
         
         # evaluate the model (for the last batch)
         scores = model.evaluate(X,Y)

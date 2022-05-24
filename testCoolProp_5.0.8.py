@@ -1,26 +1,26 @@
 '''Examples from documentation of CoolProps 5.0.8'''
 
 from CoolProp.CoolProp import PropsSI
-import CoolProp; print CoolProp.__version__, CoolProp.__gitrevision__
-print PropsSI('D', 'T', 298.15, 'P', 100e5, 'CO2')
-print PropsSI('H', 'T', 298.15, 'Q', 1, 'R134a')
-print ' '
+import CoolProp; print (CoolProp.__version__, CoolProp.__gitrevision__)
+print (PropsSI('D', 'T', 298.15, 'P', 100e5, 'CO2'))
+print (PropsSI('H', 'T', 298.15, 'Q', 1, 'R134a'))
+print (' ')
 
 from CoolProp.HumidAirProp import HAPropsSI
 # Enthalpy (J per kg dry air) as a function of temperature, pressure,
 #    and relative humidity at STP
-h = HAPropsSI('H','T',298.15,'P',101325,'R',0.5); print 'h =', h
+h = HAPropsSI('H','T',298.15,'P',101325,'R',0.5); print ('h =', h)
 
 # Temperature of saturated air at the previous enthalpy
-T = HAPropsSI('T','P',101325,'H',h,'R',1.0); print 'T =', T
+T = HAPropsSI('T','P',101325,'H',h,'R',1.0); print ('T =', T)
 
 # Temperature of saturated air - order of inputs doesn't matter
-T = HAPropsSI('T','H',h,'R',1.0,'P',101325); print 'T =', T
-print ' '
+T = HAPropsSI('T','H',h,'R',1.0,'P',101325); print ('T =', T)
+print (' ')
 
 
 import CoolProp as CP
-print CP.__version__
+print (CP.__version__)
 
 import CoolProp.CoolProp as CP
 fluid = 'Water'
@@ -29,10 +29,10 @@ pressure_at_critical_point = CP.PropsSI(fluid,'pcrit')
 # (or volumic mass in kg/m^3). Let's compute the massic volume of liquid
 # at 1bar (1e5 Pa) of pressure
 vL = 1/CP.PropsSI('D','P',1e5,'Q',0,fluid)
-print 'vL =', vL
+print ('vL =', vL)
 # Same for saturated vapor
 vG = 1/CP.PropsSI('D','P',1e5,'Q',1,fluid)
-print 'vG =', vG
+print ('vG =', vG)
 
 
 
@@ -40,9 +40,9 @@ print 'vG =', vG
 '''Warning: for each set of examples take out the comment #
     and run indivually otherwise the plots will MISSED up'''
 import CoolProp.Plots as CPP
-from CoolProp.Plots import PropsPlot
+# from CoolProp.Plots import PropsPlot
 from matplotlib import pyplot
-from CoolProp.Plots import Ts, drawIsoLines
+# from CoolProp.Plots import Ts, drawIsoLines
 from ACHPTools import get_svn_revision
 import sys
 
@@ -100,8 +100,8 @@ import sys
 # fig.set_tight_layout(True) #pyplot.tight_layout()
 # fig.savefig('images/comined_R600a.pdf') #pyplot.savefig('images/comined_R600a.pdf')
 
-print CP.PropsSI("P","T",306.3265564,"Q",0,"R407C")
-print CP.PhaseSI("T",306.3265564,"P",100000,"R407C")
-print CP.PropsSI('I', 'T', 200, 'Q', 0, "R407C")
-print CP.saturation_ancillary("R407C",'I',1,'T', 200)
-print get_svn_revision(sys.path)
+print (CP.PropsSI("P","T",306.3265564,"Q",0,"R407C"))
+print (CP.PhaseSI("T",306.3265564,"P",100000,"R407C"))
+print (CP.PropsSI('I', 'T', 200, 'Q', 0, "R407C"))
+print (CP.saturation_ancillary("R407C",'I',1,'T', 200))
+print (get_svn_revision(sys.path))
